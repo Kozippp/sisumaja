@@ -148,14 +148,14 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
         // Update
         const { error } = await supabase
           .from('projects')
-          .update(submissionData)
+          .update(submissionData as any)
           .eq('id', initialData.id);
         if (error) throw error;
       } else {
         // Create
         const { error } = await supabase
           .from('projects')
-          .insert(submissionData);
+          .insert(submissionData as any);
         if (error) throw error;
       }
       router.push('/admin/dashboard');
