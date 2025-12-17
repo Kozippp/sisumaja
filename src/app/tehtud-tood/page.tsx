@@ -2,6 +2,7 @@ import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { Metadata } from "next";
 import { Database } from "@/types/database.types";
+import { ArrowUpRight } from "lucide-react";
 
 type Project = Database['public']['Tables']['projects']['Row'];
 
@@ -25,37 +26,46 @@ export default async function WorkPage() {
   const projects = await getProjects();
 
   return (
-    <div className="min-h-screen bg-black py-24">
+    <div className="min-h-screen bg-black pt-32 pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-black text-white mb-6 uppercase tracking-tighter">Tehtud tööd</h1>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-            Oleme teinud koostööd paljude ägedate brändidega. Siin on valik meie lemmikutest.
+        <div className="text-center mb-20">
+          <h1 className="text-6xl md:text-8xl font-black text-white mb-8 uppercase tracking-tighter">Tehtud tööd</h1>
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            Oleme teinud koostööd paljude ägedate brändidega. Iga projekt on uus väljakutse ja võimalus luua midagi erakordset.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.length > 0 ? (
             projects.map((project) => (
-              <Link key={project.id} href={`/tehtud-tood/${project.slug}`} className="group block">
-                <div className="aspect-video bg-neutral-900 rounded-xl overflow-hidden mb-4 relative border border-neutral-800 group-hover:border-primary transition-all">
-                  {project.thumbnail_url ? (
-                    <img src={project.thumbnail_url} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-700">Pilt puudub</div>
-                  )}
-                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <span className="text-white font-bold uppercase tracking-widest border border-white px-4 py-2 rounded-full">Vaata lähemalt</span>
+              <Link key={project.id} href={`/tehtud-tood/${project.slug}`} className="group block h-full">
+                <article className="flex flex-col h-full">
+                  <div className="aspect-[4/3] bg-neutral-900 rounded-2xl overflow-hidden mb-6 relative border border-white/5 group-hover:border-primary/50 transition-all duration-500">
+                    {project.thumbnail_url ? (
+                      <img src={project.thumbnail_url} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-700 bg-neutral-900">
+                        <span className="uppercase tracking-widest text-sm">Pilt puudub</span>
+                      </div>
+                    )}
+                    <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-2 group-hover:translate-y-0">
+                      <ArrowUpRight className="w-6 h-6 text-white" />
+                    </div>
                   </div>
-                </div>
-                <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors">{project.title}</h3>
-                <p className="text-gray-500 text-sm line-clamp-2 mt-1">{project.description}</p>
+                  
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between mb-2">
+                       <h3 className="text-2xl font-bold text-white group-hover:text-primary transition-colors">{project.title}</h3>
+                    </div>
+                    <p className="text-gray-500 line-clamp-2 leading-relaxed">{project.description}</p>
+                  </div>
+                </article>
               </Link>
             ))
           ) : (
-             <div className="col-span-3 text-center py-24 text-gray-500 bg-neutral-900/30 rounded-xl border border-dashed border-neutral-800">
-                <p className="text-xl">Hetkel avalikud tööd puuduvad.</p>
-                <p className="text-sm mt-2">Tule varsti tagasi!</p>
+             <div className="col-span-3 text-center py-32 text-gray-500 bg-white/5 rounded-3xl border border-dashed border-white/10">
+                <h3 className="text-2xl font-bold text-white mb-2">Töid ei leitud</h3>
+                <p>Hetkel avalikud tööd puuduvad. Tule varsti tagasi!</p>
               </div>
           )}
         </div>
@@ -63,4 +73,3 @@ export default async function WorkPage() {
     </div>
   );
 }
-
