@@ -26,7 +26,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
         return;
       }
 
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('projects')
         .select('*')
         .eq('id', id)

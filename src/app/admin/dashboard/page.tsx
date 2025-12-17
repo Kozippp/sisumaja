@@ -14,6 +14,18 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+  const fetchProjects = async () => {
+    const { data } = await supabase
+      .from('projects')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (data) {
+      setProjects(data);
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
     const checkUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -25,18 +37,6 @@ export default function DashboardPage() {
     };
     checkUser();
   }, [router]);
-
-  const fetchProjects = async () => {
-    const { data, error } = await supabase
-      .from('projects')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (data) {
-      setProjects(data);
-    }
-    setLoading(false);
-  };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -53,7 +53,7 @@ export default function DashboardPage() {
   const toggleVisibility = async (project: Project) => {
     await supabase
       .from('projects')
-      // @ts-ignore
+      // @ts-expect-error - Supabase types don't properly infer update for boolean fields
       .update({ is_visible: !project.is_visible })
       .eq('id', project.id);
     fetchProjects();

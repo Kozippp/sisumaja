@@ -91,8 +91,9 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     try {
       const url = await uploadFile(e.target.files[0]);
       setFormData(prev => ({ ...prev, thumbnail_url: url }));
-    } catch (err: any) {
-      setError('Pildi üleslaadimine ebaõnnestus: ' + err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError('Pildi üleslaadimine ebaõnnestus: ' + errorMessage);
     } finally {
       setUploading(false);
     }
@@ -104,8 +105,9 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     try {
       const url = await uploadFile(e.target.files[0]);
       setFormData(prev => ({ ...prev, client_avatar_url: url }));
-    } catch (err: any) {
-      setError('Pildi üleslaadimine ebaõnnestus: ' + err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError('Pildi üleslaadimine ebaõnnestus: ' + errorMessage);
     } finally {
       setUploading(false);
     }
@@ -121,8 +123,9 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
          newUrls.push(url);
       }
       setMediaItems(prev => [...prev, ...newUrls]);
-    } catch (err: any) {
-      setError('Meedia üleslaadimine ebaõnnestus: ' + err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError('Meedia üleslaadimine ebaõnnestus: ' + errorMessage);
     } finally {
       setUploading(false);
     }
@@ -148,7 +151,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
         // Update
         const { error } = await supabase
           .from('projects')
-          // @ts-ignore
+          // @ts-expect-error - Supabase types don't properly infer complex nested JSON types
           .update(submissionData)
           .eq('id', initialData.id);
         if (error) throw error;
@@ -156,14 +159,15 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
         // Create
         const { error } = await supabase
           .from('projects')
-          // @ts-ignore
+          // @ts-expect-error - Supabase types don't properly infer complex nested JSON types
           .insert(submissionData);
         if (error) throw error;
       }
       router.push('/admin/dashboard');
       router.refresh();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -277,7 +281,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                 <input name="stat_views" value={formData.stat_views || ''} onChange={handleChange} className="w-full bg-black border border-neutral-700 rounded p-2" placeholder="nt. 50k" />
             </div>
             <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">Like'id</label>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Like&apos;id</label>
                 <input name="stat_likes" value={formData.stat_likes || ''} onChange={handleChange} className="w-full bg-black border border-neutral-700 rounded p-2" placeholder="nt. 2000" />
             </div>
              <div>

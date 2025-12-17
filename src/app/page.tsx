@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
-import { ArrowRight, Instagram, Youtube, User } from "lucide-react";
+import { ArrowRight, User } from "lucide-react";
 import { Database } from "@/types/database.types";
 
 export const revalidate = 60; // Revalidate every 60 seconds

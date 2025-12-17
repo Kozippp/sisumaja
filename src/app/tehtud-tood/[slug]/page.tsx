@@ -91,7 +91,7 @@ export default async function ProjectPage({ params }: PageProps) {
                   className="flex items-center gap-2 bg-[#FF0000] text-white px-4 py-2 rounded-full font-bold hover:opacity-90 transition-opacity"
                 >
                   <Youtube className="w-5 h-5" />
-                  Vaata YouTube'is
+                  Vaata YouTube&apos;is
                 </a>
               )}
               {project.instagram_url && (
@@ -139,7 +139,7 @@ export default async function ProjectPage({ params }: PageProps) {
                 <div className="bg-neutral-900/50 p-4 rounded-xl border border-neutral-800 text-center">
                   <Heart className="w-6 h-6 text-primary mx-auto mb-2" />
                   <div className="text-xl font-bold text-white">{project.stat_likes}</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wider">Like'i</div>
+                  <div className="text-xs text-gray-500 uppercase tracking-wider">Like&apos;i</div>
                 </div>
               )}
               {project.stat_comments && (
@@ -161,7 +161,7 @@ export default async function ProjectPage({ params }: PageProps) {
             {/* Client Feedback */}
             {project.client_quote && (
               <div className="bg-neutral-900 rounded-2xl p-8 border border-neutral-800 relative">
-                <div className="text-primary text-6xl font-serif absolute top-4 left-6 opacity-20">"</div>
+                <div className="text-primary text-6xl font-serif absolute top-4 left-6 opacity-20">&ldquo;</div>
                 <p className="text-lg text-gray-300 italic mb-6 relative z-10">{project.client_quote}</p>
                 <div className="flex items-center">
                   {project.client_avatar_url ? (
