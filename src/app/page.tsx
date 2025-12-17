@@ -1,10 +1,13 @@
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { ArrowRight, Instagram, Youtube, User } from "lucide-react";
+import { Database } from "@/types/database.types";
 
 export const revalidate = 60; // Revalidate every 60 seconds
 
-async function getRecentProjects() {
+type Project = Database['public']['Tables']['projects']['Row'];
+
+async function getRecentProjects(): Promise<Project[]> {
   const { data } = await supabase
     .from("projects")
     .select("*")
