@@ -4,6 +4,9 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { ArrowLeft, Eye, Heart, MessageCircle, Share2, Youtube, Instagram } from "lucide-react";
 import MediaGallery from "@/components/MediaGallery";
+import { Database } from "@/types/database.types";
+
+type Project = Database['public']['Tables']['projects']['Row'];
 
 // Define interface for params
 interface PageProps {
@@ -16,7 +19,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     .from("projects")
     .select("title, description")
     .eq("slug", slug)
-    .single();
+    .single<Pick<Project, 'title' | 'description'>>();
 
   if (!project) {
     return {
@@ -40,7 +43,7 @@ export default async function ProjectPage({ params }: PageProps) {
     .from("projects")
     .select("*")
     .eq("slug", slug)
-    .single();
+    .single<Project>();
 
   if (!project) {
     notFound();
@@ -52,7 +55,8 @@ export default async function ProjectPage({ params }: PageProps) {
     .select("*")
     .eq("is_visible", true)
     .neq("id", project.id)
-    .limit(3);
+    .limit(3)
+    .returns<Project[]>();
 
   // Parse media gallery safely
   const mediaGallery = Array.isArray(project.media_gallery) 

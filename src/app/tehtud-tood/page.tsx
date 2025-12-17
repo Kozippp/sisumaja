@@ -1,6 +1,9 @@
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { Metadata } from "next";
+import { Database } from "@/types/database.types";
+
+type Project = Database['public']['Tables']['projects']['Row'];
 
 export const metadata: Metadata = {
   title: "Tehtud tööd | Sisumaja",
@@ -9,7 +12,7 @@ export const metadata: Metadata = {
 
 export const revalidate = 60;
 
-async function getProjects() {
+async function getProjects(): Promise<Project[]> {
   const { data } = await supabase
     .from("projects")
     .select("*")
