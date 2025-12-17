@@ -53,7 +53,8 @@ export default function DashboardPage() {
   const toggleVisibility = async (project: Project) => {
     await supabase
       .from('projects')
-      .update({ is_visible: !project.is_visible } as any)
+      // @ts-ignore
+      .update({ is_visible: !project.is_visible })
       .eq('id', project.id);
     fetchProjects();
   };
