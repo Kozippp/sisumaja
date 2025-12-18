@@ -254,67 +254,58 @@ export default async function ProjectPage({ params }: PageProps) {
                 </div>
             </div>
 
-            {/* Stats Bar (Modern Neon) */}
+            {/* Stats Bar (Modern) */}
             {hasStats && (
-                <div className="relative mt-12 mb-8 w-full max-w-4xl mx-auto">
-                    
-                    <div className="relative z-10 flex flex-wrap justify-center items-center gap-8 md:gap-16">
+                <div className="relative mt-16 mb-12 w-full max-w-7xl mx-auto px-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center">
                         {project.stat_views && (
-                            <div className="group flex flex-col items-center justify-center bg-neutral-950 px-6 py-2 transition-transform hover:scale-110 duration-300">
-                                <div className="flex items-center gap-2 mb-1">
-                                    <Eye className="w-5 h-5 text-pink-500 drop-shadow-[0_0_8px_rgba(236,72,153,0.8)]" />
-                                    <span className="text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-lg">
-                                        {parseInt(project.stat_views.replace(/\D/g, '') || '0')
-                                            .toLocaleString('et-EE')
-                                            .replace(/,/g, ' ')}
-                                    </span>
+                            <div className="group flex flex-col items-center justify-center p-6 bg-neutral-900/30 rounded-2xl border border-neutral-800 hover:border-pink-500/50 transition-all duration-300">
+                                <Eye className="w-8 h-8 text-pink-500 mb-3 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform" />
+                                <div className="text-3xl md:text-4xl font-black text-white tracking-tight mb-1">
+                                    {parseInt(project.stat_views.replace(/\D/g, '') || '0')
+                                        .toLocaleString('et-EE')
+                                        .replace(/,/g, ' ')}
                                 </div>
-                                <div className="text-[10px] md:text-xs font-bold text-pink-400/90 uppercase tracking-[0.2em] group-hover:text-pink-300 transition-colors">
+                                <div className="text-xs font-bold text-gray-500 uppercase tracking-[0.2em] group-hover:text-pink-400 transition-colors">
                                     Vaatamist
                                 </div>
                             </div>
                         )}
                         {project.stat_likes && (
-                            <div className="group flex flex-col items-center justify-center bg-neutral-950 px-6 py-2 transition-transform hover:scale-110 duration-300">
-                                <div className="flex items-center gap-2 mb-1">
-                                    <Heart className="w-5 h-5 text-pink-500 drop-shadow-[0_0_8px_rgba(236,72,153,0.8)]" />
-                                    <span className="text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-lg">
-                                        {parseInt(project.stat_likes.replace(/\D/g, '') || '0')
-                                            .toLocaleString('et-EE')
-                                            .replace(/,/g, ' ')}
-                                    </span>
+                            <div className="group flex flex-col items-center justify-center p-6 bg-neutral-900/30 rounded-2xl border border-neutral-800 hover:border-pink-500/50 transition-all duration-300">
+                                <Heart className="w-8 h-8 text-pink-500 mb-3 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform" />
+                                <div className="text-3xl md:text-4xl font-black text-white tracking-tight mb-1">
+                                    {parseInt(project.stat_likes.replace(/\D/g, '') || '0')
+                                        .toLocaleString('et-EE')
+                                        .replace(/,/g, ' ')}
                                 </div>
-                                <div className="text-[10px] md:text-xs font-bold text-pink-400/90 uppercase tracking-[0.2em] group-hover:text-pink-300 transition-colors">
+                                <div className="text-xs font-bold text-gray-500 uppercase tracking-[0.2em] group-hover:text-pink-400 transition-colors">
                                     Like&apos;i
                                 </div>
                             </div>
                         )}
                         {project.stat_comments && (
-                            <div className="group flex flex-col items-center justify-center bg-neutral-950 px-6 py-2 transition-transform hover:scale-110 duration-300">
-                                <div className="flex items-center gap-2 mb-1">
-                                    <MessageCircle className="w-5 h-5 text-pink-500 drop-shadow-[0_0_8px_rgba(236,72,153,0.8)]" />
-                                    <span className="text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-lg">
-                                        {parseInt(project.stat_comments.replace(/\D/g, '') || '0')
-                                            .toLocaleString('et-EE')
-                                            .replace(/,/g, ' ')}
-                                    </span>
+                            <div className="group flex flex-col items-center justify-center p-6 bg-neutral-900/30 rounded-2xl border border-neutral-800 hover:border-pink-500/50 transition-all duration-300">
+                                <MessageCircle className="w-8 h-8 text-pink-500 mb-3 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform" />
+                                <div className="text-3xl md:text-4xl font-black text-white tracking-tight mb-1">
+                                    {parseInt(project.stat_comments.replace(/\D/g, '') || '0')
+                                        .toLocaleString('et-EE')
+                                        .replace(/,/g, ' ')}
                                 </div>
-                                <div className="text-[10px] md:text-xs font-bold text-pink-400/90 uppercase tracking-[0.2em] group-hover:text-pink-300 transition-colors">
+                                <div className="text-xs font-bold text-gray-500 uppercase tracking-[0.2em] group-hover:text-pink-400 transition-colors">
                                     Kommentaari
                                 </div>
                             </div>
                         )}
                         {project.stat_shares && (
-                            <div className="group flex flex-col items-center justify-center bg-neutral-950 px-6 py-2 transition-transform hover:scale-110 duration-300">
-                                <div className="flex items-center gap-2 mb-1">
-                                    <Share2 className="w-5 h-5 text-pink-500 drop-shadow-[0_0_8px_rgba(236,72,153,0.8)]" />
-                                    <span className="text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-lg">
-                                        {parseInt(project.stat_shares.replace(/\D/g, '') || '0')
-                                            .toLocaleString('et-EE')
-                                            .replace(/,/g, ' ')}
-                                    </span>
+                            <div className="group flex flex-col items-center justify-center p-6 bg-neutral-900/30 rounded-2xl border border-neutral-800 hover:border-pink-500/50 transition-all duration-300">
+                                <Share2 className="w-8 h-8 text-pink-500 mb-3 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform" />
+                                <div className="text-3xl md:text-4xl font-black text-white tracking-tight mb-1">
+                                    {parseInt(project.stat_shares.replace(/\D/g, '') || '0')
+                                        .toLocaleString('et-EE')
+                                        .replace(/,/g, ' ')}
                                 </div>
-                                <div className="text-[10px] md:text-xs font-bold text-pink-400/90 uppercase tracking-[0.2em] group-hover:text-pink-300 transition-colors">
+                                <div className="text-xs font-bold text-gray-500 uppercase tracking-[0.2em] group-hover:text-pink-400 transition-colors">
                                     Jagamist
                                 </div>
                             </div>
