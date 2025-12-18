@@ -1,15 +1,24 @@
 'use client';
 
 import { Mail, MapPin, Instagram, Youtube, ArrowRight, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useEffect } from 'react';
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    
+    // Topeltkaitse
+    if (isSubmitting) return;
+
     setIsSubmitting(true);
     setStatus('idle');
     setErrorMessage(null);
@@ -120,7 +129,7 @@ export default function ContactPage() {
                 </div>
               )}
 
-              <form className="space-y-6" onSubmit={handleSubmit}>
+              <form className="space-y-6" onSubmit={handleSubmit} noValidate>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label htmlFor="name" className="text-sm font-medium text-gray-400 uppercase tracking-wider">Sinu nimi</label>
@@ -177,7 +186,7 @@ export default function ContactPage() {
                 
                 <button 
                   type="submit" 
-                  disabled={isSubmitting}
+                  disabled={!mounted || isSubmitting}
                   className="w-full bg-primary text-white font-bold py-5 rounded-xl hover:bg-fuchsia-600 transition-all uppercase tracking-wide flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
@@ -187,7 +196,7 @@ export default function ContactPage() {
                     </>
                   ) : (
                     <>
-                  Saada sõnum <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                      Saada sõnum <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </>
                   )}
                 </button>
