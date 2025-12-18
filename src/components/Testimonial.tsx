@@ -20,17 +20,29 @@ export function Testimonial({
   className 
 }: TestimonialProps) {
   return (
-    <div className={cn("bg-neutral-900 rounded-3xl p-8 md:p-10 border border-white/10 relative overflow-hidden", className)}>
-       {/* Background decoration */}
-       <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+    <div className={cn("bg-neutral-900/50 backdrop-blur-sm rounded-3xl p-8 md:p-10 border border-white/5 relative group hover:bg-neutral-900/80 transition-all duration-500", className)}>
+       
+       <div className="flex flex-col md:flex-row gap-8 items-start">
+          {/* Quote Icon - Desktop: Left side, Mobile: Hidden or Top */}
+          <div className="hidden md:block">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+              <Quote className="w-5 h-5 text-primary fill-primary" />
+            </div>
+          </div>
 
-       <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
-          
-          {/* Profile Section */}
-          <div className="flex flex-col sm:flex-row items-center gap-6 flex-shrink-0 text-center sm:text-left relative">
-              
-              {/* Avatar */}
-              <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-white/10 flex-shrink-0 relative bg-neutral-800">
+          <div className="flex-1 space-y-8">
+            {/* Quote Text */}
+            <div className="relative">
+              {/* Mobile quote icon */}
+              <Quote className="w-8 h-8 text-primary/20 fill-primary absolute -top-4 -left-2 md:hidden" />
+              <blockquote className="text-xl md:text-2xl text-white font-medium leading-relaxed">
+                "{quote}"
+              </blockquote>
+            </div>
+
+            {/* Author Profile */}
+            <div className="flex items-center gap-4 pt-2">
+              <div className="relative w-14 h-14 rounded-full overflow-hidden border border-white/10 bg-neutral-800 flex-shrink-0">
                 {imageSrc ? (
                   <Image 
                     src={imageSrc} 
@@ -39,31 +51,26 @@ export function Testimonial({
                     className="object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-2xl font-bold text-white">
+                  <div className="w-full h-full flex items-center justify-center text-lg font-bold text-white/50">
                     {author.charAt(0)}
                   </div>
                 )}
               </div>
-
-              {/* Vertical Divider (Hidden on mobile, visible on sm+) */}
-              <div className="hidden sm:block w-px h-16 bg-white/10" />
-
-              {/* Info */}
-              <div className="space-y-1">
-                  <div className="font-bold text-xl text-white">{author}</div>
-                  <div className="text-gray-400 text-sm">{role}</div>
-                  {company && <div className="text-primary font-medium">{company}</div>}
+              
+              <div>
+                <div className="font-bold text-white text-lg leading-none mb-1.5">{author}</div>
+                <div className="flex flex-wrap items-center gap-2 text-sm">
+                  <span className="text-gray-400">{role}</span>
+                  {company && (
+                    <>
+                      <span className="w-1 h-1 bg-gray-600 rounded-full" />
+                      <span className="text-primary font-medium">{company}</span>
+                    </>
+                  )}
+                </div>
               </div>
+            </div>
           </div>
-
-          {/* Quote Section */}
-          <div className="flex-1 relative border-t lg:border-t-0 lg:border-l border-white/10 pt-8 lg:pt-0 lg:pl-12 mt-4 lg:mt-0">
-             <Quote className="w-8 h-8 text-primary/40 absolute -top-4 lg:-top-6 -left-2 lg:-left-6 transform -scale-x-100" />
-             <blockquote className="text-lg md:text-xl text-gray-200 leading-relaxed italic relative z-10 text-center lg:text-left">
-                "{quote}"
-             </blockquote>
-          </div>
-
        </div>
     </div>
   );
