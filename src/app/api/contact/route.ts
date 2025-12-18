@@ -19,12 +19,14 @@ export async function POST(req: NextRequest) {
     }
 
     // Salvestame Supabase'i backupiks
-    const { error: dbError } = await supabase.from('contact_messages').insert({
-      name,
-      email,
-      phone,
-      message,
-    });
+    const { error: dbError } = await (supabase as any)
+      .from('contact_messages')
+      .insert({
+        name,
+        email,
+        phone,
+        message,
+      });
 
     if (dbError) {
       console.error('Supabase insert error:', dbError);
