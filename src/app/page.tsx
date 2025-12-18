@@ -201,7 +201,7 @@ export default async function Home() {
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <div>
                <h2 className="text-5xl font-black text-white mb-4 uppercase">Viimased tööd</h2>
-               <p className="text-gray-400 text-lg">Vaata, mida oleme hiljuti korda saatnud</p>
+               <p className="text-gray-400 text-lg">Siin näed viimaseid koostöid brändidega.</p>
             </div>
             <Link 
               href="/tehtud-tood" 
