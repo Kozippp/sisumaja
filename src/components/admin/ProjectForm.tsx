@@ -4,10 +4,25 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import { Database } from '@/types/database.types';
-import { X, Plus, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { X, Plus, Image as ImageIcon, Loader2, Video, Type, GalleryHorizontal, ArrowUp, ArrowDown, Trash2, LayoutTemplate } from 'lucide-react';
 
 type Project = Database['public']['Tables']['projects']['Row'];
 type ProjectInsert = Database['public']['Tables']['projects']['Insert'];
+
+// Content Block Types
+type BlockType = 'text' | 'image' | 'video' | 'carousel';
+type LayoutType = 'left' | 'right';
+
+export interface ContentBlock {
+  id: string;
+  type: BlockType;
+  layout?: LayoutType;
+  title?: string;
+  content?: string;
+  mediaUrl?: string;
+  thumbnailUrl?: string;
+  mediaItems?: string[];
+}
 
 interface ProjectFormProps {
   initialData?: Project;
@@ -24,7 +39,8 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     slug: '',
     description: '',
     thumbnail_url: '',
-    media_gallery: [], // We'll cast this to string[] internally
+    media_gallery: [], // Legacy support
+    content: [], // New Content Blocks
     youtube_url: '',
     tiktok_url: '',
     instagram_url: '',
@@ -41,6 +57,15 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     ...initialData,
   });
 
+  // Load content blocks from initialData
+  const [contentBlocks, setContentBlocks] = useState<ContentBlock[]>(() => {
+    if (initialData?.content && Array.isArray(initialData.content)) {
+      return initialData.content as unknown as ContentBlock[];
+    }
+    return [];
+  });
+
+  // Legacy media items state (kept for backward compatibility or easy migration)
   const [mediaItems, setMediaItems] = useState<string[]>(
     Array.isArray(initialData?.media_gallery) ? (initialData?.media_gallery as string[]) : []
   );
@@ -48,6 +73,9 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
   useEffect(() => {
     if (initialData) {
         setMediaItems(Array.isArray(initialData.media_gallery) ? (initialData.media_gallery as string[]) : []);
+        if (initialData.content && Array.isArray(initialData.content)) {
+            setContentBlocks(initialData.content as unknown as ContentBlock[]);
+        }
     }
   }, [initialData]);
 
@@ -136,6 +164,76 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     setMediaItems(prev => prev.filter((_, i) => i !== index));
   };
 
+  // --- CONTENT BUILDER FUNCTIONS ---
+
+  const addBlock = (type: BlockType) => {
+    const newBlock: ContentBlock = {
+      id: Math.random().toString(36).substring(2, 9),
+      type,
+      layout: 'left', // Default layout
+      title: '',
+      content: '',
+      mediaUrl: '',
+      thumbnailUrl: '',
+      mediaItems: [],
+    };
+    setContentBlocks([...contentBlocks, newBlock]);
+  };
+
+  const removeBlock = (id: string) => {
+    setContentBlocks(contentBlocks.filter(b => b.id !== id));
+  };
+
+  const moveBlock = (index: number, direction: 'up' | 'down') => {
+    if (
+      (direction === 'up' && index === 0) || 
+      (direction === 'down' && index === contentBlocks.length - 1)
+    ) return;
+
+    const newBlocks = [...contentBlocks];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    [newBlocks[index], newBlocks[targetIndex]] = [newBlocks[targetIndex], newBlocks[index]];
+    setContentBlocks(newBlocks);
+  };
+
+  const updateBlock = (id: string, updates: Partial<ContentBlock>) => {
+    setContentBlocks(contentBlocks.map(b => b.id === id ? { ...b, ...updates } : b));
+  };
+
+  const handleBlockMediaUpload = async (file: File, blockId: string, field: 'mediaUrl' | 'thumbnailUrl') => {
+    setUploading(true);
+    try {
+        const url = await uploadFile(file);
+        updateBlock(blockId, { [field]: url });
+    } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        setError('Faili üleslaadimine ebaõnnestus: ' + errorMessage);
+    } finally {
+        setUploading(false);
+    }
+  };
+
+  const handleBlockCarouselUpload = async (files: FileList, blockId: string) => {
+    setUploading(true);
+    try {
+        const newUrls: string[] = [];
+        for (let i = 0; i < files.length; i++) {
+            const url = await uploadFile(files[i]);
+            newUrls.push(url);
+        }
+        const block = contentBlocks.find(b => b.id === blockId);
+        const currentItems = block?.mediaItems || [];
+        updateBlock(blockId, { mediaItems: [...currentItems, ...newUrls] });
+    } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        setError('Galerii üleslaadimine ebaõnnestus: ' + errorMessage);
+    } finally {
+        setUploading(false);
+    }
+  };
+
+  // ---------------------------------
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -144,7 +242,8 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     const submissionData = {
         ...formData,
         media_gallery: mediaItems,
-        published_at: formData.published_at || new Date().toISOString(), // Ensure published_at is set
+        content: contentBlocks as unknown as Database['public']['Tables']['projects']['Insert']['content'], // Cast for Supabase
+        published_at: formData.published_at || new Date().toISOString(),
     };
 
     try {
@@ -175,7 +274,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8 max-w-4xl mx-auto pb-24 text-white">
+    <form onSubmit={handleSubmit} className="space-y-8 max-w-5xl mx-auto pb-24 text-white">
       {error && (
         <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-lg">
           {error}
@@ -219,15 +318,14 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                 }}
                 className="w-full bg-black border border-neutral-700 rounded p-2"
             />
-            <p className="text-xs text-gray-500 mt-1">When was the collaboration completed? This will be displayed on the project page.</p>
         </div>
         <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Kirjeldus</label>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Lühikirjeldus (SEO & List View)</label>
             <textarea
                 name="description"
                 value={formData.description || ''}
                 onChange={handleChange}
-                rows={4}
+                rows={3}
                 className="w-full bg-black border border-neutral-700 rounded p-2"
             />
         </div>
@@ -256,36 +354,202 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
         </div>
       </div>
 
-      {/* Media Gallery */}
-      <div className="bg-neutral-900 p-6 rounded-xl border border-neutral-800 space-y-4">
-        <h3 className="text-xl font-bold border-b border-neutral-800 pb-2 mb-4">Meedia Galerii (Karussell)</h3>
-        
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {mediaItems.map((url, idx) => (
-                <div key={idx} className="relative group aspect-video bg-black rounded border border-neutral-700 overflow-hidden">
-                    {url.match(/\.(mp4|webm)$/i) ? (
-                        <video src={url} className="w-full h-full object-cover" />
-                    ) : (
+      {/* --- CONTENT BUILDER --- */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between border-b border-neutral-800 pb-4">
+            <h3 className="text-2xl font-bold">Sisu Segmendid (Builder)</h3>
+            <div className="flex gap-2">
+                <button type="button" onClick={() => addBlock('text')} className="flex items-center gap-2 bg-neutral-800 hover:bg-neutral-700 px-3 py-2 rounded text-sm transition-colors"><Type className="w-4 h-4" /> Tekst</button>
+                <button type="button" onClick={() => addBlock('image')} className="flex items-center gap-2 bg-neutral-800 hover:bg-neutral-700 px-3 py-2 rounded text-sm transition-colors"><ImageIcon className="w-4 h-4" /> Pilt</button>
+                <button type="button" onClick={() => addBlock('video')} className="flex items-center gap-2 bg-neutral-800 hover:bg-neutral-700 px-3 py-2 rounded text-sm transition-colors"><Video className="w-4 h-4" /> Video</button>
+                <button type="button" onClick={() => addBlock('carousel')} className="flex items-center gap-2 bg-neutral-800 hover:bg-neutral-700 px-3 py-2 rounded text-sm transition-colors"><GalleryHorizontal className="w-4 h-4" /> Karussell</button>
+            </div>
+        </div>
+
+        {contentBlocks.length === 0 && (
+            <div className="text-center py-12 bg-neutral-900/50 border border-dashed border-neutral-800 rounded-xl">
+                <p className="text-gray-500">Pole ühtegi segmenti lisatud. Vali ülevalt tüüp, et alustada.</p>
+            </div>
+        )}
+
+        <div className="space-y-6">
+            {contentBlocks.map((block, index) => (
+                <div key={block.id} className="bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden relative group">
+                    {/* Block Header / Controls */}
+                    <div className="bg-neutral-800/50 px-4 py-2 flex items-center justify-between border-b border-neutral-800">
+                        <div className="flex items-center gap-2">
+                            <span className="bg-primary/20 text-primary text-xs px-2 py-0.5 rounded uppercase font-bold tracking-wider">{block.type}</span>
+                            <span className="text-gray-500 text-xs font-mono">#{index + 1}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                            <button type="button" onClick={() => moveBlock(index, 'up')} disabled={index === 0} className="p-1 hover:bg-neutral-700 rounded disabled:opacity-30"><ArrowUp className="w-4 h-4" /></button>
+                            <button type="button" onClick={() => moveBlock(index, 'down')} disabled={index === contentBlocks.length - 1} className="p-1 hover:bg-neutral-700 rounded disabled:opacity-30"><ArrowDown className="w-4 h-4" /></button>
+                            <div className="w-px h-4 bg-neutral-700 mx-1" />
+                            <button type="button" onClick={() => removeBlock(block.id)} className="p-1 hover:bg-red-500/20 text-red-500 rounded"><Trash2 className="w-4 h-4" /></button>
+                        </div>
+                    </div>
+
+                    <div className="p-4 space-y-4">
+                        {/* Layout Toggle (Only for media blocks) */}
+                        {block.type !== 'text' && (
+                            <div className="flex items-center gap-4 mb-4">
+                                <span className="text-sm text-gray-400">Paigutus (Desktop):</span>
+                                <div className="flex bg-black rounded p-1 border border-neutral-800">
+                                    <button 
+                                        type="button"
+                                        onClick={() => updateBlock(block.id, { layout: 'left' })}
+                                        className={`flex items-center gap-2 px-3 py-1 rounded text-sm ${block.layout === 'left' ? 'bg-neutral-800 text-white' : 'text-gray-500 hover:text-white'}`}
+                                    >
+                                        <LayoutTemplate className="w-4 h-4 rotate-180" /> Meedia Vasakul
+                                    </button>
+                                    <button 
+                                        type="button"
+                                        onClick={() => updateBlock(block.id, { layout: 'right' })}
+                                        className={`flex items-center gap-2 px-3 py-1 rounded text-sm ${block.layout === 'right' ? 'bg-neutral-800 text-white' : 'text-gray-500 hover:text-white'}`}
+                                    >
+                                        <LayoutTemplate className="w-4 h-4" /> Meedia Paremal
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Text Fields (Common) */}
+                        <div className="grid grid-cols-1 gap-4">
+                             {/* Only show title field for Text block, others use it as caption/description if needed? Or make it universal? 
+                                User asked for "Video + Tekst", "Pilt + Tekst".
+                                Let's make Text field universal for all blocks. 
+                                Title field mainly for 'text' block but can be useful for others too. 
+                             */}
+                             {block.type === 'text' && (
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Pealkiri (Valikuline)</label>
+                                    <input 
+                                        type="text" 
+                                        value={block.title || ''} 
+                                        onChange={(e) => updateBlock(block.id, { title: e.target.value })}
+                                        className="w-full bg-black border border-neutral-700 rounded p-2 text-sm"
+                                        placeholder="Sektsiooni pealkiri"
+                                    />
+                                </div>
+                             )}
+                             
+                             <div>
+                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Tekst / Kirjeldus</label>
+                                <textarea 
+                                    value={block.content || ''} 
+                                    onChange={(e) => updateBlock(block.id, { content: e.target.value })}
+                                    className="w-full bg-black border border-neutral-700 rounded p-2 text-sm"
+                                    rows={block.type === 'text' ? 5 : 3}
+                                    placeholder="Kirjuta siia..."
+                                />
+                             </div>
+                        </div>
+
+                        {/* Media Fields */}
+                        {block.type === 'image' && (
+                            <div>
+                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Pilt</label>
+                                <div className="flex items-start gap-4">
+                                    {block.mediaUrl ? (
+                                        <img src={block.mediaUrl} alt="" className="w-32 h-20 object-cover rounded border border-neutral-700 bg-black" />
+                                    ) : (
+                                        <div className="w-32 h-20 bg-black border border-neutral-700 rounded flex items-center justify-center text-gray-600">
+                                            <ImageIcon className="w-6 h-6" />
+                                        </div>
+                                    )}
+                                    <div className="flex-1 space-y-2">
+                                        <input 
+                                            type="text"
+                                            value={block.mediaUrl || ''}
+                                            onChange={(e) => updateBlock(block.id, { mediaUrl: e.target.value })}
+                                            className="w-full bg-black border border-neutral-700 rounded p-2 text-sm"
+                                            placeholder="Pildi URL"
+                                        />
+                                        <label className="inline-flex items-center gap-2 cursor-pointer bg-neutral-800 hover:bg-neutral-700 px-3 py-1.5 rounded text-xs transition-colors">
+                                            {uploading ? <Loader2 className="w-3 h-3 animate-spin" /> : <ImageIcon className="w-3 h-3" />}
+                                            Lae failist
+                                            <input type="file" className="hidden" accept="image/*" onChange={(e) => e.target.files && handleBlockMediaUpload(e.target.files[0], block.id, 'mediaUrl')} />
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {block.type === 'video' && (
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Video URL (YouTube/Vimeo)</label>
+                                    <input 
+                                        type="text"
+                                        value={block.mediaUrl || ''}
+                                        onChange={(e) => updateBlock(block.id, { mediaUrl: e.target.value })}
+                                        className="w-full bg-black border border-neutral-700 rounded p-2 text-sm"
+                                        placeholder="https://www.youtube.com/watch?v=..."
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Custom Thumbnail (Valikuline)</label>
+                                    <div className="flex items-start gap-4">
+                                        {block.thumbnailUrl ? (
+                                            <img src={block.thumbnailUrl} alt="" className="w-32 h-20 object-cover rounded border border-neutral-700 bg-black" />
+                                        ) : (
+                                            <div className="w-32 h-20 bg-black border border-neutral-700 rounded flex items-center justify-center text-gray-600 text-xs text-center p-2">
+                                                Auto (YouTube)
+                                            </div>
+                                        )}
+                                        <div className="flex-1 space-y-2">
+                                            <label className="inline-flex items-center gap-2 cursor-pointer bg-neutral-800 hover:bg-neutral-700 px-3 py-1.5 rounded text-xs transition-colors">
+                                                {uploading ? <Loader2 className="w-3 h-3 animate-spin" /> : <ImageIcon className="w-3 h-3" />}
+                                                Lae thumbnail
+                                                <input type="file" className="hidden" accept="image/*" onChange={(e) => e.target.files && handleBlockMediaUpload(e.target.files[0], block.id, 'thumbnailUrl')} />
+                                            </label>
+                                            {block.thumbnailUrl && (
+                                                <button 
+                                                    type="button"
+                                                    onClick={() => updateBlock(block.id, { thumbnailUrl: '' })}
+                                                    className="ml-2 text-red-500 text-xs hover:underline"
+                                                >
+                                                    Eemalda
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {block.type === 'carousel' && (
+                            <div>
+                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Galerii Pildid</label>
+                                <div className="grid grid-cols-4 gap-2 mb-2">
+                                    {block.mediaItems?.map((url, i) => (
+                                        <div key={i} className="aspect-square bg-black rounded border border-neutral-700 relative group overflow-hidden">
                         <img src={url} alt="" className="w-full h-full object-cover" />
-                    )}
                     <button
                         type="button"
-                        onClick={() => removeMediaItem(idx)}
-                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                onClick={() => {
+                                                    const newItems = block.mediaItems?.filter((_, idx) => idx !== i);
+                                                    updateBlock(block.id, { mediaItems: newItems });
+                                                }}
+                                                className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                         <X className="w-3 h-3" />
                     </button>
                 </div>
             ))}
-             <label className="cursor-pointer aspect-video bg-neutral-800 rounded border border-neutral-700 border-dashed hover:border-primary flex items-center justify-center transition-colors">
-                <div className="text-center">
-                    <Plus className="w-6 h-6 mx-auto mb-1 text-gray-400" />
-                    <span className="text-xs text-gray-500">Lisa faile</span>
+                                    <label className="aspect-square bg-neutral-800 rounded border border-neutral-700 border-dashed hover:border-primary flex items-center justify-center cursor-pointer transition-colors">
+                                        <Plus className="w-5 h-5 text-gray-400" />
+                                        <input type="file" className="hidden" multiple accept="image/*" onChange={(e) => e.target.files && handleBlockCarouselUpload(e.target.files, block.id)} />
+                                    </label>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
-                <input type="file" onChange={handleMediaUpload} accept="image/*,video/*" multiple className="hidden" />
-            </label>
+            ))}
         </div>
       </div>
+      {/* ----------------------- */}
 
       {/* Stats */}
       <div className="bg-neutral-900 p-6 rounded-xl border border-neutral-800 space-y-4">
@@ -399,4 +663,3 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     </form>
   );
 }
-
