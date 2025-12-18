@@ -31,7 +31,7 @@ export default async function WorkPage() {
         <div className="text-center mb-20">
           <h1 className="text-6xl md:text-8xl font-black text-white mb-8 uppercase tracking-tighter">Tehtud tööd</h1>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
-            Oleme teinud koostööd paljude ägedate brändidega. Iga projekt on uus väljakutse ja võimalus luua midagi erakordset.
+            Siin näed kellega ja kuidas oleme brändidega koostööd teinud.
           </p>
         </div>
 
