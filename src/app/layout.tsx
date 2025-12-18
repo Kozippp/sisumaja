@@ -17,6 +17,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Sisumaja | Eesti esimene creatorhouse",
   description: "Sisumaja on Eesti esimene creatorhouse, kuhu on kolinud kokku 6 eesti sisuloojat.",
+  icons: {
+    icon: "/LOGOTRANSPARENT.png",
+    shortcut: "/LOGOTRANSPARENT.png",
+    apple: "/LOGOTRANSPARENT.png",
+  },
 };
 
 export default function RootLayout({
