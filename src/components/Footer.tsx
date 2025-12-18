@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Instagram, Youtube, Mail, Tiktok } from 'lucide-react';
+import { Instagram, Youtube, Mail } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -16,7 +16,7 @@ export default function Footer() {
             <div className="flex space-x-4">
               <SocialLink href="https://www.youtube.com/@Sisumajatv" icon={Youtube} />
               <SocialLink href="https://www.instagram.com/sisumaja.tv/" icon={Instagram} />
-              <SocialLink href="https://www.tiktok.com/@sisumaja.tv" icon={Tiktok} />
+              <SocialLink href="https://www.tiktok.com/@sisumaja.tv" icon={TikTokIcon} />
               <SocialLink href="mailto:info@sisumaja.ee" icon={Mail} />
             </div>
           </div>
@@ -59,6 +59,22 @@ function SocialLink({ href, icon: Icon }: { href: string; icon: React.ElementTyp
     >
       <Icon className="w-5 h-5" />
     </a>
+  );
+}
+
+function TikTokIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M16 8.5c-1.1 0-2.1-.3-3-.8v5.3a4 4 0 1 1-2-3.5v2.2a2 2 0 1 0 1 1.7V4h2a4 4 0 0 0 4 4" />
+    </svg>
   );
 }
 
