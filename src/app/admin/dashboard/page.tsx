@@ -53,7 +53,6 @@ export default function DashboardPage() {
   const toggleVisibility = async (project: Project) => {
     await supabase
       .from('projects')
-      // @ts-expect-error - Supabase types don't properly infer update for boolean fields
       .update({ is_visible: !project.is_visible })
       .eq('id', project.id);
     fetchProjects();
