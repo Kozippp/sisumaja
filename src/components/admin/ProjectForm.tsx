@@ -294,8 +294,18 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     setLoading(true);
     setError(null);
 
+    // Ensure slug is always defined
+    const slug = formData.slug || formData.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || '';
+    
+    if (!slug) {
+      setError('Slug on kohustuslik. Palun sisesta pealkiri või slug.');
+      setLoading(false);
+      return;
+    }
+
     const submissionData = {
         ...formData,
+        slug, // Ensure slug is always a string
         media_gallery: mediaItems,
         content: contentBlocks as unknown as Database['public']['Tables']['projects']['Insert']['content'], // Cast for Supabase
         links: customLinks as unknown as Database['public']['Tables']['projects']['Insert']['links'],
