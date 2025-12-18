@@ -158,36 +158,41 @@ export default async function ProjectPage({ params }: PageProps) {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12">
-              {project.stat_views && (
-                <div className="bg-neutral-900/50 p-4 rounded-xl border border-neutral-800 text-center">
-                  <Eye className="w-6 h-6 text-primary mx-auto mb-2" />
-                  <div className="text-xl font-bold text-white">{parseInt(project.stat_views.replace(/\D/g, '') || '0').toLocaleString('et-EE').replace(/,/g, ' ')}</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wider">Vaatamist</div>
+            {(project.stat_views || project.stat_likes || project.stat_comments || project.stat_shares) && (
+              <div className="bg-neutral-900/50 p-6 rounded-xl border border-neutral-800 mb-12">
+                <h3 className="text-lg font-bold text-white mb-4 uppercase">Tulemus</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  {project.stat_views && (
+                    <div className="text-center">
+                      <Eye className="w-6 h-6 text-primary mx-auto mb-2" />
+                      <div className="text-xl font-bold text-white">{parseInt(project.stat_views.replace(/\D/g, '') || '0').toLocaleString('et-EE').replace(/,/g, ' ')}</div>
+                      <div className="text-xs text-gray-500 uppercase tracking-wider">Vaatamist</div>
+                    </div>
+                  )}
+                  {project.stat_likes && (
+                    <div className="text-center">
+                      <Heart className="w-6 h-6 text-primary mx-auto mb-2" />
+                      <div className="text-xl font-bold text-white">{parseInt(project.stat_likes.replace(/\D/g, '') || '0').toLocaleString('et-EE').replace(/,/g, ' ')}</div>
+                      <div className="text-xs text-gray-500 uppercase tracking-wider">Like&apos;i</div>
+                    </div>
+                  )}
+                  {project.stat_comments && (
+                    <div className="text-center">
+                      <MessageCircle className="w-6 h-6 text-primary mx-auto mb-2" />
+                      <div className="text-xl font-bold text-white">{parseInt(project.stat_comments.replace(/\D/g, '') || '0').toLocaleString('et-EE').replace(/,/g, ' ')}</div>
+                      <div className="text-xs text-gray-500 uppercase tracking-wider">Kommentaari</div>
+                    </div>
+                  )}
+                  {project.stat_shares && (
+                    <div className="text-center">
+                      <Share2 className="w-6 h-6 text-primary mx-auto mb-2" />
+                      <div className="text-xl font-bold text-white">{parseInt(project.stat_shares.replace(/\D/g, '') || '0').toLocaleString('et-EE').replace(/,/g, ' ')}</div>
+                      <div className="text-xs text-gray-500 uppercase tracking-wider">Jagamist</div>
+                    </div>
+                  )}
                 </div>
-              )}
-              {project.stat_likes && (
-                <div className="bg-neutral-900/50 p-4 rounded-xl border border-neutral-800 text-center">
-                  <Heart className="w-6 h-6 text-primary mx-auto mb-2" />
-                  <div className="text-xl font-bold text-white">{parseInt(project.stat_likes.replace(/\D/g, '') || '0').toLocaleString('et-EE').replace(/,/g, ' ')}</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wider">Like&apos;i</div>
-                </div>
-              )}
-              {project.stat_comments && (
-                <div className="bg-neutral-900/50 p-4 rounded-xl border border-neutral-800 text-center">
-                  <MessageCircle className="w-6 h-6 text-primary mx-auto mb-2" />
-                  <div className="text-xl font-bold text-white">{parseInt(project.stat_comments.replace(/\D/g, '') || '0').toLocaleString('et-EE').replace(/,/g, ' ')}</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wider">Kommentaari</div>
-                </div>
-              )}
-              {project.stat_shares && (
-                <div className="bg-neutral-900/50 p-4 rounded-xl border border-neutral-800 text-center">
-                  <Share2 className="w-6 h-6 text-primary mx-auto mb-2" />
-                  <div className="text-xl font-bold text-white">{parseInt(project.stat_shares.replace(/\D/g, '') || '0').toLocaleString('et-EE').replace(/,/g, ' ')}</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wider">Jagamist</div>
-                </div>
-              )}
-            </div>
+              </div>
+            )}
 
             {/* Client Feedback */}
             {project.client_quote && (
