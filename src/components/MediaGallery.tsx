@@ -36,7 +36,7 @@ export default function MediaGallery({ media }: MediaGalleryProps) {
 
   return (
     <div className="space-y-4">
-      <div className="relative aspect-video w-full bg-black rounded-2xl overflow-hidden border border-neutral-800 group">
+      <div className="relative aspect-video w-full bg-black rounded-2xl overflow-hidden group">
         {isVideo(media[currentIndex]) ? (
           <video 
             src={media[currentIndex]} 
@@ -90,8 +90,10 @@ export default function MediaGallery({ media }: MediaGalleryProps) {
                     key={idx}
                     onClick={() => setCurrentIndex(idx)}
                     className={cn(
-                        "relative flex-shrink-0 w-24 h-16 rounded-lg overflow-hidden border-2 transition-all",
-                        currentIndex === idx ? "border-primary" : "border-transparent opacity-60 hover:opacity-100"
+                        "relative flex-shrink-0 w-24 h-16 rounded-lg overflow-hidden transition-all duration-300",
+                        currentIndex === idx 
+                            ? "ring-2 ring-white opacity-100 scale-105" 
+                            : "opacity-40 hover:opacity-100 grayscale hover:grayscale-0"
                     )}
                 >
                      {isVideo(item) ? (

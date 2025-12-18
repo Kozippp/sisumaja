@@ -81,7 +81,7 @@ const MediaBlock = ({ block }: { block: ContentBlock }) => {
     if (block.type === 'video' && block.mediaUrl) {
       const embedUrl = getYoutubeEmbedUrl(block.mediaUrl);
       return (
-        <div className="relative aspect-video bg-black rounded-xl overflow-hidden border border-neutral-800 shadow-2xl">
+        <div className="relative aspect-video bg-black rounded-xl overflow-hidden shadow-2xl">
             {embedUrl ? (
                 <iframe 
                     src={embedUrl} 
@@ -98,7 +98,7 @@ const MediaBlock = ({ block }: { block: ContentBlock }) => {
     
     if (block.type === 'image' && block.mediaUrl) {
         return (
-            <div className="relative rounded-xl overflow-hidden border border-neutral-800 shadow-2xl">
+            <div className="relative rounded-xl overflow-hidden shadow-2xl">
                 <img src={block.mediaUrl} alt={block.title || ""} className="w-full h-auto object-cover" />
             </div>
         );
@@ -106,7 +106,7 @@ const MediaBlock = ({ block }: { block: ContentBlock }) => {
 
     if (block.type === 'carousel' && block.mediaItems && block.mediaItems.length > 0) {
         return (
-            <div className="relative rounded-xl overflow-hidden border border-neutral-800 shadow-2xl">
+            <div className="relative rounded-xl overflow-hidden shadow-2xl">
                  <MediaGallery media={block.mediaItems} />
             </div>
         );
