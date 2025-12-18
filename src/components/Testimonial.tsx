@@ -1,4 +1,4 @@
-import { Quote } from "lucide-react";
+import { Star } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
@@ -9,6 +9,7 @@ interface TestimonialProps {
   company?: string;
   imageSrc?: string;
   className?: string;
+  date?: string; // Optional date if available
 }
 
 export function Testimonial({ 
@@ -17,31 +18,16 @@ export function Testimonial({
   role, 
   company, 
   imageSrc,
-  className 
+  className,
+  date
 }: TestimonialProps) {
   return (
-    <div className={cn("bg-neutral-900/50 backdrop-blur-sm rounded-3xl p-8 md:p-10 border border-white/5 relative group hover:bg-neutral-900/80 transition-all duration-500", className)}>
+    <div className={cn("bg-neutral-900 rounded-3xl p-8 border border-white/5", className)}>
        
-       <div className="flex flex-col md:flex-row gap-8 items-start">
-          {/* Quote Icon - Desktop: Left side, Mobile: Hidden or Top */}
-          <div className="hidden md:block">
-            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-              <Quote className="w-5 h-5 text-primary fill-primary" />
-            </div>
-          </div>
-
-          <div className="flex-1 space-y-8">
-            {/* Quote Text */}
-            <div className="relative">
-              {/* Mobile quote icon */}
-              <Quote className="w-8 h-8 text-primary/20 fill-primary absolute -top-4 -left-2 md:hidden" />
-              <blockquote className="text-xl md:text-2xl text-white font-medium leading-relaxed">
-                "{quote}"
-              </blockquote>
-            </div>
-
-            {/* Author Profile */}
-            <div className="flex items-center gap-4 pt-2">
+       <div className="flex flex-col gap-6">
+          
+          {/* Header: Avatar + Name/Role */}
+          <div className="flex items-center gap-4">
               <div className="relative w-14 h-14 rounded-full overflow-hidden border border-white/10 bg-neutral-800 flex-shrink-0">
                 {imageSrc ? (
                   <Image 
@@ -58,19 +44,29 @@ export function Testimonial({
               </div>
               
               <div>
-                <div className="font-bold text-white text-lg leading-none mb-1.5">{author}</div>
-                <div className="flex flex-wrap items-center gap-2 text-sm">
-                  <span className="text-gray-400">{role}</span>
-                  {company && (
-                    <>
-                      <span className="w-1 h-1 bg-gray-600 rounded-full" />
-                      <span className="text-primary font-medium">{company}</span>
-                    </>
-                  )}
+                <div className="font-bold text-white text-lg leading-tight">{author}</div>
+                <div className="text-gray-400 text-sm mt-0.5">
+                  {role}
+                  {company && <span className="text-primary ml-1">• {company}</span>}
                 </div>
               </div>
-            </div>
           </div>
+
+          {/* Stars */}
+          <div className="flex gap-1">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Star key={star} className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+            ))}
+          </div>
+
+          {/* Review Content */}
+          <div className="space-y-3">
+            <h3 className="text-xl font-bold text-white">Suurepärane koostöö!</h3>
+            <p className="text-gray-300 leading-relaxed text-lg">
+              {quote}
+            </p>
+          </div>
+
        </div>
     </div>
   );
