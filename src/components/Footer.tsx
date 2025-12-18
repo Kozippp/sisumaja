@@ -11,11 +11,12 @@ export default function Footer() {
               Sisumaja<span className="text-primary">.</span>
             </Link>
             <p className="text-gray-400 max-w-sm mb-8 leading-relaxed">
-              Eesti esimene creatorhouse. Ühendame loovuse, professionaalsuse ja meelelahutuse, et luua sisu, mis kõnetab.
+              Sisumaja pakub uuenduslikku meelelahutust Eesti rahvale ning efektiivset turunduskanalit ettevõtetele, kelle väärtused kattuvad meie omadega.
             </p>
             <div className="flex space-x-4">
-              <SocialLink href="#" icon={<Instagram />} />
-              <SocialLink href="#" icon={<Youtube />} />
+              <SocialLink href="https://www.youtube.com/@Sisumajatv" icon={<Youtube />} />
+              <SocialLink href="https://www.instagram.com/sisumaja.tv/" icon={<Instagram />} />
+              <SocialLink href="https://www.tiktok.com/@sisumaja.tv" icon={<span className="text-xs font-semibold">TT</span>} />
               <SocialLink href="mailto:info@sisumaja.ee" icon={<Mail />} />
             </div>
           </div>
