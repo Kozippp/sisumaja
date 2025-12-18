@@ -3,6 +3,8 @@ import Link from "next/link";
 import { ArrowRight, User, Play, Star, Zap, TrendingUp, Clapperboard, Users } from "lucide-react";
 import Image from "next/image";
 import { Database } from "@/types/database.types";
+import { HeroSection } from "@/components/HeroSection";
+import * as motion from "framer-motion/client";
 
 export const revalidate = 60;
 
@@ -48,36 +50,115 @@ const FEATURES = [
 export default async function Home() {
   const recentProjects = await getRecentProjects();
 
+  const titleText = "SISUMAJA";
+
   return (
     <div className="flex flex-col min-h-screen bg-black overflow-x-hidden">
       {/* Hero Section */}
-      <section className="relative h-screen min-h-[800px] flex items-center justify-center overflow-hidden">
-        {/* Abstract Background Elements */}
-        <div className="absolute top-1/4 -left-64 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 -right-64 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl" />
+      <section className="relative h-screen min-h-[800px] flex items-center justify-center overflow-hidden bg-black">
         
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-neutral-900/50 via-black to-black" />
+        {/* Grain Overlay - adds texture to prevent banding and "cheap" look */}
+        <div className="absolute inset-0 z-[1] opacity-20 pointer-events-none mix-blend-overlay" 
+             style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")' }} 
+        />
+
+        {/* Abstract Background Elements - Animated */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <motion.div 
+            animate={{ 
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.5, 0.3], 
+              x: [-50, 50, -50],
+              y: [-20, 20, -20]
+            }}
+            transition={{ 
+              duration: 15, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+            className="absolute top-1/4 -left-64 w-[800px] h-[800px] bg-purple-900/40 rounded-full blur-[120px]" 
+          />
+          <motion.div 
+            animate={{ 
+              scale: [1, 1.1, 1],
+              opacity: [0.3, 0.6, 0.3],
+              x: [50, -50, 50],
+              y: [20, -50, 20]
+            }}
+            transition={{ 
+              duration: 18, 
+              repeat: Infinity, 
+              ease: "easeInOut",
+              delay: 2 
+            }}
+            className="absolute bottom-1/4 -right-64 w-[600px] h-[600px] bg-blue-900/40 rounded-full blur-[100px]" 
+          />
+          {/* Third subtle orb for depth */}
+           <motion.div 
+            animate={{ 
+              scale: [1, 1.3, 1],
+              opacity: [0.1, 0.3, 0.1],
+            }}
+            transition={{ 
+              duration: 20, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-fuchsia-900/10 rounded-full blur-[130px]" 
+          />
         </div>
         
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 z-0 bg-gradient-to-b from-transparent via-black/50 to-black" />
+        
         <div className="relative z-20 text-center px-4 max-w-5xl mx-auto mt-20">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-gray-300 mb-8 backdrop-blur-sm animate-fade-in-up">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-gray-300 mb-8 backdrop-blur-sm"
+          >
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
             </span>
             Eesti esimene creatorhouse
-          </div>
+          </motion.div>
           
-          <h1 className="text-7xl md:text-9xl font-black text-white mb-8 tracking-tighter uppercase leading-[0.9]">
-            Sisu<span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-purple-600">maja</span>
+          <h1 className="text-7xl md:text-9xl font-black text-white mb-8 tracking-tighter uppercase leading-[0.9] flex justify-center overflow-hidden">
+            {/* Split text animation */}
+            {titleText.split("").map((char, index) => (
+              <motion.span
+                key={index}
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                transition={{ 
+                  duration: 0.8, 
+                  ease: [0.33, 1, 0.68, 1], // Custom cubic bezier for "snappy" feel
+                  delay: index * 0.05 + 0.2 
+                }}
+                className="inline-block"
+              >
+                {char}
+              </motion.span>
+            ))}
           </h1>
           
-          <p className="text-xl md:text-2xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
+            className="text-xl md:text-2xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed"
+          >
             Pakume uuenduslikku meelelahutust Eesti rahvale ning efektiivset turunduskanalit meiega resoneeruvatele ettevõtele.
-          </p>
+          </motion.p>
           
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.0, ease: "easeOut" }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-6"
+          >
             <Link 
               href="/kontakt" 
               className="group relative px-8 py-4 bg-primary text-white font-bold rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95"
@@ -93,7 +174,7 @@ export default async function Home() {
             >
               Vaata tehtud töid
             </Link>
-          </div>
+          </motion.div>
         </div>
       </section>
 
