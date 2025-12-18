@@ -262,7 +262,7 @@ export default async function ProjectPage({ params }: PageProps) {
                         {project.stat_views && (
                             <div className="group flex flex-col items-center justify-center min-w-[120px]">
                                 <Eye className="w-8 h-8 text-pink-500 mb-4 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform duration-300" />
-                                <div className="text-4xl md:text-5xl font-black text-white tracking-tight mb-2">
+                                <div className="text-3xl md:text-4xl font-black text-white tracking-tight mb-2">
                                     {parseInt(project.stat_views.replace(/\D/g, '') || '0')
                                         .toLocaleString('et-EE')
                                         .replace(/,/g, ' ')}
@@ -275,7 +275,7 @@ export default async function ProjectPage({ params }: PageProps) {
                         {project.stat_likes && (
                             <div className="group flex flex-col items-center justify-center min-w-[120px]">
                                 <Heart className="w-8 h-8 text-pink-500 mb-4 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform duration-300" />
-                                <div className="text-4xl md:text-5xl font-black text-white tracking-tight mb-2">
+                                <div className="text-3xl md:text-4xl font-black text-white tracking-tight mb-2">
                                     {parseInt(project.stat_likes.replace(/\D/g, '') || '0')
                                         .toLocaleString('et-EE')
                                         .replace(/,/g, ' ')}
@@ -288,7 +288,7 @@ export default async function ProjectPage({ params }: PageProps) {
                         {project.stat_comments && (
                             <div className="group flex flex-col items-center justify-center min-w-[120px]">
                                 <MessageCircle className="w-8 h-8 text-pink-500 mb-4 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform duration-300" />
-                                <div className="text-4xl md:text-5xl font-black text-white tracking-tight mb-2">
+                                <div className="text-3xl md:text-4xl font-black text-white tracking-tight mb-2">
                                     {parseInt(project.stat_comments.replace(/\D/g, '') || '0')
                                         .toLocaleString('et-EE')
                                         .replace(/,/g, ' ')}
@@ -301,7 +301,7 @@ export default async function ProjectPage({ params }: PageProps) {
                         {project.stat_shares && (
                             <div className="group flex flex-col items-center justify-center min-w-[120px]">
                                 <Share2 className="w-8 h-8 text-pink-500 mb-4 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform duration-300" />
-                                <div className="text-4xl md:text-5xl font-black text-white tracking-tight mb-2">
+                                <div className="text-3xl md:text-4xl font-black text-white tracking-tight mb-2">
                                     {parseInt(project.stat_shares.replace(/\D/g, '') || '0')
                                         .toLocaleString('et-EE')
                                         .replace(/,/g, ' ')}
