@@ -77,7 +77,7 @@ export default async function Home() {
           </h1>
           
           <p className="text-xl md:text-2xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
-            Sisumaja pakub uuenduslikku meelelahutust Eesti rahvale ning efektiivset turunduskanalit ettevõtele, kelle väärtused kattuvad meie omadega.
+            Pakume uuenduslikku meelelahutust Eesti rahvale ning efektiivset turunduskanalit meiega resoneeruvatele ettevõtele.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
@@ -94,7 +94,7 @@ export default async function Home() {
               href="/tehtud-tood" 
               className="group px-8 py-4 bg-transparent border border-white/20 text-white font-bold rounded-full hover:bg-white/5 transition-all hover:scale-105 active:scale-95 uppercase tracking-wide text-sm flex items-center gap-2"
             >
-              <Play className="w-4 h-4 fill-current" /> Vaata videot
+              <Play className="w-4 h-4 fill-current" /> Vaata tehtud töid
             </Link>
           </div>
         </div>
