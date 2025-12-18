@@ -67,7 +67,7 @@ export default async function Home() {
           <motion.div 
             animate={{ 
               scale: [1, 1.2, 1],
-              opacity: [0.3, 0.5, 0.3], 
+              opacity: [0.4, 0.7, 0.4], 
               x: [-50, 50, -50],
               y: [-20, 20, -20]
             }}
@@ -76,12 +76,12 @@ export default async function Home() {
               repeat: Infinity, 
               ease: "easeInOut" 
             }}
-            className="absolute top-1/4 -left-64 w-[800px] h-[800px] bg-purple-900/40 rounded-full blur-[120px]" 
+            className="absolute top-1/4 -left-64 w-[800px] h-[800px] bg-purple-600/40 rounded-full blur-[120px]" 
           />
           <motion.div 
             animate={{ 
               scale: [1, 1.1, 1],
-              opacity: [0.3, 0.6, 0.3],
+              opacity: [0.4, 0.8, 0.4],
               x: [50, -50, 50],
               y: [20, -50, 20]
             }}
@@ -91,20 +91,20 @@ export default async function Home() {
               ease: "easeInOut",
               delay: 2 
             }}
-            className="absolute bottom-1/4 -right-64 w-[600px] h-[600px] bg-blue-900/40 rounded-full blur-[100px]" 
+            className="absolute bottom-1/4 -right-64 w-[600px] h-[600px] bg-blue-600/40 rounded-full blur-[100px]" 
           />
           {/* Third subtle orb for depth */}
            <motion.div 
             animate={{ 
               scale: [1, 1.3, 1],
-              opacity: [0.1, 0.3, 0.1],
+              opacity: [0.2, 0.5, 0.2],
             }}
             transition={{ 
               duration: 20, 
               repeat: Infinity, 
               ease: "easeInOut" 
             }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-fuchsia-900/10 rounded-full blur-[130px]" 
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-fuchsia-500/20 rounded-full blur-[130px]" 
           />
         </div>
         
@@ -126,15 +126,15 @@ export default async function Home() {
           </motion.div>
           
           <h1 className="text-7xl md:text-9xl font-black text-white mb-8 tracking-tighter uppercase leading-[0.9] flex justify-center overflow-hidden">
-            {/* Split text animation */}
-            {titleText.split("").map((char, index) => (
+            {/* Split text animation for "Sisu" */}
+            {"Sisu".split("").map((char, index) => (
               <motion.span
                 key={index}
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{ 
                   duration: 0.8, 
-                  ease: [0.33, 1, 0.68, 1], // Custom cubic bezier for "snappy" feel
+                  ease: [0.33, 1, 0.68, 1],
                   delay: index * 0.05 + 0.2 
                 }}
                 className="inline-block"
@@ -142,6 +142,19 @@ export default async function Home() {
                 {char}
               </motion.span>
             ))}
+            {/* "maja" as a single block to preserve gradient */}
+            <motion.span
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              transition={{ 
+                duration: 0.8, 
+                ease: [0.33, 1, 0.68, 1],
+                delay: 4 * 0.05 + 0.2 // Delay after "Sisu"
+              }}
+              className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-purple-600"
+            >
+              maja
+            </motion.span>
           </h1>
           
           <motion.p 
