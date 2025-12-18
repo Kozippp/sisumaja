@@ -20,10 +20,10 @@ async function getRecentProjects(): Promise<Project[]> {
 
 const TEAM_MEMBERS = [
   { name: "Kris", role: "Sisulooja", image: "/Kris.jpg" },
-  { name: "Mihkel", role: "Sisulooja", image: "/Mihkel.jpg" },
   { name: "Gerhard", role: "Sisulooja", image: "/Gerhard.jpg" },
-  { name: "Aston", role: "Sisulooja", image: "/Aston.jpg" },
+  { name: "Mihkel", role: "Sisulooja", image: "/Mihkel.jpg" },
   { name: "Maia-Liis", role: "Sisulooja", image: "/Maia-Liis.jpg" },
+  { name: "Aston", role: "Sisulooja", image: "/Aston.jpg" },
   { name: "Gepu", role: "Sisulooja", image: "/Gepu.jpg" },
 ];
 
