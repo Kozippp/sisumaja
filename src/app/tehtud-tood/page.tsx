@@ -29,7 +29,7 @@ export default async function WorkPage() {
     <div className="min-h-screen bg-black pt-32 pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-20">
-          <h1 className="text-6xl md:text-8xl font-black text-white mb-8 uppercase tracking-tighter">Tehtud tööd</h1>
+          <h1 className="text-[56px] md:text-[56px] font-black text-white mb-0 uppercase tracking-tighter">Tehtud tööd</h1>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
             Siin näed, mis brändidega ja kuidas oleme koostööd teinud.
           </p>

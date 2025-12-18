@@ -55,13 +55,13 @@ export default function MediaGallery({ media }: MediaGalleryProps) {
           <>
             <button 
               onClick={prevSlide}
-              className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 text-white hover:bg-primary transition-colors backdrop-blur-sm opacity-0 group-hover:opacity-100"
+              className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 text-white hover:bg-primary transition-colors backdrop-blur-sm"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
             <button 
               onClick={nextSlide}
-              className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 text-white hover:bg-primary transition-colors backdrop-blur-sm opacity-0 group-hover:opacity-100"
+              className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 text-white hover:bg-primary transition-colors backdrop-blur-sm"
             >
               <ChevronRight className="w-6 h-6" />
             </button>
@@ -84,16 +84,16 @@ export default function MediaGallery({ media }: MediaGalleryProps) {
       
       {/* Thumbnails */}
       {media.length > 1 && (
-        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+        <div className="flex gap-2 overflow-x-auto p-2 scrollbar-hide justify-center">
             {media.map((item, idx) => (
                 <button
                     key={idx}
                     onClick={() => setCurrentIndex(idx)}
                     className={cn(
-                        "relative flex-shrink-0 w-24 h-16 rounded-lg overflow-hidden transition-all duration-300",
+                        "relative flex-shrink-0 w-24 h-16 rounded-lg overflow-hidden transition-all duration-300 border-2",
                         currentIndex === idx 
-                            ? "ring-2 ring-white opacity-100 scale-105" 
-                            : "opacity-40 hover:opacity-100 grayscale hover:grayscale-0"
+                            ? "border-primary opacity-100 scale-105" 
+                            : "border-transparent opacity-40 hover:opacity-100 grayscale hover:grayscale-0"
                     )}
                 >
                      {isVideo(item) ? (
