@@ -1,6 +1,7 @@
 'use client';
 
 import { Mail, MapPin, Instagram, Youtube, ArrowRight, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
+import Image from 'next/image';
 import { useState, FormEvent, useEffect } from 'react';
 
 export default function ContactPage() {
@@ -100,6 +101,7 @@ export default function ContactPage() {
               <div className="flex gap-4">
                 <SocialButton icon={<Instagram className="w-6 h-6" />} href="https://www.instagram.com/sisumaja.tv/" />
                 <SocialButton icon={<Youtube className="w-6 h-6" />} href="https://www.youtube.com/@Sisumajatv" />
+                <SocialButton icon={<TikTokIcon className="w-6 h-6" />} href="https://www.tiktok.com/@sisumaja.tv" />
               </div>
             </div>
           </div>
@@ -219,5 +221,17 @@ function SocialButton({ icon, href }: { icon: React.ReactNode, href: string }) {
     >
       {icon}
     </a>
+  );
+}
+
+function TikTokIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <Image
+      src="/tiktok_logo.png"
+      alt="TikTok"
+      width={24}
+      height={24}
+      className="w-6 h-6 object-contain"
+    />
   );
 }
