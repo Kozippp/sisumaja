@@ -61,7 +61,7 @@ export default async function WorkPage() {
                     {project.collaboration_completed_at && (
                       <div className="flex items-center gap-2 text-xs text-gray-400">
                         <Calendar className="w-3 h-3" />
-                        <span>Completed {new Date(project.collaboration_completed_at).toLocaleDateString('en-US', { 
+                        <span>Valminud {new Date(project.collaboration_completed_at).toLocaleDateString('et-EE', { 
                           year: 'numeric', 
                           month: 'short', 
                           day: 'numeric' 

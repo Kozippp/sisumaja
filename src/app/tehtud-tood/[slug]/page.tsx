@@ -128,9 +128,9 @@ export default async function ProjectPage({ params }: PageProps) {
               {project.collaboration_completed_at && (
                 <div className="flex items-center gap-2 bg-neutral-900/50 px-4 py-2 rounded-lg border border-neutral-800">
                   <Calendar className="w-4 h-4 text-primary" />
-                  <span className="text-sm text-gray-400">Completed:</span>
+                  <span className="text-sm text-gray-400">Valminud:</span>
                   <span className="text-sm text-white font-medium">
-                    {new Date(project.collaboration_completed_at).toLocaleDateString('en-US', { 
+                    {new Date(project.collaboration_completed_at).toLocaleDateString('et-EE', { 
                       year: 'numeric', 
                       month: 'long', 
                       day: 'numeric' 
@@ -140,9 +140,9 @@ export default async function ProjectPage({ params }: PageProps) {
               )}
               <div className="flex items-center gap-2 bg-neutral-900/50 px-4 py-2 rounded-lg border border-neutral-800">
                 <Clock className="w-4 h-4 text-gray-500" />
-                <span className="text-sm text-gray-400">Last updated:</span>
+                <span className="text-sm text-gray-400">Viimati uuendatud:</span>
                 <span className="text-sm text-gray-300 font-medium">
-                  {new Date(project.updated_at).toLocaleDateString('en-US', { 
+                  {new Date(project.updated_at).toLocaleDateString('et-EE', { 
                     year: 'numeric', 
                     month: 'long', 
                     day: 'numeric' 
