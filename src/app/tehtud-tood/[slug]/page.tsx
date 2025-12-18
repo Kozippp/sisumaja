@@ -2,10 +2,10 @@ import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import { ArrowLeft, Eye, Heart, MessageCircle, Share2, Youtube, Instagram, Calendar, Clock, Play } from "lucide-react";
+import { ArrowLeft, Eye, Heart, MessageCircle, Share2, Youtube, Instagram, Calendar, Clock, Play, Link as LinkIcon, ExternalLink } from "lucide-react";
 import MediaGallery from "@/components/MediaGallery";
 import { Database } from "@/types/database.types";
-import { ContentBlock } from "@/components/admin/ProjectForm";
+import { ContentBlock, CustomLink } from "@/components/admin/ProjectForm";
 
 type Project = Database['public']['Tables']['projects']['Row'];
 
@@ -176,9 +176,6 @@ export default async function ProjectPage({ params }: PageProps) {
       blocks = project.content as unknown as ContentBlock[];
   } else {
       // Fallback: Construct blocks from legacy fields ONLY if no new content exists
-      // BUT for new projects, we don't want to show description automatically unless added as block
-      
-      // We will only fallback for LEGACY projects (where content is null/empty AND description/gallery exists)
       // If user clears content but keeps description, we might want to respect that? 
       // Current logic: If content array exists (even empty), we use it. If null, we use fallback.
       
@@ -199,8 +196,18 @@ export default async function ProjectPage({ params }: PageProps) {
               layout: 'left'
           });
       }
-      // REMOVED: Fallback to thumbnail_url as a content block. 
-      // User requested thumbnail NOT to be shown in content flow.
+  }
+
+  // Links
+  let links: CustomLink[] = [];
+  if (project.links && Array.isArray(project.links)) {
+      links = project.links as unknown as CustomLink[];
+  }
+  // If no new links, construct from legacy
+  if (links.length === 0) {
+      if (project.youtube_url) links.push({ id: 'yt', type: 'youtube', label: 'Vaata YouTube\'is', url: project.youtube_url });
+      if (project.instagram_url) links.push({ id: 'ig', type: 'instagram', label: 'Vaata Instagramis', url: project.instagram_url });
+      if (project.tiktok_url) links.push({ id: 'tt', type: 'tiktok', label: 'Vaata TikTokis', url: project.tiktok_url });
   }
 
   // Check if we have any stats to show
@@ -221,9 +228,35 @@ export default async function ProjectPage({ params }: PageProps) {
                 {project.title}
             </h1>
 
+            {/* Dates Row */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-sm text-gray-400 mb-10">
+                {project.collaboration_completed_at && (
+                    <div className="flex items-center gap-2">
+                        <Calendar className="w-4 h-4 text-primary" />
+                        <span>
+                            Avalikustatud: <span className="text-white font-medium">{new Date(project.collaboration_completed_at).toLocaleDateString('et-EE', { 
+                                year: 'numeric', 
+                                month: 'long',
+                                day: 'numeric'
+                            })}</span>
+                        </span>
+                    </div>
+                )}
+                 <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-gray-500" />
+                    <span>
+                         Viimati uuendatud: <span className="text-gray-300 font-medium">{new Date(project.updated_at).toLocaleDateString('et-EE', { 
+                                year: 'numeric', 
+                                month: 'long',
+                                day: 'numeric'
+                            })}</span>
+                    </span>
+                </div>
+            </div>
+
             {/* Stats Bar (Modern) */}
             {hasStats && (
-                <div className="inline-flex flex-wrap items-center justify-center gap-6 md:gap-12 bg-neutral-900/50 rounded-2xl px-8 py-4 border border-neutral-800 mb-10 backdrop-blur-sm">
+                <div className="inline-flex flex-wrap items-center justify-center gap-6 md:gap-12 bg-neutral-900/50 rounded-2xl px-8 py-4 border border-neutral-800 backdrop-blur-sm">
                     {project.stat_views && (
                         <div className="flex items-center gap-3">
                             <div className="p-2 bg-neutral-800 rounded-full text-primary">
@@ -270,42 +303,6 @@ export default async function ProjectPage({ params }: PageProps) {
                     )}
                 </div>
             )}
-
-            {/* Meta Info & Socials Row */}
-            <div className="flex flex-col md:flex-row items-center justify-center gap-6 text-sm text-gray-400">
-                <div className="flex items-center gap-4">
-                    {project.collaboration_completed_at && (
-                    <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-primary" />
-                        <span>
-                        {new Date(project.collaboration_completed_at).toLocaleDateString('et-EE', { 
-                            year: 'numeric', 
-                            month: 'long'
-                        })}
-                        </span>
-                    </div>
-                    )}
-                </div>
-
-                {/* Social Links */}
-                <div className="flex flex-wrap justify-center gap-3">
-                    {project.youtube_url && (
-                        <a href={project.youtube_url} target="_blank" rel="noopener noreferrer" className="p-2 bg-[#FF0000] text-white rounded-full hover:opacity-90 transition-opacity" title="Vaata YouTube'is">
-                        <Youtube className="w-5 h-5" />
-                        </a>
-                    )}
-                    {project.instagram_url && (
-                        <a href={project.instagram_url} target="_blank" rel="noopener noreferrer" className="p-2 bg-gradient-to-tr from-[#f09433] via-[#bc1888] to-[#2f55a4] text-white rounded-full hover:opacity-90 transition-opacity" title="Vaata Instagramis">
-                        <Instagram className="w-5 h-5" />
-                        </a>
-                    )}
-                    {project.tiktok_url && (
-                        <a href={project.tiktok_url} target="_blank" rel="noopener noreferrer" className="p-2 bg-[#000000] border border-white/20 text-white rounded-full hover:bg-neutral-900 transition-colors" title="Vaata TikTokis">
-                        <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.65-1.58-1.09-.65 2.58-.71 5.3-.17 7.92.56 2.73 2.18 5.17 4.5 6.64-1.35 1.05-2.96 1.76-4.66 1.95-2.8.31-5.71-.5-7.9-2.3C6.3 20.37 5.01 17.5 5.5 14.5c.34-2.13 1.39-4.13 2.98-5.71 1.58-1.57 3.75-2.47 5.98-2.5v4.03c-1.39.05-2.73.68-3.64 1.76-.94 1.13-1.39 2.63-1.19 4.1.25 1.83 1.34 3.48 2.96 4.39 1.69.95 3.8.84 5.39-.27.87-.6 1.56-1.45 1.95-2.43.51-1.32.61-2.78.3-4.19H12.52v-13.8z"/></svg>
-                        </a>
-                    )}
-                </div>
-            </div>
         </div>
       </div>
 
@@ -320,8 +317,51 @@ export default async function ProjectPage({ params }: PageProps) {
           ))}
       </div>
 
-      {/* Footer / Stats Section */}
+      {/* Footer / Links Section */}
       <div className="max-w-5xl mx-auto px-4 pb-24">
+        
+        {/* Social Links (Dynamic) */}
+        {links.length > 0 && (
+            <div className="mb-24 text-center">
+                 <h2 className="text-2xl font-bold text-white mb-8 uppercase">Vaata projekti sotsiaalmeedias</h2>
+                 <div className="flex flex-wrap justify-center gap-4">
+                    {links.map((link) => {
+                        let Icon = ExternalLink;
+                        let bgClass = "bg-neutral-800 hover:bg-neutral-700";
+                        let textClass = "text-white";
+
+                        if (link.type === 'youtube') {
+                            Icon = Youtube;
+                            bgClass = "bg-[#FF0000] hover:bg-[#CC0000]";
+                        } else if (link.type === 'instagram') {
+                            Icon = Instagram;
+                            bgClass = "bg-gradient-to-tr from-[#f09433] via-[#bc1888] to-[#2f55a4] hover:opacity-90";
+                        } else if (link.type === 'tiktok') {
+                            // Custom icon for tiktok below
+                             bgClass = "bg-[#000000] border border-white/20 hover:bg-neutral-900";
+                        }
+
+                        return (
+                            <a 
+                                key={link.id} 
+                                href={link.url} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className={`flex items-center gap-3 px-6 py-3 rounded-full font-bold transition-all transform hover:scale-105 ${bgClass} ${textClass}`}
+                            >
+                                {link.type === 'tiktok' ? (
+                                    <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.65-1.58-1.09-.65 2.58-.71 5.3-.17 7.92.56 2.73 2.18 5.17 4.5 6.64-1.35 1.05-2.96 1.76-4.66 1.95-2.8.31-5.71-.5-7.9-2.3C6.3 20.37 5.01 17.5 5.5 14.5c.34-2.13 1.39-4.13 2.98-5.71 1.58-1.57 3.75-2.47 5.98-2.5v4.03c-1.39.05-2.73.68-3.64 1.76-.94 1.13-1.39 2.63-1.19 4.1.25 1.83 1.34 3.48 2.96 4.39 1.69.95 3.8.84 5.39-.27.87-.6 1.56-1.45 1.95-2.43.51-1.32.61-2.78.3-4.19H12.52v-13.8z"/></svg>
+                                ) : (
+                                    <Icon className="w-5 h-5" />
+                                )}
+                                {link.label}
+                            </a>
+                        );
+                    })}
+                 </div>
+            </div>
+        )}
+
         {/* Client Quote */}
         {project.client_quote && (
              <div className="bg-neutral-900 rounded-3xl p-8 md:p-12 border border-neutral-800 relative text-center">

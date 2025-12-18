@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import { Database } from '@/types/database.types';
-import { X, Plus, Image as ImageIcon, Loader2, Video, Type, GalleryHorizontal, ArrowUp, ArrowDown, Trash2, LayoutTemplate } from 'lucide-react';
+import { X, Plus, Image as ImageIcon, Loader2, Video, Type, GalleryHorizontal, ArrowUp, ArrowDown, Trash2, LayoutTemplate, Link as LinkIcon, Youtube, Instagram } from 'lucide-react';
 
 type Project = Database['public']['Tables']['projects']['Row'];
 type ProjectInsert = Database['public']['Tables']['projects']['Insert'];
@@ -12,6 +12,15 @@ type ProjectInsert = Database['public']['Tables']['projects']['Insert'];
 // Content Block Types
 type BlockType = 'text' | 'image' | 'video' | 'carousel';
 type LayoutType = 'left' | 'right';
+
+// Link Types
+type LinkType = 'youtube' | 'instagram' | 'tiktok' | 'other';
+export interface CustomLink {
+    id: string;
+    type: LinkType;
+    label: string;
+    url: string;
+}
 
 export interface ContentBlock {
   id: string;
@@ -41,6 +50,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     thumbnail_url: '',
     media_gallery: [], // Legacy support
     content: [], // New Content Blocks
+    links: [], // New Custom Links
     youtube_url: '',
     tiktok_url: '',
     instagram_url: '',
@@ -65,6 +75,15 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     return [];
   });
 
+  // Load custom links from initialData
+  const [customLinks, setCustomLinks] = useState<CustomLink[]>(() => {
+    if (initialData?.links && Array.isArray(initialData.links)) {
+        return initialData.links as unknown as CustomLink[];
+    }
+    return [];
+  });
+
+
   // Legacy media items state (kept for backward compatibility or easy migration)
   const [mediaItems, setMediaItems] = useState<string[]>(
     Array.isArray(initialData?.media_gallery) ? (initialData?.media_gallery as string[]) : []
@@ -75,6 +94,9 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
         setMediaItems(Array.isArray(initialData.media_gallery) ? (initialData.media_gallery as string[]) : []);
         if (initialData.content && Array.isArray(initialData.content)) {
             setContentBlocks(initialData.content as unknown as ContentBlock[]);
+        }
+        if (initialData.links && Array.isArray(initialData.links)) {
+            setCustomLinks(initialData.links as unknown as CustomLink[]);
         }
     }
   }, [initialData]);
@@ -232,6 +254,37 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     }
   };
 
+  // --- LINKS BUILDER FUNCTIONS ---
+  const addLink = () => {
+    const newLink: CustomLink = {
+        id: Math.random().toString(36).substring(2, 9),
+        type: 'youtube', // default
+        label: '',
+        url: ''
+    };
+    setCustomLinks([...customLinks, newLink]);
+  };
+
+  const removeLink = (id: string) => {
+    setCustomLinks(customLinks.filter(l => l.id !== id));
+  };
+
+  const moveLink = (index: number, direction: 'up' | 'down') => {
+     if (
+      (direction === 'up' && index === 0) || 
+      (direction === 'down' && index === customLinks.length - 1)
+    ) return;
+    
+    const newLinks = [...customLinks];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    [newLinks[index], newLinks[targetIndex]] = [newLinks[targetIndex], newLinks[index]];
+    setCustomLinks(newLinks);
+  };
+
+  const updateLink = (id: string, updates: Partial<CustomLink>) => {
+      setCustomLinks(customLinks.map(l => l.id === id ? { ...l, ...updates } : l));
+  };
+
   // ---------------------------------
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -243,6 +296,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
         ...formData,
         media_gallery: mediaItems,
         content: contentBlocks as unknown as Database['public']['Tables']['projects']['Insert']['content'], // Cast for Supabase
+        links: customLinks as unknown as Database['public']['Tables']['projects']['Insert']['links'],
         published_at: formData.published_at || new Date().toISOString(),
     };
 
@@ -307,7 +361,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
             </div>
         </div>
         <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Collaboration Completed Date</label>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Projekti avaldamise kuupäev</label>
             <input
                 type="date"
                 name="collaboration_completed_at"
@@ -318,6 +372,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                 }}
                 className="w-full bg-black border border-neutral-700 rounded p-2"
             />
+             <p className="text-xs text-gray-500 mt-1">Kuupäev, millal projekt avalikustati. See ilmub lehel pealkirja all.</p>
         </div>
         <div>
             <label className="block text-sm font-medium text-gray-400 mb-1">Lühikirjeldus (SEO & List View)</label>
@@ -328,6 +383,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                 rows={3}
                 className="w-full bg-black border border-neutral-700 rounded p-2"
             />
+             <p className="text-xs text-gray-500 mt-1">See tekst on nähtav Google otsingus ja tehtud tööde nimekirjas. Projekti detailvaates seda EI kuvata.</p>
         </div>
         
         {/* Thumbnail */}
@@ -415,11 +471,6 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
 
                         {/* Text Fields (Common) */}
                         <div className="grid grid-cols-1 gap-4">
-                             {/* Only show title field for Text block, others use it as caption/description if needed? Or make it universal? 
-                                User asked for "Video + Tekst", "Pilt + Tekst".
-                                Let's make Text field universal for all blocks. 
-                                Title field mainly for 'text' block but can be useful for others too. 
-                             */}
                              {block.type === 'text' && (
                                 <div>
                                     <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Pealkiri (Valikuline)</label>
@@ -524,19 +575,19 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                                 <div className="grid grid-cols-4 gap-2 mb-2">
                                     {block.mediaItems?.map((url, i) => (
                                         <div key={i} className="aspect-square bg-black rounded border border-neutral-700 relative group overflow-hidden">
-                        <img src={url} alt="" className="w-full h-full object-cover" />
-                    <button
-                        type="button"
+                                            <img src={url} alt="" className="w-full h-full object-cover" />
+                                            <button 
+                                                type="button"
                                                 onClick={() => {
                                                     const newItems = block.mediaItems?.filter((_, idx) => idx !== i);
                                                     updateBlock(block.id, { mediaItems: newItems });
                                                 }}
                                                 className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                        <X className="w-3 h-3" />
-                    </button>
-                </div>
-            ))}
+                                            >
+                                                <X className="w-3 h-3" />
+                                            </button>
+                                        </div>
+                                    ))}
                                     <label className="aspect-square bg-neutral-800 rounded border border-neutral-700 border-dashed hover:border-primary flex items-center justify-center cursor-pointer transition-colors">
                                         <Plus className="w-5 h-5 text-gray-400" />
                                         <input type="file" className="hidden" multiple accept="image/*" onChange={(e) => e.target.files && handleBlockCarouselUpload(e.target.files, block.id)} />
@@ -574,22 +625,64 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
         </div>
       </div>
 
-      {/* Social Links */}
+      {/* Social Links Builder (NEW) */}
       <div className="bg-neutral-900 p-6 rounded-xl border border-neutral-800 space-y-4">
-        <h3 className="text-xl font-bold border-b border-neutral-800 pb-2 mb-4">Lingid</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-             <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">YouTube Video Link</label>
-                <input name="youtube_url" value={formData.youtube_url || ''} onChange={handleChange} className="w-full bg-black border border-neutral-700 rounded p-2" />
-            </div>
-             <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">TikTok Video Link</label>
-                <input name="tiktok_url" value={formData.tiktok_url || ''} onChange={handleChange} className="w-full bg-black border border-neutral-700 rounded p-2" />
-            </div>
-             <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">Instagram Postituse Link</label>
-                <input name="instagram_url" value={formData.instagram_url || ''} onChange={handleChange} className="w-full bg-black border border-neutral-700 rounded p-2" />
-            </div>
+        <div className="flex items-center justify-between border-b border-neutral-800 pb-2 mb-4">
+            <h3 className="text-xl font-bold">Lingid (Sotsiaalmeedia)</h3>
+             <button type="button" onClick={addLink} className="flex items-center gap-2 bg-neutral-800 hover:bg-neutral-700 px-3 py-2 rounded text-sm transition-colors"><Plus className="w-4 h-4" /> Lisa Link</button>
+        </div>
+        
+         {customLinks.length === 0 && (
+            <p className="text-gray-500 text-sm">Lisa siia lingid sotsiaalmeediasse (nt. YouTube, TikTok, Instagram).</p>
+        )}
+
+        <div className="space-y-4">
+            {customLinks.map((link, index) => (
+                <div key={link.id} className="flex items-center gap-4 bg-black p-4 rounded border border-neutral-800">
+                     <div className="flex flex-col gap-1">
+                        <button type="button" onClick={() => moveLink(index, 'up')} disabled={index === 0} className="p-1 hover:bg-neutral-800 rounded text-gray-500 disabled:opacity-30"><ArrowUp className="w-3 h-3" /></button>
+                        <button type="button" onClick={() => moveLink(index, 'down')} disabled={index === customLinks.length - 1} className="p-1 hover:bg-neutral-800 rounded text-gray-500 disabled:opacity-30"><ArrowDown className="w-3 h-3" /></button>
+                    </div>
+                    
+                    {/* Icon Select */}
+                    <div>
+                        <select 
+                            value={link.type}
+                            onChange={(e) => updateLink(link.id, { type: e.target.value as LinkType })}
+                            className="bg-neutral-900 border border-neutral-700 rounded p-2 text-sm"
+                        >
+                            <option value="youtube">YouTube</option>
+                            <option value="instagram">Instagram</option>
+                            <option value="tiktok">TikTok</option>
+                            <option value="other">Muu Link</option>
+                        </select>
+                    </div>
+
+                    {/* Label Input */}
+                     <div className="flex-1">
+                        <input 
+                            type="text"
+                            placeholder="Nupu tekst (nt. Vaata videot)"
+                            value={link.label}
+                            onChange={(e) => updateLink(link.id, { label: e.target.value })}
+                            className="w-full bg-neutral-900 border border-neutral-700 rounded p-2 text-sm"
+                        />
+                    </div>
+
+                    {/* URL Input */}
+                     <div className="flex-[2]">
+                        <input 
+                            type="text"
+                            placeholder="URL (https://...)"
+                            value={link.url}
+                            onChange={(e) => updateLink(link.id, { url: e.target.value })}
+                            className="w-full bg-neutral-900 border border-neutral-700 rounded p-2 text-sm"
+                        />
+                    </div>
+
+                    <button type="button" onClick={() => removeLink(link.id)} className="p-2 hover:bg-red-500/20 text-red-500 rounded"><Trash2 className="w-4 h-4" /></button>
+                </div>
+            ))}
         </div>
       </div>
 
