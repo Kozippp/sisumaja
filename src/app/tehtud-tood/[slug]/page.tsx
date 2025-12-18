@@ -159,9 +159,8 @@ export default async function ProjectPage({ params }: PageProps) {
 
             {/* Stats */}
             {(project.stat_views || project.stat_likes || project.stat_comments || project.stat_shares) && (
-              <div className="bg-neutral-900/50 p-6 rounded-xl border border-neutral-800 mb-12">
-                <h3 className="text-lg font-bold text-white mb-4 uppercase">Tulemus</h3>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div className="bg-neutral-900/50 p-4 rounded-xl border border-neutral-800 mb-12 inline-block">
+                <div className="flex gap-6">
                   {project.stat_views && (
                     <div className="text-center">
                       <Eye className="w-6 h-6 text-primary mx-auto mb-2" />
