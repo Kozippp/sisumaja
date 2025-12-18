@@ -12,9 +12,9 @@ export async function POST(req: NextRequest) {
     const message = (formData.get('message') || '').toString().trim();
 
     if (!name || !email || !message) {
-      return NextResponse.redirect(
-        new URL('/kontakt?error=missing_fields', req.url),
-        303
+      return NextResponse.json(
+        { error: 'missing_fields', message: 'Palun täida vähemalt nimi, e-mail ja sõnum.' },
+        { status: 400 }
       );
     }
 
@@ -30,6 +30,7 @@ export async function POST(req: NextRequest) {
 
     if (dbError) {
       console.error('Supabase insert error:', dbError);
+      // Me ei katkesta siin, kui ainult andmebaasi salvestamine ebaõnnestub, proovime ikka e-kirja saata
     }
 
     // Saadame e-kirja Zoho kaudu
@@ -86,9 +87,9 @@ export async function POST(req: NextRequest) {
         });
       } catch (emailError) {
         console.error('Email send error:', emailError);
-        return NextResponse.redirect(
-          new URL('/kontakt?error=email_failed', req.url),
-          303
+        return NextResponse.json(
+          { error: 'email_failed', message: 'Sõnumi saatmine ebaõnnestus.' },
+          { status: 500 }
         );
       }
     } else {
@@ -97,17 +98,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    return NextResponse.redirect(
-      new URL('/kontakt?success=1', req.url),
-      303
-    );
+    return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Contact API error:', error);
-    return NextResponse.redirect(
-      new URL('/kontakt?error=unknown', req.url),
-      303
+    return NextResponse.json(
+      { error: 'unknown', message: 'Tekkis tundmatu viga.' },
+      { status: 500 }
     );
   }
 }
-
-

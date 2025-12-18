@@ -1,12 +1,51 @@
-import { Mail, MapPin, Instagram, Youtube, ArrowRight } from 'lucide-react';
+'use client';
 
-export default function ContactPage({
-  searchParams,
-}: {
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) {
-  const success = searchParams?.success === '1';
-  const error = typeof searchParams?.error === 'string' ? searchParams.error : undefined;
+import { Mail, MapPin, Instagram, Youtube, ArrowRight, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
+import { useState, FormEvent } from 'react';
+
+export default function ContactPage() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setStatus('idle');
+    setErrorMessage(null);
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Something went wrong');
+      }
+
+      setStatus('success');
+      form.reset();
+    } catch (error: any) {
+      console.error('Submission error:', error);
+      setStatus('error');
+      
+      if (error.message === 'missing_fields') {
+        setErrorMessage('Palun täida vähemalt nimi, e-mail ja sõnum.');
+      } else if (error.message === 'email_failed') {
+        setErrorMessage('Sõnum salvestus, kuid e-kirja saatmine ebaõnnestus. Proovi hiljem uuesti või kirjuta otse info@sisumaja.ee.');
+      } else {
+        setErrorMessage('Midagi läks valesti. Proovi palun uuesti või kirjuta otse info@sisumaja.ee.');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
     <div className="min-h-screen bg-black pt-32 pb-24 relative overflow-hidden">
@@ -61,23 +100,27 @@ export default function ContactPage({
             <div className="bg-neutral-900/50 backdrop-blur-xl p-8 md:p-12 rounded-3xl border border-white/10 shadow-2xl">
               <h2 className="text-2xl font-bold text-white mb-4 uppercase">Saada meile kiri</h2>
 
-              {success && (
-                <div className="mb-6 rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-200 px-4 py-3 text-sm">
-                  Sõnum on edukalt saadetud. Võtame sinuga peagi ühendust.
+              {status === 'success' && (
+                <div className="mb-6 rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-200 px-4 py-3 text-sm flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-bold">Sõnum saadetud!</p>
+                    <p>Täname kirjast. Sõnum on edukalt meieni jõudnud ja vastame sulle peagi.</p>
+                  </div>
                 </div>
               )}
 
-              {error && (
-                <div className="mb-6 rounded-xl border border-red-500/40 bg-red-500/10 text-red-200 px-4 py-3 text-sm">
-                  {error === 'missing_fields'
-                    ? 'Palun täida vähemalt nimi, e-mail ja sõnum.'
-                    : error === 'email_failed'
-                    ? 'Sõnum salvestus, kuid e-kirja saatmine ebaõnnestus. Proovi hiljem uuesti või kirjuta otse info@sisumaja.ee.'
-                    : 'Midagi läks valesti. Proovi palun uuesti või kirjuta otse info@sisumaja.ee.'}
+              {status === 'error' && (
+                <div className="mb-6 rounded-xl border border-red-500/40 bg-red-500/10 text-red-200 px-4 py-3 text-sm flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-bold">Viga saatmisel</p>
+                    <p>{errorMessage}</p>
+                  </div>
                 </div>
               )}
 
-              <form className="space-y-6" action="/api/contact" method="POST">
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label htmlFor="name" className="text-sm font-medium text-gray-400 uppercase tracking-wider">Sinu nimi</label>
@@ -85,9 +128,10 @@ export default function ContactPage({
                       type="text" 
                       id="name" 
                       name="name"
-                      className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-gray-600"
+                      className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
                       placeholder="Ees- ja perekonnanimi"
                       required
+                      disabled={isSubmitting}
                     />
                   </div>
                   <div className="space-y-2">
@@ -96,9 +140,10 @@ export default function ContactPage({
                       type="email" 
                       id="email" 
                       name="email"
-                      className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-gray-600"
+                      className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
                       placeholder="nimi@ettevote.ee"
                       required
+                      disabled={isSubmitting}
                     />
                   </div>
                 </div>
@@ -111,8 +156,9 @@ export default function ContactPage({
                     type="tel"
                     id="phone"
                     name="phone"
-                    className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-gray-600"
+                    className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder="+372 5xxxxx"
+                    disabled={isSubmitting}
                   />
                 </div>
                 
@@ -122,17 +168,28 @@ export default function ContactPage({
                     id="message" 
                     name="message"
                     rows={6}
-                    className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-gray-600 resize-none"
+                    className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-gray-600 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder="Kirjelda oma ideed..."
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
                 
                 <button 
                   type="submit" 
-                  className="w-full bg-primary text-white font-bold py-5 rounded-xl hover:bg-fuchsia-600 transition-all uppercase tracking-wide flex items-center justify-center gap-2 group"
+                  disabled={isSubmitting}
+                  className="w-full bg-primary text-white font-bold py-5 rounded-xl hover:bg-fuchsia-600 transition-all uppercase tracking-wide flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed"
                 >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Saadan...
+                    </>
+                  ) : (
+                    <>
                   Saada sõnum <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
                 </button>
               </form>
             </div>
