@@ -170,15 +170,18 @@ export default async function ProjectPage({ params }: PageProps) {
     .returns<Project[]>();
 
   // Determine content blocks
-  // If no new content blocks, we construct them from legacy data to maintain the new design consistency
   let blocks: ContentBlock[] = [];
   
   if (project.content && Array.isArray(project.content) && project.content.length > 0) {
       blocks = project.content as unknown as ContentBlock[];
   } else {
-      // Fallback: Construct blocks from legacy fields
+      // Fallback: Construct blocks from legacy fields ONLY if no new content exists
+      // BUT for new projects, we don't want to show description automatically unless added as block
       
-      // 1. Description Block
+      // We will only fallback for LEGACY projects (where content is null/empty AND description/gallery exists)
+      // If user clears content but keeps description, we might want to respect that? 
+      // Current logic: If content array exists (even empty), we use it. If null, we use fallback.
+      
       if (project.description) {
           blocks.push({
               id: 'legacy-desc',
@@ -187,25 +190,21 @@ export default async function ProjectPage({ params }: PageProps) {
           });
       }
 
-      // 2. Media Gallery Block (Carousel)
       const legacyMedia = Array.isArray(project.media_gallery) ? project.media_gallery.map(String) : [];
       if (legacyMedia.length > 0) {
           blocks.push({
               id: 'legacy-gallery',
               type: 'carousel',
               mediaItems: legacyMedia,
-              layout: 'left' // default
-          });
-      } else if (project.thumbnail_url) {
-          // Fallback to thumbnail if no gallery
-          blocks.push({
-              id: 'legacy-thumb',
-              type: 'image',
-              mediaUrl: project.thumbnail_url,
               layout: 'left'
           });
       }
+      // REMOVED: Fallback to thumbnail_url as a content block. 
+      // User requested thumbnail NOT to be shown in content flow.
   }
+
+  // Check if we have any stats to show
+  const hasStats = project.stat_views || project.stat_likes || project.stat_comments || project.stat_shares;
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -218,48 +217,94 @@ export default async function ProjectPage({ params }: PageProps) {
                 Tagasi tehtud tööde juurde
             </Link>
             
-            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase leading-tight tracking-tight">
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-8 uppercase leading-tight tracking-tight">
                 {project.title}
             </h1>
 
-            {/* Meta Info */}
-            <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-400 mb-8">
-                {project.collaboration_completed_at && (
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-primary" />
-                    <span>
-                      {new Date(project.collaboration_completed_at).toLocaleDateString('et-EE', { 
-                        year: 'numeric', 
-                        month: 'long'
-                      })}
-                    </span>
-                  </div>
-                )}
-                 <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-gray-500" />
-                  <span>
-                     {Math.ceil((project.description?.length || 500) / 500)} min lugemist
-                  </span>
+            {/* Stats Bar (Modern) */}
+            {hasStats && (
+                <div className="inline-flex flex-wrap items-center justify-center gap-6 md:gap-12 bg-neutral-900/50 rounded-2xl px-8 py-4 border border-neutral-800 mb-10 backdrop-blur-sm">
+                    {project.stat_views && (
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-neutral-800 rounded-full text-primary">
+                                <Eye className="w-5 h-5" />
+                            </div>
+                            <div className="text-left">
+                                <div className="text-lg font-bold text-white leading-none">{parseInt(project.stat_views.replace(/\D/g, '') || '0').toLocaleString('et-EE').replace(/,/g, ' ')}</div>
+                                <div className="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Vaatamist</div>
+                            </div>
+                        </div>
+                    )}
+                    {project.stat_likes && (
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-neutral-800 rounded-full text-primary">
+                                <Heart className="w-5 h-5" />
+                            </div>
+                             <div className="text-left">
+                                <div className="text-lg font-bold text-white leading-none">{parseInt(project.stat_likes.replace(/\D/g, '') || '0').toLocaleString('et-EE').replace(/,/g, ' ')}</div>
+                                <div className="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Like&apos;i</div>
+                            </div>
+                        </div>
+                    )}
+                    {project.stat_comments && (
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-neutral-800 rounded-full text-primary">
+                                <MessageCircle className="w-5 h-5" />
+                            </div>
+                             <div className="text-left">
+                                <div className="text-lg font-bold text-white leading-none">{parseInt(project.stat_comments.replace(/\D/g, '') || '0').toLocaleString('et-EE').replace(/,/g, ' ')}</div>
+                                <div className="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Kommentaari</div>
+                            </div>
+                        </div>
+                    )}
+                     {project.stat_shares && (
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-neutral-800 rounded-full text-primary">
+                                <Share2 className="w-5 h-5" />
+                            </div>
+                             <div className="text-left">
+                                <div className="text-lg font-bold text-white leading-none">{parseInt(project.stat_shares.replace(/\D/g, '') || '0').toLocaleString('et-EE').replace(/,/g, ' ')}</div>
+                                <div className="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Jagamist</div>
+                            </div>
+                        </div>
+                    )}
                 </div>
-            </div>
+            )}
 
-            {/* Social Links */}
-             <div className="flex flex-wrap justify-center gap-4">
-              {project.youtube_url && (
-                <a href={project.youtube_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-[#FF0000] text-white px-4 py-2 rounded-full font-bold hover:opacity-90 transition-opacity">
-                  <Youtube className="w-5 h-5" /> YouTube
-                </a>
-              )}
-              {project.instagram_url && (
-                <a href={project.instagram_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-gradient-to-tr from-[#f09433] via-[#bc1888] to-[#2f55a4] text-white px-4 py-2 rounded-full font-bold hover:opacity-90 transition-opacity">
-                  <Instagram className="w-5 h-5" /> Instagram
-                </a>
-              )}
-               {project.tiktok_url && (
-                <a href={project.tiktok_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-[#000000] border border-white/20 text-white px-4 py-2 rounded-full font-bold hover:bg-neutral-900 transition-colors">
-                  <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.65-1.58-1.09-.65 2.58-.71 5.3-.17 7.92.56 2.73 2.18 5.17 4.5 6.64-1.35 1.05-2.96 1.76-4.66 1.95-2.8.31-5.71-.5-7.9-2.3C6.3 20.37 5.01 17.5 5.5 14.5c.34-2.13 1.39-4.13 2.98-5.71 1.58-1.57 3.75-2.47 5.98-2.5v4.03c-1.39.05-2.73.68-3.64 1.76-.94 1.13-1.39 2.63-1.19 4.1.25 1.83 1.34 3.48 2.96 4.39 1.69.95 3.8.84 5.39-.27.87-.6 1.56-1.45 1.95-2.43.51-1.32.61-2.78.3-4.19H12.52v-13.8z"/></svg> TikTok
-                </a>
-              )}
+            {/* Meta Info & Socials Row */}
+            <div className="flex flex-col md:flex-row items-center justify-center gap-6 text-sm text-gray-400">
+                <div className="flex items-center gap-4">
+                    {project.collaboration_completed_at && (
+                    <div className="flex items-center gap-2">
+                        <Calendar className="w-4 h-4 text-primary" />
+                        <span>
+                        {new Date(project.collaboration_completed_at).toLocaleDateString('et-EE', { 
+                            year: 'numeric', 
+                            month: 'long'
+                        })}
+                        </span>
+                    </div>
+                    )}
+                </div>
+
+                {/* Social Links */}
+                <div className="flex flex-wrap justify-center gap-3">
+                    {project.youtube_url && (
+                        <a href={project.youtube_url} target="_blank" rel="noopener noreferrer" className="p-2 bg-[#FF0000] text-white rounded-full hover:opacity-90 transition-opacity" title="Vaata YouTube'is">
+                        <Youtube className="w-5 h-5" />
+                        </a>
+                    )}
+                    {project.instagram_url && (
+                        <a href={project.instagram_url} target="_blank" rel="noopener noreferrer" className="p-2 bg-gradient-to-tr from-[#f09433] via-[#bc1888] to-[#2f55a4] text-white rounded-full hover:opacity-90 transition-opacity" title="Vaata Instagramis">
+                        <Instagram className="w-5 h-5" />
+                        </a>
+                    )}
+                    {project.tiktok_url && (
+                        <a href={project.tiktok_url} target="_blank" rel="noopener noreferrer" className="p-2 bg-[#000000] border border-white/20 text-white rounded-full hover:bg-neutral-900 transition-colors" title="Vaata TikTokis">
+                        <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.65-1.58-1.09-.65 2.58-.71 5.3-.17 7.92.56 2.73 2.18 5.17 4.5 6.64-1.35 1.05-2.96 1.76-4.66 1.95-2.8.31-5.71-.5-7.9-2.3C6.3 20.37 5.01 17.5 5.5 14.5c.34-2.13 1.39-4.13 2.98-5.71 1.58-1.57 3.75-2.47 5.98-2.5v4.03c-1.39.05-2.73.68-3.64 1.76-.94 1.13-1.39 2.63-1.19 4.1.25 1.83 1.34 3.48 2.96 4.39 1.69.95 3.8.84 5.39-.27.87-.6 1.56-1.45 1.95-2.43.51-1.32.61-2.78.3-4.19H12.52v-13.8z"/></svg>
+                        </a>
+                    )}
+                </div>
             </div>
         </div>
       </div>
@@ -277,34 +322,6 @@ export default async function ProjectPage({ params }: PageProps) {
 
       {/* Footer / Stats Section */}
       <div className="max-w-5xl mx-auto px-4 pb-24">
-         {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-16 border-t border-neutral-800 pt-12">
-            {project.stat_views && (
-            <div className="text-center">
-                <div className="text-3xl font-black text-white mb-1">{parseInt(project.stat_views.replace(/\D/g, '') || '0').toLocaleString('et-EE').replace(/,/g, ' ')}</div>
-                <div className="text-xs text-gray-500 uppercase tracking-wider font-bold">Vaatamist</div>
-            </div>
-            )}
-            {project.stat_likes && (
-            <div className="text-center">
-                <div className="text-3xl font-black text-white mb-1">{parseInt(project.stat_likes.replace(/\D/g, '') || '0').toLocaleString('et-EE').replace(/,/g, ' ')}</div>
-                <div className="text-xs text-gray-500 uppercase tracking-wider font-bold">Like&apos;i</div>
-            </div>
-            )}
-            {project.stat_comments && (
-            <div className="text-center">
-                <div className="text-3xl font-black text-white mb-1">{parseInt(project.stat_comments.replace(/\D/g, '') || '0').toLocaleString('et-EE').replace(/,/g, ' ')}</div>
-                <div className="text-xs text-gray-500 uppercase tracking-wider font-bold">Kommentaari</div>
-            </div>
-            )}
-            {project.stat_shares && (
-            <div className="text-center">
-                <div className="text-3xl font-black text-white mb-1">{parseInt(project.stat_shares.replace(/\D/g, '') || '0').toLocaleString('et-EE').replace(/,/g, ' ')}</div>
-                <div className="text-xs text-gray-500 uppercase tracking-wider font-bold">Jagamist</div>
-            </div>
-            )}
-        </div>
-
         {/* Client Quote */}
         {project.client_quote && (
              <div className="bg-neutral-900 rounded-3xl p-8 md:p-12 border border-neutral-800 relative text-center">
