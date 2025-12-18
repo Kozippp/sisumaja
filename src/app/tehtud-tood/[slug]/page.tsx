@@ -258,57 +258,61 @@ export default async function ProjectPage({ params }: PageProps) {
             {/* Stats Bar (Modern) */}
             {hasStats && (
                 <div className="relative mt-16 mb-12 w-full max-w-7xl mx-auto px-4">
-                    <div className="flex flex-wrap justify-center gap-8 md:gap-12">
+                    <div className="flex flex-wrap justify-center gap-12 md:gap-24">
                         {project.stat_views && (
-                            <div className="group flex flex-col items-center justify-center p-6 bg-neutral-900/30 rounded-2xl border border-neutral-800 hover:border-pink-500/50 transition-all duration-300 w-full sm:w-[calc(50%-1rem)] md:w-[calc(33.333%-2rem)] lg:w-[calc(25%-2.25rem)] min-w-[200px]">
-                                <Eye className="w-8 h-8 text-pink-500 mb-3 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform" />
-                                <div className="text-3xl md:text-4xl font-black text-white tracking-tight mb-1">
+                            <div className="group flex flex-col items-center justify-center min-w-[120px]">
+                                <Eye className="w-8 h-8 text-pink-500 mb-4 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform duration-300" />
+                                <div className="text-4xl md:text-5xl font-black text-white tracking-tight mb-2">
                                     {parseInt(project.stat_views.replace(/\D/g, '') || '0')
                                         .toLocaleString('et-EE')
                                         .replace(/,/g, ' ')}
                                 </div>
-                                <div className="text-xs font-bold text-gray-500 uppercase tracking-[0.2em] group-hover:text-pink-400 transition-colors">
+                                <div className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-6 group-hover:text-pink-400 transition-colors">
                                     Vaatamist
                                 </div>
+                                <div className="w-12 h-0.5 bg-neutral-800 group-hover:bg-pink-500 group-hover:w-full transition-all duration-500 ease-out" />
                             </div>
                         )}
                         {project.stat_likes && (
-                            <div className="group flex flex-col items-center justify-center p-6 bg-neutral-900/30 rounded-2xl border border-neutral-800 hover:border-pink-500/50 transition-all duration-300 w-full sm:w-[calc(50%-1rem)] md:w-[calc(33.333%-2rem)] lg:w-[calc(25%-2.25rem)] min-w-[200px]">
-                                <Heart className="w-8 h-8 text-pink-500 mb-3 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform" />
-                                <div className="text-3xl md:text-4xl font-black text-white tracking-tight mb-1">
+                            <div className="group flex flex-col items-center justify-center min-w-[120px]">
+                                <Heart className="w-8 h-8 text-pink-500 mb-4 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform duration-300" />
+                                <div className="text-4xl md:text-5xl font-black text-white tracking-tight mb-2">
                                     {parseInt(project.stat_likes.replace(/\D/g, '') || '0')
                                         .toLocaleString('et-EE')
                                         .replace(/,/g, ' ')}
                                 </div>
-                                <div className="text-xs font-bold text-gray-500 uppercase tracking-[0.2em] group-hover:text-pink-400 transition-colors">
+                                <div className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-6 group-hover:text-pink-400 transition-colors">
                                     Like&apos;i
                                 </div>
+                                <div className="w-12 h-0.5 bg-neutral-800 group-hover:bg-pink-500 group-hover:w-full transition-all duration-500 ease-out" />
                             </div>
                         )}
                         {project.stat_comments && (
-                            <div className="group flex flex-col items-center justify-center p-6 bg-neutral-900/30 rounded-2xl border border-neutral-800 hover:border-pink-500/50 transition-all duration-300 w-full sm:w-[calc(50%-1rem)] md:w-[calc(33.333%-2rem)] lg:w-[calc(25%-2.25rem)] min-w-[200px]">
-                                <MessageCircle className="w-8 h-8 text-pink-500 mb-3 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform" />
-                                <div className="text-3xl md:text-4xl font-black text-white tracking-tight mb-1">
+                            <div className="group flex flex-col items-center justify-center min-w-[120px]">
+                                <MessageCircle className="w-8 h-8 text-pink-500 mb-4 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform duration-300" />
+                                <div className="text-4xl md:text-5xl font-black text-white tracking-tight mb-2">
                                     {parseInt(project.stat_comments.replace(/\D/g, '') || '0')
                                         .toLocaleString('et-EE')
                                         .replace(/,/g, ' ')}
                                 </div>
-                                <div className="text-xs font-bold text-gray-500 uppercase tracking-[0.2em] group-hover:text-pink-400 transition-colors">
+                                <div className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-6 group-hover:text-pink-400 transition-colors">
                                     Kommentaari
                                 </div>
+                                <div className="w-12 h-0.5 bg-neutral-800 group-hover:bg-pink-500 group-hover:w-full transition-all duration-500 ease-out" />
                             </div>
                         )}
                         {project.stat_shares && (
-                            <div className="group flex flex-col items-center justify-center p-6 bg-neutral-900/30 rounded-2xl border border-neutral-800 hover:border-pink-500/50 transition-all duration-300 w-full sm:w-[calc(50%-1rem)] md:w-[calc(33.333%-2rem)] lg:w-[calc(25%-2.25rem)] min-w-[200px]">
-                                <Share2 className="w-8 h-8 text-pink-500 mb-3 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform" />
-                                <div className="text-3xl md:text-4xl font-black text-white tracking-tight mb-1">
+                            <div className="group flex flex-col items-center justify-center min-w-[120px]">
+                                <Share2 className="w-8 h-8 text-pink-500 mb-4 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform duration-300" />
+                                <div className="text-4xl md:text-5xl font-black text-white tracking-tight mb-2">
                                     {parseInt(project.stat_shares.replace(/\D/g, '') || '0')
                                         .toLocaleString('et-EE')
                                         .replace(/,/g, ' ')}
                                 </div>
-                                <div className="text-xs font-bold text-gray-500 uppercase tracking-[0.2em] group-hover:text-pink-400 transition-colors">
+                                <div className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-6 group-hover:text-pink-400 transition-colors">
                                     Jagamist
                                 </div>
+                                <div className="w-12 h-0.5 bg-neutral-800 group-hover:bg-pink-500 group-hover:w-full transition-all duration-500 ease-out" />
                             </div>
                         )}
                     </div>
