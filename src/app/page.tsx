@@ -30,8 +30,8 @@ const TEAM_MEMBERS = [
 const FEATURES = [
   {
     icon: <Star className="w-6 h-6 text-primary" />,
-    title: "Tipptasemel Sisu",
-    description: "Loome sisu, mis ei jäta kedagi külmaks. Kvaliteet on meie visiitkaart.",
+    title: "Aja kanal",
+    description: "Loome iganädalaselt koos seltskondlikke videoid Sisumaja YouTube’i kanalile.",
   },
   {
     icon: <Zap className="w-6 h-6 text-primary" />,
@@ -120,8 +120,8 @@ export default async function Home() {
                    <div className="text-gray-500 text-sm uppercase tracking-wider">Sisuloojat</div>
                 </div>
                 <div>
-                   <div className="text-4xl font-bold text-white mb-2">40+ aastat kogemust kokku</div>
-                   <div className="text-gray-500 text-sm uppercase tracking-wider">Meeskonna ühiskogemus</div>
+                   <div className="text-4xl font-bold text-white mb-2">40+ AASTAT</div>
+                   <div className="text-gray-500 text-sm uppercase tracking-wider">kogemust sotsiaalmeedias kokku</div>
                 </div>
               </div>
             </div>
