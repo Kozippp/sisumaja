@@ -54,7 +54,7 @@ export default async function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-black overflow-x-hidden">
       {/* Hero Section */}
-      <section className="relative h-screen min-h-[800px] flex items-center justify-center overflow-hidden bg-black">
+      <section className="relative h-screen min-h-[100svh] md:min-h-[800px] flex items-center justify-center overflow-hidden bg-black">
         
         {/* Grain Overlay - adds texture to prevent banding and "cheap" look */}
         <div className="absolute inset-0 z-[1] opacity-20 pointer-events-none mix-blend-overlay" 
@@ -110,7 +110,7 @@ export default async function Home() {
         {/* Gradient Overlay */}
         <div className="absolute inset-0 z-0 bg-gradient-to-b from-transparent via-black/50 to-black" />
         
-        <div className="relative z-20 text-center px-4 max-w-5xl mx-auto mt-20">
+        <div className="relative z-20 text-center px-4 max-w-5xl mx-auto md:mt-20">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
