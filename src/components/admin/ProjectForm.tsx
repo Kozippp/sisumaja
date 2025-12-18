@@ -307,7 +307,6 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
         // Update
         const { error } = await supabase
           .from('projects')
-          // @ts-expect-error - Supabase types don't properly infer complex nested JSON types
           .update(submissionData)
           .eq('id', initialData.id);
         if (error) throw error;
@@ -315,7 +314,6 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
         // Create
         const { error } = await supabase
           .from('projects')
-          // @ts-expect-error - Supabase types don't properly infer complex nested JSON types
           .insert(submissionData);
         if (error) throw error;
       }
