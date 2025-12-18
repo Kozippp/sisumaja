@@ -58,9 +58,17 @@ export default async function Home() {
         
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-neutral-900/50 via-black to-black" />
-          {/* Placeholder for Video Background */}
+          {/* Logo watermark in background */}
           <div className="absolute inset-0 flex items-center justify-center opacity-20">
-             <div className="text-neutral-800 text-[20vw] font-black uppercase tracking-tighter select-none">Sisumaja</div>
+            <div className="relative w-[70vw] max-w-[640px] aspect-square">
+              <Image
+                src="/LOGOTRANSPARENT.png"
+                alt="Sisumaja logo taustal"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
           </div>
         </div>
         
@@ -112,7 +120,7 @@ export default async function Home() {
                 kogukond.
               </h2>
               <p className="text-gray-400 text-lg leading-relaxed mb-8">
-                Sisumajja on kokku kolinud 6 andekat sisuloojat, kes elavad ja loovad koos 24/7. Meie eesmärk on pakkuda Eesti rahvale uut ja ägedat seltskondlikku meelelahutust ning arendada Eesti sisuloome maastikku paremaks kõikidele sisuloojatele.
+                Sisumajja on kokku kolinud 6 andekat sisuloojat, kes elavad ja loovad sisu koos 24/7. Meie eesmärk on pakkuda Eesti rahvale uut ja ägedat seltskondlikku meelelahutust ning arendada Eesti sisuloome maastikku paremaks kõikidele.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                 <div>
