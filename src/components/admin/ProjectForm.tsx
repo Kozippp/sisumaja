@@ -471,18 +471,16 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
 
                         {/* Text Fields (Common) */}
                         <div className="grid grid-cols-1 gap-4">
-                             {block.type === 'text' && (
-                                <div>
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Pealkiri (Valikuline)</label>
-                                    <input 
-                                        type="text" 
-                                        value={block.title || ''} 
-                                        onChange={(e) => updateBlock(block.id, { title: e.target.value })}
-                                        className="w-full bg-black border border-neutral-700 rounded p-2 text-sm"
-                                        placeholder="Sektsiooni pealkiri"
-                                    />
-                                </div>
-                             )}
+                             <div>
+                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Pealkiri (Valikuline)</label>
+                                <input 
+                                    type="text" 
+                                    value={block.title || ''} 
+                                    onChange={(e) => updateBlock(block.id, { title: e.target.value })}
+                                    className="w-full bg-black border border-neutral-700 rounded p-2 text-sm"
+                                    placeholder="Sektsiooni pealkiri"
+                                />
+                             </div>
                              
                              <div>
                                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Tekst / Kirjeldus</label>

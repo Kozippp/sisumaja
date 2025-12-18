@@ -127,7 +127,7 @@ const MediaBlock = ({ block }: { block: ContentBlock }) => {
   // Split layout
   return (
     <div className="max-w-7xl mx-auto w-full px-4 mb-16">
-      <div className={`flex flex-col lg:flex-row gap-8 lg:gap-16 items-center ${isRightLayout ? 'lg:flex-row-reverse' : ''}`}>
+      <div className={`flex flex-col-reverse lg:flex-row gap-8 lg:gap-16 items-start ${isRightLayout ? 'lg:flex-row-reverse' : ''}`}>
          {/* Media Side */}
          <div className="w-full lg:w-1/2">
              {renderMedia()}
