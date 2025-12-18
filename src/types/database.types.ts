@@ -83,6 +83,32 @@ export interface Database {
           collaboration_completed_at?: string | null
         }
       }
+      contact_messages: {
+        Row: {
+          id: string
+          created_at: string
+          name: string
+          email: string
+          phone: string | null
+          message: string
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          name: string
+          email: string
+          phone?: string | null
+          message: string
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          name?: string
+          email?: string
+          phone?: string | null
+          message?: string
+        }
+      }
     }
   }
 }
