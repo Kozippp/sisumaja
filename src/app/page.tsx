@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { ArrowRight, User, Play, Star, Zap, TrendingUp } from "lucide-react";
+import Image from "next/image";
 import { Database } from "@/types/database.types";
 
 export const revalidate = 60;
@@ -107,11 +108,11 @@ export default async function Home() {
             <div>
               <h2 className="text-5xl md:text-6xl font-black text-white mb-8 uppercase tracking-tight leading-none">
                 Mitte lihtsalt <br/>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-purple-600">kodu</span>, vaid <br/>
-                stuudio.
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-purple-600">üks kanal</span>, vaid <br/>
+                kogukond.
               </h2>
               <p className="text-gray-400 text-lg leading-relaxed mb-8">
-                Sisumaja on unikaalne projekt Eesti meelelahutusmaastikul. Oleme kokku toonud 6 andekat sisuloojat, kes elavad ja loovad koos 24/7. See on keskkond, kus sünnivad ideed, mis levivad kulutulena.
+                Sisumajja on kokku kolinud 6 andekat sisuloojat, kes elavad ja loovad koos 24/7. Meie eesmärk on pakkuda Eesti rahvale uut ja ägedat seltskondlikku meelelahutust ning arendada Eesti sisuloome maastikku paremaks kõikidele sisuloojatele.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                 <div>
@@ -126,9 +127,13 @@ export default async function Home() {
             </div>
             <div className="relative">
               <div className="aspect-[4/5] rounded-3xl overflow-hidden border border-white/10 relative">
-                 <div className="absolute inset-0 bg-neutral-900 flex items-center justify-center">
-                    <span className="text-neutral-700 font-bold text-xl uppercase">Sisumaja Elu</span>
-                 </div>
+                 <Image 
+                   src="/sisumaja-elu.jpg"
+                   alt="Sisumaja elu"
+                   fill
+                   className="object-cover"
+                   priority
+                 />
                  {/* Decorative elements */}
                  <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-primary/30 rounded-full blur-3xl" />
               </div>
