@@ -19,12 +19,12 @@ async function getRecentProjects(): Promise<Project[]> {
 }
 
 const TEAM_MEMBERS = [
-  { name: "Liige 1", role: "Sisulooja", image: null },
-  { name: "Liige 2", role: "Sisulooja", image: null },
-  { name: "Liige 3", role: "Sisulooja", image: null },
-  { name: "Liige 4", role: "Sisulooja", image: null },
-  { name: "Liige 5", role: "Sisulooja", image: null },
-  { name: "Liige 6", role: "Sisulooja", image: null },
+  { name: "Kris", role: "Sisulooja", image: "/Kris.jpg" },
+  { name: "Mihkel", role: "Sisulooja", image: "/Mihkel.jpg" },
+  { name: "Gerhard", role: "Sisulooja", image: "/Gerhard.jpg" },
+  { name: "Aston", role: "Sisulooja", image: "/Aston.jpg" },
+  { name: "Maia-Liis", role: "Sisulooja", image: "/Maia-Liis.jpg" },
+  { name: "Gepu", role: "Sisulooja", image: "/Gepu.jpg" },
 ];
 
 const FEATURES = [
@@ -40,8 +40,8 @@ const FEATURES = [
   },
   {
     icon: <TrendingUp className="w-6 h-6 text-primary" />,
-    title: "Lai Haare",
-    description: "Meie sisu jõuab sadade tuhandete eestlasteni iga kuu.",
+    title: "Efektiivne turundus",
+    description: "Reklaamime oma videotes brände, kelle väärtused ühtivad meie omadega.",
   },
 ];
 
@@ -158,9 +158,9 @@ export default async function Home() {
       <section className="py-32 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <h2 className="text-5xl font-black text-white mb-6 uppercase">Meie Tiim</h2>
+            <h2 className="text-5xl font-black text-white mb-6 uppercase">Sisumaja Liikmed</h2>
             <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-              Saa tuttavaks nägudega kaamera taga (ja ees).
+              Saa tuttavaks Sisumaja tuumikuga.
             </p>
           </div>
           
@@ -168,9 +168,18 @@ export default async function Home() {
             {TEAM_MEMBERS.map((member, index) => (
               <div key={index} className="group relative">
                 <div className="aspect-[3/4] bg-neutral-900 rounded-2xl overflow-hidden mb-4 border border-neutral-800 group-hover:border-primary transition-all duration-300 relative">
-                  <div className="w-full h-full flex items-center justify-center bg-neutral-900 text-neutral-800 group-hover:text-primary transition-colors">
-                    <User className="w-16 h-16" />
-                  </div>
+                  {member.image ? (
+                    <Image 
+                      src={member.image}
+                      alt={member.name}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-neutral-900 text-neutral-800 group-hover:text-primary transition-colors">
+                      <User className="w-16 h-16" />
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
                      <p className="text-white font-bold text-sm">{member.name}</p>
                      <p className="text-primary text-xs uppercase tracking-wider">{member.role}</p>
