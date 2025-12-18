@@ -9,7 +9,9 @@ interface TestimonialProps {
   company?: string;
   imageSrc?: string;
   className?: string;
-  date?: string; // Optional date if available
+  date?: string;
+  stars?: number;
+  title?: string;
 }
 
 export function Testimonial({ 
@@ -19,7 +21,9 @@ export function Testimonial({
   company, 
   imageSrc,
   className,
-  date
+  date,
+  stars = 5,
+  title = "Suurepärane koostöö!"
 }: TestimonialProps) {
   return (
     <div className={cn("bg-neutral-900 rounded-3xl p-8 border border-white/5", className)}>
@@ -54,14 +58,20 @@ export function Testimonial({
 
           {/* Stars */}
           <div className="flex gap-1">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <Star key={star} className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Star 
+                key={i} 
+                className={cn(
+                  "w-5 h-5",
+                  i < stars ? "text-yellow-500 fill-yellow-500" : "text-gray-600 fill-gray-600"
+                )} 
+              />
             ))}
           </div>
 
           {/* Review Content */}
           <div className="space-y-3">
-            <h3 className="text-xl font-bold text-white">Suurepärane koostöö!</h3>
+            <h3 className="text-xl font-bold text-white">{title}</h3>
             <p className="text-gray-300 leading-relaxed text-lg">
               {quote}
             </p>

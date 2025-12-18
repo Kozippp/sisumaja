@@ -339,6 +339,8 @@ export default async function ProjectPage({ params }: PageProps) {
                 author={project.client_name || "Klient"}
                 role={project.client_role || "Koostööpartner"}
                 imageSrc={project.client_avatar_url || undefined}
+                stars={project.client_review_stars ?? 5}
+                title={project.client_review_title || "Suurepärane koostöö!"}
                 className="max-w-4xl mx-auto"
              />
           </div>

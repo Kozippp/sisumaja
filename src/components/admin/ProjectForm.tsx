@@ -62,6 +62,8 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     client_role: '',
     client_avatar_url: '',
     client_quote: '',
+    client_review_stars: 5,
+    client_review_title: '',
     is_visible: false,
     collaboration_completed_at: null,
     ...initialData,
@@ -709,6 +711,35 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                 </label>
             </div>
         </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                 <label className="block text-sm font-medium text-gray-400 mb-1">Tagasiside pealkiri</label>
+                 <input 
+                    name="client_review_title" 
+                    value={formData.client_review_title || ''} 
+                    onChange={handleChange} 
+                    className="w-full bg-black border border-neutral-700 rounded p-2" 
+                    placeholder="nt. Suurepärane koostöö!"
+                />
+            </div>
+            <div>
+                 <label className="block text-sm font-medium text-gray-400 mb-1">Hinne (1-5 tärni)</label>
+                 <select 
+                    name="client_review_stars" 
+                    value={formData.client_review_stars || 5} 
+                    onChange={handleChange} 
+                    className="w-full bg-black border border-neutral-700 rounded p-2"
+                >
+                    <option value={5}>5 Tärni</option>
+                    <option value={4}>4 Tärni</option>
+                    <option value={3}>3 Tärni</option>
+                    <option value={2}>2 Tärni</option>
+                    <option value={1}>1 Tärn</option>
+                </select>
+            </div>
+        </div>
+
         <div>
             <label className="block text-sm font-medium text-gray-400 mb-1">Tagasiside (Tsitaat)</label>
              <textarea

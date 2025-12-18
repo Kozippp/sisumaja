@@ -6,116 +6,263 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export interface Database {
+export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "14.1"
+  }
   public: {
     Tables: {
-      projects: {
-        Row: {
-          id: string
-          created_at: string
-          title: string
-          slug: string
-          description: string | null
-          content: Json | null
-          links: Json | null
-          thumbnail_url: string | null
-          media_gallery: Json
-          youtube_url: string | null
-          tiktok_url: string | null
-          instagram_url: string | null
-          stat_views: string | null
-          stat_likes: string | null
-          stat_comments: string | null
-          stat_shares: string | null
-          client_name: string | null
-          client_role: string | null
-          client_avatar_url: string | null
-          client_quote: string | null
-          is_visible: boolean
-          published_at: string | null
-          updated_at: string
-          collaboration_completed_at: string | null
-        }
-        Insert: {
-          id?: string
-          created_at?: string
-          title: string
-          slug: string
-          description?: string | null
-          content?: Json | null
-          links?: Json | null
-          thumbnail_url?: string | null
-          media_gallery?: Json
-          youtube_url?: string | null
-          tiktok_url?: string | null
-          instagram_url?: string | null
-          stat_views?: string | null
-          stat_likes?: string | null
-          stat_comments?: string | null
-          stat_shares?: string | null
-          client_name?: string | null
-          client_role?: string | null
-          client_avatar_url?: string | null
-          client_quote?: string | null
-          is_visible?: boolean
-          published_at?: string | null
-          updated_at?: string
-          collaboration_completed_at?: string | null
-        }
-        Update: {
-          id?: string
-          created_at?: string
-          title?: string
-          slug?: string
-          description?: string | null
-          content?: Json | null
-          links?: Json | null
-          thumbnail_url?: string | null
-          media_gallery?: Json
-          youtube_url?: string | null
-          tiktok_url?: string | null
-          instagram_url?: string | null
-          stat_views?: string | null
-          stat_likes?: string | null
-          stat_comments?: string | null
-          stat_shares?: string | null
-          client_name?: string | null
-          client_role?: string | null
-          client_avatar_url?: string | null
-          client_quote?: string | null
-          is_visible?: boolean
-          published_at?: string | null
-          updated_at?: string
-          collaboration_completed_at?: string | null
-        }
-      }
       contact_messages: {
         Row: {
-          id: string
           created_at: string
-          name: string
           email: string
-          phone: string | null
+          id: string
           message: string
+          name: string
+          phone: string | null
         }
         Insert: {
-          id?: string
           created_at?: string
-          name: string
           email: string
-          phone?: string | null
+          id?: string
           message: string
+          name: string
+          phone?: string | null
         }
         Update: {
-          id?: string
           created_at?: string
-          name?: string
           email?: string
-          phone?: string | null
+          id?: string
           message?: string
+          name?: string
+          phone?: string | null
         }
+        Relationships: []
       }
+      projects: {
+        Row: {
+          client_avatar_url: string | null
+          client_name: string | null
+          client_quote: string | null
+          client_review_stars: number | null
+          client_review_title: string | null
+          client_role: string | null
+          collaboration_completed_at: string | null
+          content: Json | null
+          created_at: string
+          description: string | null
+          id: string
+          instagram_url: string | null
+          is_visible: boolean | null
+          links: Json | null
+          media_gallery: Json | null
+          published_at: string | null
+          slug: string
+          stat_comments: string | null
+          stat_likes: string | null
+          stat_shares: string | null
+          stat_views: string | null
+          thumbnail_url: string | null
+          tiktok_url: string | null
+          title: string
+          updated_at: string | null
+          youtube_url: string | null
+        }
+        Insert: {
+          client_avatar_url?: string | null
+          client_name?: string | null
+          client_quote?: string | null
+          client_review_stars?: number | null
+          client_review_title?: string | null
+          client_role?: string | null
+          collaboration_completed_at?: string | null
+          content?: Json | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          instagram_url?: string | null
+          is_visible?: boolean | null
+          links?: Json | null
+          media_gallery?: Json | null
+          published_at?: string | null
+          slug: string
+          stat_comments?: string | null
+          stat_likes?: string | null
+          stat_shares?: string | null
+          stat_views?: string | null
+          thumbnail_url?: string | null
+          tiktok_url?: string | null
+          title: string
+          updated_at?: string | null
+          youtube_url?: string | null
+        }
+        Update: {
+          client_avatar_url?: string | null
+          client_name?: string | null
+          client_quote?: string | null
+          client_review_stars?: number | null
+          client_review_title?: string | null
+          client_role?: string | null
+          collaboration_completed_at?: string | null
+          content?: Json | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          instagram_url?: string | null
+          is_visible?: boolean | null
+          links?: Json | null
+          media_gallery?: Json | null
+          published_at?: string | null
+          slug?: string
+          stat_comments?: string | null
+          stat_likes?: string | null
+          stat_shares?: string | null
+          stat_views?: string | null
+          thumbnail_url?: string | null
+          tiktok_url?: string | null
+          title?: string
+          updated_at?: string | null
+          youtube_url?: string | null
+        }
+        Relationships: []
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      [_ in never]: never
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
     }
   }
 }
 
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
+    : never
+
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
+    : never
+
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
+    : never
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
+
+export const Constants = {
+  public: {
+    Enums: {},
+  },
+} as const
