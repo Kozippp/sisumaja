@@ -77,8 +77,7 @@ export default async function Home() {
           </h1>
           
           <p className="text-xl md:text-2xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
-            Kuus talenti. Üks maja. Lõputu loovus. <br className="hidden md:block"/>
-            Me loome meelelahutust, mis kõnetab uut generatsiooni.
+            Sisumaja pakub uuenduslikku meelelahutust Eesti rahvale ning efektiivset turunduskanalit ettevõtele, kelle väärtused kattuvad meie omadega.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
