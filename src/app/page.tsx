@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
-import { ArrowRight, User, Play, Star, Zap, TrendingUp, Clapperboard } from "lucide-react";
+import { ArrowRight, User, Play, Star, Zap, TrendingUp, Clapperboard, Users } from "lucide-react";
 import Image from "next/image";
 import { Database } from "@/types/database.types";
 
@@ -34,9 +34,9 @@ const FEATURES = [
     description: "Loome iganädalaselt koos videoid Sisumaja YouTube’i kanalile.",
   },
   {
-    icon: <Zap className="w-6 h-6 text-primary" />,
-    title: "Kiire Teostus",
-    description: "Ideest teostuseni vaid loetud päevadega. Oleme paindlikud ja kiired.",
+    icon: <Users className="w-6 h-6 text-primary" />,
+    title: "Kogukond",
+    description: "Kaasame teisi sisuloojaid ning arendame sisuloome maastikku kõigi heaks.",
   },
   {
     icon: <TrendingUp className="w-6 h-6 text-primary" />,
