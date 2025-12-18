@@ -8,23 +8,25 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           <div className="col-span-1 md:col-span-2">
-            <Link href="/" className="block mb-6 w-auto max-w-[220px]">
-              <Image
-                src="/LOGOTRANSPARENT.png"
-                alt="Sisumaja logo"
-                width={220}
-                height={90}
-                className="w-full h-auto object-contain"
-              />
-            </Link>
-            <p className="text-gray-400 max-w-sm mb-8 leading-relaxed">
-              Sisumaja pakub uuenduslikku meelelahutust Eesti rahvale ning efektiivset turunduskanalit ettevõtetele, kelle väärtused kattuvad meie omadega.
-            </p>
-            <div className="flex space-x-4">
-              <SocialLink href="https://www.youtube.com/@Sisumajatv" icon={Youtube} />
-              <SocialLink href="https://www.instagram.com/sisumaja.tv/" icon={Instagram} />
-              <SocialLink href="https://www.tiktok.com/@sisumaja.tv" icon={TikTokIcon} />
-              <SocialLink href="mailto:info@sisumaja.ee" icon={Mail} />
+            <div className="flex flex-col items-start">
+              <Link href="/" className="block mb-6 w-auto max-w-[220px]">
+                <Image
+                  src="/LOGOTRANSPARENT.png"
+                  alt="Sisumaja logo"
+                  width={220}
+                  height={90}
+                  className="w-full h-auto object-contain"
+                />
+              </Link>
+              <p className="text-gray-400 max-w-sm mb-6 leading-relaxed">
+                Sisumaja pakub uuenduslikku meelelahutust Eesti rahvale ning efektiivset turunduskanalit ettevõtetele, kelle väärtused kattuvad meie omadega.
+              </p>
+              <div className="flex space-x-4">
+                <SocialLink href="https://www.youtube.com/@Sisumajatv" icon={Youtube} />
+                <SocialLink href="https://www.instagram.com/sisumaja.tv/" icon={Instagram} />
+                <SocialLink href="https://www.tiktok.com/@sisumaja.tv" icon={TikTokIcon} />
+                <SocialLink href="mailto:info@sisumaja.ee" icon={Mail} />
+              </div>
             </div>
           </div>
           
