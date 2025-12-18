@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Instagram, Youtube, Mail } from 'lucide-react';
+import { Instagram, Youtube, Mail, Tiktok } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -14,10 +14,10 @@ export default function Footer() {
               Sisumaja pakub uuenduslikku meelelahutust Eesti rahvale ning efektiivset turunduskanalit ettevõtetele, kelle väärtused kattuvad meie omadega.
             </p>
             <div className="flex space-x-4">
-              <SocialLink href="https://www.youtube.com/@Sisumajatv" icon={<Youtube />} />
-              <SocialLink href="https://www.instagram.com/sisumaja.tv/" icon={<Instagram />} />
-              <SocialLink href="https://www.tiktok.com/@sisumaja.tv" icon={<span className="text-xs font-semibold">TT</span>} />
-              <SocialLink href="mailto:info@sisumaja.ee" icon={<Mail />} />
+              <SocialLink href="https://www.youtube.com/@Sisumajatv" icon={Youtube} />
+              <SocialLink href="https://www.instagram.com/sisumaja.tv/" icon={Instagram} />
+              <SocialLink href="https://www.tiktok.com/@sisumaja.tv" icon={Tiktok} />
+              <SocialLink href="mailto:info@sisumaja.ee" icon={Mail} />
             </div>
           </div>
           
@@ -51,13 +51,13 @@ export default function Footer() {
   );
 }
 
-function SocialLink({ href, icon }: { href: string; icon: React.ReactNode }) {
+function SocialLink({ href, icon: Icon }: { href: string; icon: React.ElementType }) {
   return (
     <a 
       href={href}
       className="w-10 h-10 rounded-full bg-neutral-900 flex items-center justify-center text-white hover:bg-primary transition-all duration-300 border border-neutral-800"
     >
-      <div className="w-5 h-5">{icon}</div>
+      <Icon className="w-5 h-5" />
     </a>
   );
 }
