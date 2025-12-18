@@ -41,6 +41,7 @@ export interface Database {
           title: string
           slug: string
           description?: string | null
+          content?: Json | null
           thumbnail_url?: string | null
           media_gallery?: Json
           youtube_url?: string | null
@@ -65,6 +66,7 @@ export interface Database {
           title?: string
           slug?: string
           description?: string | null
+          content?: Json | null
           thumbnail_url?: string | null
           media_gallery?: Json
           youtube_url?: string | null
