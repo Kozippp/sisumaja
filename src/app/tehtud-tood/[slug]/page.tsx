@@ -246,7 +246,7 @@ export default async function ProjectPage({ params }: PageProps) {
                  <div className="flex items-center gap-2">
                     <Clock className="w-4 h-4 text-gray-500" />
                     <span>
-                         Viimati uuendatud: <span className="text-gray-300 font-medium">{new Date(project.updated_at).toLocaleDateString('et-EE', { 
+                         Viimati uuendatud: <span className="text-gray-300 font-medium">{new Date(project.updated_at ?? new Date()).toLocaleDateString('et-EE', { 
                                 year: 'numeric', 
                                 month: 'long',
                                 day: 'numeric'
