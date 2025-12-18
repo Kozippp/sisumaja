@@ -36,9 +36,9 @@ export default function Navbar() {
               <Image
                 src="/LOGOTRANSPARENT.png"
                 alt="Sisumaja logo"
-                width={200}
-                height={80}
-                className="h-12 md:h-16 w-auto object-contain drop-shadow-[0_0_18px_rgba(255,255,255,0.75)]"
+                width={240}
+                height={96}
+                className="h-14 md:h-20 w-auto object-contain"
                 priority
               />
             </Link>
