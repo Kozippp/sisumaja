@@ -318,12 +318,34 @@ export default async function ProjectPage({ params }: PageProps) {
       </div>
 
       {/* Footer / Links Section */}
-      <div className="max-w-5xl mx-auto px-4 pb-24">
-        
+      <div className="max-w-5xl mx-auto px-4 pb-0 mt-0 mb-0">
+
+        {/* Client Quote */}
+        {project.client_quote && (
+             <div className="bg-neutral-900 rounded-3xl p-8 md:p-12 border border-neutral-800 relative text-center">
+                <div className="inline-block mb-6">
+                    {project.client_avatar_url ? (
+                        <img src={project.client_avatar_url} alt={project.client_name || "Klient"} className="w-20 h-20 rounded-full object-cover border-4 border-neutral-800 mx-auto" />
+                    ) : (
+                        <div className="w-20 h-20 rounded-full bg-neutral-800 flex items-center justify-center mx-auto text-2xl font-bold text-gray-600">
+                             {project.client_name?.charAt(0) || "K"}
+                        </div>
+                    )}
+                </div>
+                <blockquote className="text-xl md:text-2xl font-medium text-white mb-6 max-w-2xl mx-auto leading-relaxed">
+                    &ldquo;{project.client_quote}&rdquo;
+                </blockquote>
+                <div>
+                    <div className="font-bold text-white text-lg">{project.client_name || "Klient"}</div>
+                    <div className="text-primary font-bold uppercase text-sm tracking-wide">{project.client_role || "Koostööpartner"}</div>
+                </div>
+             </div>
+        )}
+
         {/* Social Links (Dynamic) */}
         {links.length > 0 && (
             <div className="mb-24 text-center">
-                 <h2 className="text-2xl font-bold text-white mb-8 uppercase">Vaata projekti sotsiaalmeedias</h2>
+                 <h2 className="text-2xl font-bold text-white mb-8 uppercase">Vaata projekti sotsiaalmeedias:</h2>
                  <div className="flex flex-wrap justify-center gap-4">
                     {links.map((link) => {
                         let Icon = ExternalLink;
@@ -360,28 +382,6 @@ export default async function ProjectPage({ params }: PageProps) {
                     })}
                  </div>
             </div>
-        )}
-
-        {/* Client Quote */}
-        {project.client_quote && (
-             <div className="bg-neutral-900 rounded-3xl p-8 md:p-12 border border-neutral-800 relative text-center">
-                <div className="inline-block mb-6">
-                    {project.client_avatar_url ? (
-                        <img src={project.client_avatar_url} alt={project.client_name || "Klient"} className="w-20 h-20 rounded-full object-cover border-4 border-neutral-800 mx-auto" />
-                    ) : (
-                        <div className="w-20 h-20 rounded-full bg-neutral-800 flex items-center justify-center mx-auto text-2xl font-bold text-gray-600">
-                             {project.client_name?.charAt(0) || "K"}
-                        </div>
-                    )}
-                </div>
-                <blockquote className="text-xl md:text-2xl font-medium text-white mb-6 max-w-2xl mx-auto leading-relaxed">
-                    &ldquo;{project.client_quote}&rdquo;
-                </blockquote>
-                <div>
-                    <div className="font-bold text-white text-lg">{project.client_name || "Klient"}</div>
-                    <div className="text-primary font-bold uppercase text-sm tracking-wide">{project.client_role || "Koostööpartner"}</div>
-                </div>
-             </div>
         )}
       </div>
 
