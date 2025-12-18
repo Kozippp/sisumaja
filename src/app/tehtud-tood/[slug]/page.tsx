@@ -63,12 +63,16 @@ const getYoutubeEmbedUrl = (url: string) => {
 
 // Renderers for different block types
 const TextBlock = ({ block }: { block: ContentBlock }) => (
-  <div className="max-w-3xl mx-auto w-full px-4 mb-16">
-    {block.title && <h2 className="text-3xl font-bold text-white mb-6 uppercase">{block.title}</h2>}
+  <div className="max-w-3xl mx-auto w-full px-4 mb-16 text-center">
+    {block.title && (
+      <h2 className="text-3xl font-bold text-white mb-6 uppercase text-center">
+        {block.title}
+      </h2>
+    )}
     {block.content && (
-        <div className="prose prose-invert prose-lg max-w-none text-gray-300">
-            <p className="whitespace-pre-wrap">{block.content}</p>
-        </div>
+      <div className="prose prose-invert prose-lg max-w-none text-gray-300 text-center">
+        <p className="whitespace-pre-wrap">{block.content}</p>
+      </div>
     )}
   </div>
 );
