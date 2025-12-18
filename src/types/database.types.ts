@@ -31,6 +31,8 @@ export interface Database {
           client_quote: string | null
           is_visible: boolean
           published_at: string | null
+          updated_at: string
+          collaboration_completed_at: string | null
         }
         Insert: {
           id?: string
@@ -53,6 +55,8 @@ export interface Database {
           client_quote?: string | null
           is_visible?: boolean
           published_at?: string | null
+          updated_at?: string
+          collaboration_completed_at?: string | null
         }
         Update: {
           id?: string
@@ -75,6 +79,8 @@ export interface Database {
           client_quote?: string | null
           is_visible?: boolean
           published_at?: string | null
+          updated_at?: string
+          collaboration_completed_at?: string | null
         }
       }
     }

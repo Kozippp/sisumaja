@@ -2,7 +2,7 @@ import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { Metadata } from "next";
 import { Database } from "@/types/database.types";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Calendar } from "lucide-react";
 
 type Project = Database['public']['Tables']['projects']['Row'];
 
@@ -57,7 +57,17 @@ export default async function WorkPage() {
                     <div className="flex items-center justify-between mb-2">
                        <h3 className="text-2xl font-bold text-white group-hover:text-primary transition-colors">{project.title}</h3>
                     </div>
-                    <p className="text-gray-500 line-clamp-2 leading-relaxed">{project.description}</p>
+                    <p className="text-gray-500 line-clamp-2 leading-relaxed mb-3">{project.description}</p>
+                    {project.collaboration_completed_at && (
+                      <div className="flex items-center gap-2 text-xs text-gray-400">
+                        <Calendar className="w-3 h-3" />
+                        <span>Completed {new Date(project.collaboration_completed_at).toLocaleDateString('en-US', { 
+                          year: 'numeric', 
+                          month: 'short', 
+                          day: 'numeric' 
+                        })}</span>
+                      </div>
+                    )}
                   </div>
                 </article>
               </Link>

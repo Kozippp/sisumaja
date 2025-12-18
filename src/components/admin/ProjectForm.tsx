@@ -37,6 +37,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     client_avatar_url: '',
     client_quote: '',
     is_visible: false,
+    collaboration_completed_at: null,
     ...initialData,
   });
 
@@ -205,6 +206,20 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                     required
                 />
             </div>
+        </div>
+        <div>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Collaboration Completed Date</label>
+            <input
+                type="date"
+                name="collaboration_completed_at"
+                value={formData.collaboration_completed_at ? new Date(formData.collaboration_completed_at).toISOString().split('T')[0] : ''}
+                onChange={(e) => {
+                    const value = e.target.value ? new Date(e.target.value).toISOString() : null;
+                    setFormData(prev => ({ ...prev, collaboration_completed_at: value }));
+                }}
+                className="w-full bg-black border border-neutral-700 rounded p-2"
+            />
+            <p className="text-xs text-gray-500 mt-1">When was the collaboration completed? This will be displayed on the project page.</p>
         </div>
         <div>
             <label className="block text-sm font-medium text-gray-400 mb-1">Kirjeldus</label>

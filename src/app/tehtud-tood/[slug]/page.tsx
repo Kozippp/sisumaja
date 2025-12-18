@@ -2,7 +2,7 @@ import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import { ArrowLeft, Eye, Heart, MessageCircle, Share2, Youtube, Instagram } from "lucide-react";
+import { ArrowLeft, Eye, Heart, MessageCircle, Share2, Youtube, Instagram, Calendar, Clock } from "lucide-react";
 import MediaGallery from "@/components/MediaGallery";
 import { Database } from "@/types/database.types";
 
@@ -122,6 +122,35 @@ export default async function ProjectPage({ params }: PageProps) {
           {/* Right Column: Info */}
           <div>
             <h1 className="text-4xl md:text-5xl font-black text-white mb-6 uppercase leading-tight">{project.title}</h1>
+            
+            {/* Dates Section */}
+            <div className="flex flex-wrap gap-4 mb-6">
+              {project.collaboration_completed_at && (
+                <div className="flex items-center gap-2 bg-neutral-900/50 px-4 py-2 rounded-lg border border-neutral-800">
+                  <Calendar className="w-4 h-4 text-primary" />
+                  <span className="text-sm text-gray-400">Completed:</span>
+                  <span className="text-sm text-white font-medium">
+                    {new Date(project.collaboration_completed_at).toLocaleDateString('en-US', { 
+                      year: 'numeric', 
+                      month: 'long', 
+                      day: 'numeric' 
+                    })}
+                  </span>
+                </div>
+              )}
+              <div className="flex items-center gap-2 bg-neutral-900/50 px-4 py-2 rounded-lg border border-neutral-800">
+                <Clock className="w-4 h-4 text-gray-500" />
+                <span className="text-sm text-gray-400">Last updated:</span>
+                <span className="text-sm text-gray-300 font-medium">
+                  {new Date(project.updated_at).toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  })}
+                </span>
+              </div>
+            </div>
+
             <div className="prose prose-invert max-w-none text-gray-300 mb-8">
               <p className="whitespace-pre-wrap">{project.description}</p>
             </div>
