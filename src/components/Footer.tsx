@@ -41,7 +41,11 @@ export default function Footer() {
             <h4 className="text-white font-bold uppercase tracking-wider mb-6">Kontakt</h4>
             <ul className="space-y-4 text-gray-400">
               <li>Tallinn, Eesti</li>
-              <li>info@sisumaja.ee</li>
+              <li>
+                <a href="mailto:info@sisumaja.ee" className="hover:text-white transition-colors">
+                  info@sisumaja.ee
+                </a>
+              </li>
             </ul>
           </div>
         </div>
