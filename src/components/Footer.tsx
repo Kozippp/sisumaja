@@ -14,7 +14,7 @@ export default function Footer() {
                 alt="Sisumaja logo"
                 width={220}
                 height={90}
-                className="w-full h-auto object-contain drop-shadow-[0_0_18px_rgba(255,255,255,0.75)]"
+                className="w-full h-auto object-contain"
               />
             </Link>
             <p className="text-gray-400 max-w-sm mb-8 leading-relaxed">
