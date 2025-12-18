@@ -45,11 +45,11 @@ export default function ContactPage() {
       setStatus('error');
       
       if (error.message === 'missing_fields') {
-        setErrorMessage('Palun täida vähemalt nimi, e-mail ja sõnum.');
+        setErrorMessage('Palun veendu, et oled täitnud kõik vajalikud väljad (nimi, e-mail ja sõnum).');
       } else if (error.message === 'email_failed') {
-        setErrorMessage('Sõnum salvestus, kuid e-kirja saatmine ebaõnnestus. Proovi hiljem uuesti või kirjuta otse info@sisumaja.ee.');
+        setErrorMessage('Kahjuks tekkis sõnumi saatmisel tehniline tõrge. Palun proovi hiljem uuesti või kirjuta meile otse aadressil info@sisumaja.ee.');
       } else {
-        setErrorMessage('Midagi läks valesti. Proovi palun uuesti või kirjuta otse info@sisumaja.ee.');
+        setErrorMessage('Midagi läks valesti. Palun proovi uuesti või võta meiega ühendust aadressil info@sisumaja.ee.');
       }
     } finally {
       setIsSubmitting(false);
@@ -114,7 +114,7 @@ export default function ContactPage() {
                   <CheckCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-bold">Sõnum saadetud!</p>
-                    <p>Täname kirjast. Sõnum on edukalt meieni jõudnud ja vastame sulle peagi.</p>
+                    <p>Aitäh kirja eest! Sinu sõnum jõudis meieni ja vastame Sulle esimesel võimalusel.</p>
                   </div>
                 </div>
               )}
