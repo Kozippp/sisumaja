@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ArrowRight, User, Play, Star, Zap, TrendingUp, Clapperboard, Users } from "lucide-react";
 import Image from "next/image";
 import { Database } from "@/types/database.types";
-import { Testimonial } from "@/components/Testimonial";
 import * as motion from "framer-motion/client";
 
 export const revalidate = 60;
@@ -188,21 +187,6 @@ export default async function Home() {
               Vaata tehtud töid
             </Link>
           </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.2, ease: "easeOut" }}
-            className="mt-16 text-left"
-          >
-            <Testimonial 
-              quote="Sisumajaga koostöö on nagu hea ilutulestik. Põnev alustada, särab eredalt keskel ja lõppeb alati imeilusalt. Nooruslik energia annab iga ettevõtte sisule kohe kindlasti palju juurde!"
-              author="Carl"
-              role="Tegevjuht"
-              company="Koostööpartner"
-              className="mx-auto"
-            />
-          </motion.div>
         </div>
       </section>
 
@@ -345,3 +329,5 @@ export default async function Home() {
     </div>
   );
 }
+
+
