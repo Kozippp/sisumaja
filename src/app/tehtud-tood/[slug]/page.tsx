@@ -21,6 +21,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     .from("projects")
     .select("title, description")
     .eq("slug", slug)
+    .eq("is_visible", true)
     .single<Pick<Project, 'title' | 'description'>>();
 
   if (!project) {
@@ -155,6 +156,7 @@ export default async function ProjectPage({ params }: PageProps) {
     .from("projects")
     .select("*")
     .eq("slug", slug)
+    .eq("is_visible", true)
     .single<Project>();
 
   if (!project) {

@@ -44,8 +44,17 @@ export default function DashboardPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm('Oled kindel, et soovid seda tööd kustutada?')) {
-      await supabase.from('projects').delete().eq('id', id);
+    if (confirm('Oled kindel, et soovid seda tööd kustutada? See peidetakse ka avalikust "Tehtud tööd" vaatest.')) {
+      const { error } = await supabase
+        .from('projects')
+        .update({ is_visible: false })
+        .eq('id', id);
+
+      if (error) {
+        alert('Töö kustutamine ebaõnnestus: ' + error.message);
+        return;
+      }
+
       fetchProjects();
     }
   };
