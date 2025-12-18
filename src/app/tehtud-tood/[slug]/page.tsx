@@ -257,9 +257,7 @@ export default async function ProjectPage({ params }: PageProps) {
             {/* Stats Bar (Modern Neon) */}
             {hasStats && (
                 <div className="relative mt-12 mb-8 w-full max-w-4xl mx-auto">
-                    {/* Neon pink line */}
-                    <div className="absolute top-1/2 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-pink-500 to-transparent shadow-[0_0_15px_#ec4899] -translate-y-1/2 z-0 opacity-80" />
-
+                    
                     <div className="relative z-10 flex flex-wrap justify-center items-center gap-8 md:gap-16">
                         {project.stat_views && (
                             <div className="group flex flex-col items-center justify-center bg-neutral-950 px-6 py-2 transition-transform hover:scale-110 duration-300">
