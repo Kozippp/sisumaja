@@ -250,7 +250,7 @@ export default async function ProjectPage({ params }: PageProps) {
                     </div>
                 )}
                  <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-gray-500" />
+                    <Clock className="w-4 h-4 text-white" />
                     <span>
                          Viimati uuendatud: <span className="text-gray-300 font-medium">{new Date(project.updated_at ?? new Date()).toLocaleDateString('et-EE', { 
                                 year: 'numeric', 
