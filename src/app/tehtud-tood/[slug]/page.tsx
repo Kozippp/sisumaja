@@ -257,8 +257,8 @@ export default async function ProjectPage({ params }: PageProps) {
 
             {/* Stats Bar (Modern) */}
             {hasStats && (
-                <div className="relative mt-16 mb-12 w-full max-w-7xl mx-auto px-4">
-                    <div className="flex flex-wrap justify-center gap-12 md:gap-24">
+                <div className="relative mt-16 mb-12 w-full flex justify-center px-4">
+                    <div className="inline-flex flex-wrap justify-center gap-12 md:gap-24 pb-8 border-b-2 border-pink-500 shadow-[0_10px_20px_-10px_rgba(236,72,153,0.5)]">
                         {project.stat_views && (
                             <div className="group flex flex-col items-center justify-center min-w-[120px]">
                                 <Eye className="w-8 h-8 text-pink-500 mb-4 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform duration-300" />
@@ -267,10 +267,9 @@ export default async function ProjectPage({ params }: PageProps) {
                                         .toLocaleString('et-EE')
                                         .replace(/,/g, ' ')}
                                 </div>
-                                <div className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-6 group-hover:text-pink-400 transition-colors">
+                                <div className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] group-hover:text-pink-400 transition-colors">
                                     Vaatamist
                                 </div>
-                                <div className="w-12 h-0.5 bg-neutral-800 group-hover:bg-pink-500 group-hover:w-full transition-all duration-500 ease-out" />
                             </div>
                         )}
                         {project.stat_likes && (
@@ -281,10 +280,9 @@ export default async function ProjectPage({ params }: PageProps) {
                                         .toLocaleString('et-EE')
                                         .replace(/,/g, ' ')}
                                 </div>
-                                <div className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-6 group-hover:text-pink-400 transition-colors">
+                                <div className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] group-hover:text-pink-400 transition-colors">
                                     Like&apos;i
                                 </div>
-                                <div className="w-12 h-0.5 bg-neutral-800 group-hover:bg-pink-500 group-hover:w-full transition-all duration-500 ease-out" />
                             </div>
                         )}
                         {project.stat_comments && (
@@ -295,10 +293,9 @@ export default async function ProjectPage({ params }: PageProps) {
                                         .toLocaleString('et-EE')
                                         .replace(/,/g, ' ')}
                                 </div>
-                                <div className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-6 group-hover:text-pink-400 transition-colors">
+                                <div className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] group-hover:text-pink-400 transition-colors">
                                     Kommentaari
                                 </div>
-                                <div className="w-12 h-0.5 bg-neutral-800 group-hover:bg-pink-500 group-hover:w-full transition-all duration-500 ease-out" />
                             </div>
                         )}
                         {project.stat_shares && (
@@ -309,10 +306,9 @@ export default async function ProjectPage({ params }: PageProps) {
                                         .toLocaleString('et-EE')
                                         .replace(/,/g, ' ')}
                                 </div>
-                                <div className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-6 group-hover:text-pink-400 transition-colors">
+                                <div className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] group-hover:text-pink-400 transition-colors">
                                     Jagamist
                                 </div>
-                                <div className="w-12 h-0.5 bg-neutral-800 group-hover:bg-pink-500 group-hover:w-full transition-all duration-500 ease-out" />
                             </div>
                         )}
                     </div>
