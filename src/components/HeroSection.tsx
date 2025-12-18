@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { clsx } from "clsx";
@@ -9,7 +9,7 @@ export function HeroSection() {
   const text = "SISUMAJA";
   const letters = text.split("");
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: (i = 1) => ({
       opacity: 1,
@@ -17,7 +17,7 @@ export function HeroSection() {
     }),
   };
 
-  const childVariants = {
+  const childVariants: Variants = {
     visible: {
       opacity: 1,
       y: 0,
