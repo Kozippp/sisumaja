@@ -294,10 +294,17 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     setLoading(true);
     setError(null);
 
+    // Ensure title is always defined
+    const title = formData.title || '';
+    if (!title.trim()) {
+      setError('Pealkiri on kohustuslik.');
+      setLoading(false);
+      return;
+    }
+
     // Ensure slug is always defined
-    const slug = formData.slug || formData.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || '';
-    
-    if (!slug) {
+    const slug = formData.slug || title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || '';
+    if (!slug.trim()) {
       setError('Slug on kohustuslik. Palun sisesta pealkiri või slug.');
       setLoading(false);
       return;
@@ -305,6 +312,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
 
     const submissionData = {
         ...formData,
+        title, // Ensure title is always a string
         slug, // Ensure slug is always a string
         media_gallery: mediaItems,
         content: contentBlocks as unknown as Database['public']['Tables']['projects']['Insert']['content'], // Cast for Supabase
