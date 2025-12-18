@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
-import { ArrowRight, User, Play, Star, Zap, TrendingUp } from "lucide-react";
+import { ArrowRight, User, Play, Star, Zap, TrendingUp, Clapperboard } from "lucide-react";
 import Image from "next/image";
 import { Database } from "@/types/database.types";
 
@@ -29,9 +29,9 @@ const TEAM_MEMBERS = [
 
 const FEATURES = [
   {
-    icon: <Star className="w-6 h-6 text-primary" />,
-    title: "Aja kanal",
-    description: "Loome iganädalaselt koos seltskondlikke videoid Sisumaja YouTube’i kanalile.",
+    icon: <Clapperboard className="w-6 h-6 text-primary" />,
+    title: "Sisumaja kanal",
+    description: "Loome iganädalaselt koos videoid Sisumaja YouTube’i kanalile.",
   },
   {
     icon: <Zap className="w-6 h-6 text-primary" />,
