@@ -23,7 +23,7 @@ export function Testimonial({
   className,
   date,
   stars = 5,
-  title = "Suurepärane koostöö!"
+  title
 }: TestimonialProps) {
   return (
     <div className={cn("bg-neutral-900 rounded-3xl p-8 border border-white/5", className)}>
@@ -71,7 +71,9 @@ export function Testimonial({
 
           {/* Review Content */}
           <div className="space-y-3">
-            <h3 className="text-xl font-bold text-white">{title}</h3>
+            {title && (
+              <h3 className="text-xl font-bold text-white">{title}</h3>
+            )}
             <p className="text-gray-300 leading-relaxed text-lg">
               {quote}
             </p>
