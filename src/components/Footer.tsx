@@ -54,9 +54,10 @@ export default function Footer() {
         
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-600">
           <p>&copy; {new Date().getFullYear()} Sisumaja. Kõik õigused kaitstud.</p>
-          <div className="flex space-x-6 mt-4 md:mt-0">
-            <Link href="#" className="hover:text-white transition-colors">Privaatsuspoliitika</Link>
-            <Link href="#" className="hover:text-white transition-colors">Kasutustingimused</Link>
+          <div className="flex space-x-6 mt-4 md:mt-0 flex-wrap justify-end gap-y-2">
+            <Link href="/privaatsuspoliitika" className="hover:text-white transition-colors">Privaatsuspoliitika</Link>
+            <Link href="/kasutustingimused" className="hover:text-white transition-colors">Kasutustingimused</Link>
+            <Link href="/kupsiste-poliitika" className="hover:text-white transition-colors">Küpsiste poliitika</Link>
           </div>
         </div>
       </div>
