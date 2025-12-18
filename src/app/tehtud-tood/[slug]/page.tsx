@@ -264,7 +264,7 @@ export default async function ProjectPage({ params }: PageProps) {
             {/* Stats Bar (Modern) */}
             {hasStats && (
                 <div className="relative mt-16 mb-12 w-full flex justify-center px-4">
-                    <div className="inline-flex flex-nowrap justify-center gap-8 md:gap-16 pb-8 border-b-2 border-pink-500 px-4 sm:px-8 md:px-12 overflow-x-auto">
+                    <div className="inline-flex flex-nowrap justify-center gap-8 md:gap-16 pb-8 border-b-2 border-pink-500 px-4 sm:px-8 md:px-12">
                         {project.stat_views && (
                             <div className="group flex flex-col items-center justify-center min-w-[90px] sm:min-w-[120px]">
                                 <Eye className="w-8 h-8 text-pink-500 mb-4 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform duration-300" />
