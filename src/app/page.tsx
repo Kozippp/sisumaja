@@ -58,18 +58,6 @@ export default async function Home() {
         
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-neutral-900/50 via-black to-black" />
-          {/* Logo watermark in background */}
-          <div className="absolute inset-0 flex items-center justify-center opacity-20">
-            <div className="relative w-[70vw] max-w-[640px] aspect-square">
-              <Image
-                src="/LOGOTRANSPARENT.png"
-                alt="Sisumaja logo taustal"
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
-          </div>
         </div>
         
         <div className="relative z-20 text-center px-4 max-w-5xl mx-auto mt-20">
