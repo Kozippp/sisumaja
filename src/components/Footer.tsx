@@ -63,9 +63,12 @@ export default function Footer() {
 }
 
 function SocialLink({ href, icon: Icon }: { href: string; icon: React.ElementType }) {
+  const isMailto = href.startsWith('mailto:');
   return (
     <a 
       href={href}
+      target={isMailto ? undefined : "_blank"}
+      rel={isMailto ? undefined : "noopener noreferrer"}
       className="w-10 h-10 rounded-full bg-neutral-900 flex items-center justify-center text-white hover:bg-primary transition-all duration-300 border border-neutral-800"
     >
       <Icon className="w-5 h-5" />
