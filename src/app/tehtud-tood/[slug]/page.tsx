@@ -257,9 +257,9 @@ export default async function ProjectPage({ params }: PageProps) {
             {/* Stats Bar (Modern) */}
             {hasStats && (
                 <div className="relative mt-16 mb-12 w-full max-w-7xl mx-auto px-4">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center">
+                    <div className="flex flex-wrap justify-center gap-8 md:gap-12">
                         {project.stat_views && (
-                            <div className="group flex flex-col items-center justify-center p-6 bg-neutral-900/30 rounded-2xl border border-neutral-800 hover:border-pink-500/50 transition-all duration-300">
+                            <div className="group flex flex-col items-center justify-center p-6 bg-neutral-900/30 rounded-2xl border border-neutral-800 hover:border-pink-500/50 transition-all duration-300 w-full sm:w-[calc(50%-1rem)] md:w-[calc(33.333%-2rem)] lg:w-[calc(25%-2.25rem)] min-w-[200px]">
                                 <Eye className="w-8 h-8 text-pink-500 mb-3 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform" />
                                 <div className="text-3xl md:text-4xl font-black text-white tracking-tight mb-1">
                                     {parseInt(project.stat_views.replace(/\D/g, '') || '0')
@@ -272,7 +272,7 @@ export default async function ProjectPage({ params }: PageProps) {
                             </div>
                         )}
                         {project.stat_likes && (
-                            <div className="group flex flex-col items-center justify-center p-6 bg-neutral-900/30 rounded-2xl border border-neutral-800 hover:border-pink-500/50 transition-all duration-300">
+                            <div className="group flex flex-col items-center justify-center p-6 bg-neutral-900/30 rounded-2xl border border-neutral-800 hover:border-pink-500/50 transition-all duration-300 w-full sm:w-[calc(50%-1rem)] md:w-[calc(33.333%-2rem)] lg:w-[calc(25%-2.25rem)] min-w-[200px]">
                                 <Heart className="w-8 h-8 text-pink-500 mb-3 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform" />
                                 <div className="text-3xl md:text-4xl font-black text-white tracking-tight mb-1">
                                     {parseInt(project.stat_likes.replace(/\D/g, '') || '0')
@@ -285,7 +285,7 @@ export default async function ProjectPage({ params }: PageProps) {
                             </div>
                         )}
                         {project.stat_comments && (
-                            <div className="group flex flex-col items-center justify-center p-6 bg-neutral-900/30 rounded-2xl border border-neutral-800 hover:border-pink-500/50 transition-all duration-300">
+                            <div className="group flex flex-col items-center justify-center p-6 bg-neutral-900/30 rounded-2xl border border-neutral-800 hover:border-pink-500/50 transition-all duration-300 w-full sm:w-[calc(50%-1rem)] md:w-[calc(33.333%-2rem)] lg:w-[calc(25%-2.25rem)] min-w-[200px]">
                                 <MessageCircle className="w-8 h-8 text-pink-500 mb-3 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform" />
                                 <div className="text-3xl md:text-4xl font-black text-white tracking-tight mb-1">
                                     {parseInt(project.stat_comments.replace(/\D/g, '') || '0')
@@ -298,7 +298,7 @@ export default async function ProjectPage({ params }: PageProps) {
                             </div>
                         )}
                         {project.stat_shares && (
-                            <div className="group flex flex-col items-center justify-center p-6 bg-neutral-900/30 rounded-2xl border border-neutral-800 hover:border-pink-500/50 transition-all duration-300">
+                            <div className="group flex flex-col items-center justify-center p-6 bg-neutral-900/30 rounded-2xl border border-neutral-800 hover:border-pink-500/50 transition-all duration-300 w-full sm:w-[calc(50%-1rem)] md:w-[calc(33.333%-2rem)] lg:w-[calc(25%-2.25rem)] min-w-[200px]">
                                 <Share2 className="w-8 h-8 text-pink-500 mb-3 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform" />
                                 <div className="text-3xl md:text-4xl font-black text-white tracking-tight mb-1">
                                     {parseInt(project.stat_shares.replace(/\D/g, '') || '0')
