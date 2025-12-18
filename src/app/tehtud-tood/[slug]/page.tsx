@@ -221,7 +221,7 @@ export default async function ProjectPage({ params }: PageProps) {
         <div className="max-w-5xl mx-auto text-center">
             <Link href="/tehtud-tood" className="inline-flex items-center text-gray-400 hover:text-white mb-8 transition-colors">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Tagasi tehtud tööde juurde
+                Tagasi kõikide tööde juurde
             </Link>
             
             <h1 className="text-4xl md:text-6xl font-black text-white mb-8 uppercase leading-tight tracking-tight">
@@ -232,7 +232,7 @@ export default async function ProjectPage({ params }: PageProps) {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-sm text-gray-400 mb-10">
                 {project.collaboration_completed_at && (
                     <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-primary" />
+                        <Calendar className="w-4 h-4 text-white" />
                         <span>
                             Avalikustatud: <span className="text-white font-medium">{new Date(project.collaboration_completed_at).toLocaleDateString('et-EE', { 
                                 year: 'numeric', 
@@ -254,53 +254,74 @@ export default async function ProjectPage({ params }: PageProps) {
                 </div>
             </div>
 
-            {/* Stats Bar (Modern) */}
+            {/* Stats Bar (Modern Neon) */}
             {hasStats && (
-                <div className="inline-flex flex-wrap items-center justify-center gap-6 md:gap-12 bg-neutral-900/50 rounded-2xl px-8 py-4 border border-neutral-800 backdrop-blur-sm">
-                    {project.stat_views && (
-                        <div className="flex items-center gap-3">
-                            <div className="p-2 bg-neutral-800 rounded-full text-primary">
-                                <Eye className="w-5 h-5" />
+                <div className="relative mt-12 mb-8 w-full max-w-4xl mx-auto">
+                    {/* Neon pink line */}
+                    <div className="absolute top-1/2 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-pink-500 to-transparent shadow-[0_0_15px_#ec4899] -translate-y-1/2 z-0 opacity-80" />
+
+                    <div className="relative z-10 flex flex-wrap justify-center items-center gap-8 md:gap-16">
+                        {project.stat_views && (
+                            <div className="group flex flex-col items-center justify-center bg-neutral-950 px-6 py-2 transition-transform hover:scale-110 duration-300">
+                                <div className="flex items-center gap-2 mb-1">
+                                    <Eye className="w-5 h-5 text-pink-500 drop-shadow-[0_0_8px_rgba(236,72,153,0.8)]" />
+                                    <span className="text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-lg">
+                                        {parseInt(project.stat_views.replace(/\D/g, '') || '0')
+                                            .toLocaleString('et-EE')
+                                            .replace(/,/g, ' ')}
+                                    </span>
+                                </div>
+                                <div className="text-[10px] md:text-xs font-bold text-pink-400/90 uppercase tracking-[0.2em] group-hover:text-pink-300 transition-colors">
+                                    Vaatamist
+                                </div>
                             </div>
-                            <div className="text-left">
-                                <div className="text-lg font-bold text-white leading-none">{parseInt(project.stat_views.replace(/\D/g, '') || '0').toLocaleString('et-EE').replace(/,/g, ' ')}</div>
-                                <div className="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Vaatamist</div>
+                        )}
+                        {project.stat_likes && (
+                            <div className="group flex flex-col items-center justify-center bg-neutral-950 px-6 py-2 transition-transform hover:scale-110 duration-300">
+                                <div className="flex items-center gap-2 mb-1">
+                                    <Heart className="w-5 h-5 text-pink-500 drop-shadow-[0_0_8px_rgba(236,72,153,0.8)]" />
+                                    <span className="text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-lg">
+                                        {parseInt(project.stat_likes.replace(/\D/g, '') || '0')
+                                            .toLocaleString('et-EE')
+                                            .replace(/,/g, ' ')}
+                                    </span>
+                                </div>
+                                <div className="text-[10px] md:text-xs font-bold text-pink-400/90 uppercase tracking-[0.2em] group-hover:text-pink-300 transition-colors">
+                                    Like&apos;i
+                                </div>
                             </div>
-                        </div>
-                    )}
-                    {project.stat_likes && (
-                        <div className="flex items-center gap-3">
-                            <div className="p-2 bg-neutral-800 rounded-full text-primary">
-                                <Heart className="w-5 h-5" />
+                        )}
+                        {project.stat_comments && (
+                            <div className="group flex flex-col items-center justify-center bg-neutral-950 px-6 py-2 transition-transform hover:scale-110 duration-300">
+                                <div className="flex items-center gap-2 mb-1">
+                                    <MessageCircle className="w-5 h-5 text-pink-500 drop-shadow-[0_0_8px_rgba(236,72,153,0.8)]" />
+                                    <span className="text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-lg">
+                                        {parseInt(project.stat_comments.replace(/\D/g, '') || '0')
+                                            .toLocaleString('et-EE')
+                                            .replace(/,/g, ' ')}
+                                    </span>
+                                </div>
+                                <div className="text-[10px] md:text-xs font-bold text-pink-400/90 uppercase tracking-[0.2em] group-hover:text-pink-300 transition-colors">
+                                    Kommentaari
+                                </div>
                             </div>
-                             <div className="text-left">
-                                <div className="text-lg font-bold text-white leading-none">{parseInt(project.stat_likes.replace(/\D/g, '') || '0').toLocaleString('et-EE').replace(/,/g, ' ')}</div>
-                                <div className="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Like&apos;i</div>
+                        )}
+                        {project.stat_shares && (
+                            <div className="group flex flex-col items-center justify-center bg-neutral-950 px-6 py-2 transition-transform hover:scale-110 duration-300">
+                                <div className="flex items-center gap-2 mb-1">
+                                    <Share2 className="w-5 h-5 text-pink-500 drop-shadow-[0_0_8px_rgba(236,72,153,0.8)]" />
+                                    <span className="text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-lg">
+                                        {parseInt(project.stat_shares.replace(/\D/g, '') || '0')
+                                            .toLocaleString('et-EE')
+                                            .replace(/,/g, ' ')}
+                                    </span>
+                                </div>
+                                <div className="text-[10px] md:text-xs font-bold text-pink-400/90 uppercase tracking-[0.2em] group-hover:text-pink-300 transition-colors">
+                                    Jagamist
+                                </div>
                             </div>
-                        </div>
-                    )}
-                    {project.stat_comments && (
-                        <div className="flex items-center gap-3">
-                            <div className="p-2 bg-neutral-800 rounded-full text-primary">
-                                <MessageCircle className="w-5 h-5" />
-                            </div>
-                             <div className="text-left">
-                                <div className="text-lg font-bold text-white leading-none">{parseInt(project.stat_comments.replace(/\D/g, '') || '0').toLocaleString('et-EE').replace(/,/g, ' ')}</div>
-                                <div className="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Kommentaari</div>
-                            </div>
-                        </div>
-                    )}
-                     {project.stat_shares && (
-                        <div className="flex items-center gap-3">
-                            <div className="p-2 bg-neutral-800 rounded-full text-primary">
-                                <Share2 className="w-5 h-5" />
-                            </div>
-                             <div className="text-left">
-                                <div className="text-lg font-bold text-white leading-none">{parseInt(project.stat_shares.replace(/\D/g, '') || '0').toLocaleString('et-EE').replace(/,/g, ' ')}</div>
-                                <div className="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Jagamist</div>
-                            </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
             )}
         </div>
@@ -318,7 +339,7 @@ export default async function ProjectPage({ params }: PageProps) {
       </div>
 
       {/* Footer / Links Section */}
-      <div className="max-w-5xl mx-auto px-4 pb-0 mt-0 mb-0">
+      <div className="max-w-5xl mx-auto px-4 pb-0 my-0">
 
         {/* Client Quote */}
         {project.client_quote && (
@@ -344,7 +365,7 @@ export default async function ProjectPage({ params }: PageProps) {
 
         {/* Social Links (Dynamic) */}
         {links.length > 0 && (
-            <div className="mb-24 text-center">
+            <div className="mb-24 text-center py-9">
                  <h2 className="text-2xl font-bold text-white mb-8 uppercase">Vaata projekti sotsiaalmeedias:</h2>
                  <div className="flex flex-wrap justify-center gap-4">
                     {links.map((link) => {
