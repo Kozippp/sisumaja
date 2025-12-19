@@ -7,6 +7,7 @@ import MediaGallery from "@/components/MediaGallery";
 import { Database } from "@/types/database.types";
 import { ContentBlock, CustomLink } from "@/components/admin/ProjectForm";
 import { Testimonial } from "@/components/Testimonial";
+import LiveStats from "@/components/LiveStats";
 
 type Project = Database['public']['Tables']['projects']['Row'];
 
