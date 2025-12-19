@@ -21,23 +21,21 @@ export default function LiveStats({
   initialShares,
   showYoutubeStats
 }: LiveStatsProps) {
-  // If showYoutubeStats is true, we start with null to show loading/waiting state.
-  // This prevents the "glitch" of showing DB data then jumping to Live data immediately.
   const [stats, setStats] = useState({
     views: showYoutubeStats ? null : initialViews,
     likes: showYoutubeStats ? null : initialLikes,
     comments: showYoutubeStats ? null : initialComments,
-    shares: initialShares
   });
 
   const [isLoaded, setIsLoaded] = useState(!showYoutubeStats);
 
   useEffect(() => {
-    // If we're not using live stats, we're done (data is passed via props)
     if (!showYoutubeStats) return;
 
-    const formatNumber = (num: number | string) => {
-       return parseInt(String(num)).toLocaleString('et-EE');
+    // We store raw numbers in state now, formatting happens in render
+    const parseToNumber = (num: number | string) => {
+        const raw = String(num).replace(/\s/g, '').replace(/k/i, '000').replace(/\D/g, '');
+        return parseInt(raw) || 0;
     };
 
     let isMounted = true;
@@ -56,12 +54,12 @@ export default function LiveStats({
         if (res.ok && isMounted) {
           const data = await res.json();
           if (data.success && data.data) {
-             setStats(prev => ({
-                ...prev,
-                views: formatNumber(data.data.stat_views),
-                likes: formatNumber(data.data.stat_likes),
-                comments: formatNumber(data.data.stat_comments),
-             }));
+             // Keep data as raw strings/numbers from API
+             setStats({
+                views: data.data.stat_views,
+                likes: data.data.stat_likes,
+                comments: data.data.stat_comments,
+             });
              setIsLoaded(true);
              if (fallbackTimer) clearTimeout(fallbackTimer);
           }
@@ -71,23 +69,18 @@ export default function LiveStats({
       }
     };
 
-    // 1. Fallback: If YouTube data doesn't arrive in 3 seconds, show DB data.
     fallbackTimer = setTimeout(() => {
         if (isMounted && !isLoaded) {
             setStats({
                 views: initialViews,
                 likes: initialLikes,
                 comments: initialComments,
-                shares: initialShares
             });
             setIsLoaded(true);
         }
     }, 3000);
 
-    // 2. Initial fetch
     fetchStats();
-
-    // 3. Polling
     const interval = setInterval(fetchStats, 10000);
 
     return () => {
@@ -95,10 +88,9 @@ export default function LiveStats({
         clearInterval(interval);
         clearTimeout(fallbackTimer);
     };
-  }, [projectId, showYoutubeStats, initialViews, initialLikes, initialComments, initialShares, isLoaded]);
+  }, [projectId, showYoutubeStats, initialViews, initialLikes, initialComments, isLoaded]);
 
-  // If we have no data at all (and not loading), render nothing
-  const hasData = stats.views || stats.likes || stats.comments || stats.shares;
+  const hasData = stats.views || stats.likes || stats.comments;
   if (!hasData && isLoaded) return null;
 
   return (
@@ -125,16 +117,12 @@ export default function LiveStats({
   );
 }
 
-function StatItem({ icon: Icon, value, label, isLoading }: { icon: any, value: string | null, label: string, isLoading: boolean }) {
-    let displayValue = value;
-    
-    // Parse value for clean display
+function StatItem({ icon: Icon, value, label, isLoading }: { icon: any, value: string | null | number, label: string, isLoading: boolean }) {
+    // Parse value to number for Ticker
+    let numValue = 0;
     if (value) {
         const rawString = String(value).replace(/\s/g, '').replace(/k/i, '000').replace(/\D/g, '');
-        const num = parseInt(rawString);
-        if (!isNaN(num)) {
-            displayValue = num.toLocaleString('et-EE').replace(/,/g, ' ');
-        }
+        numValue = parseInt(rawString) || 0;
     }
 
     return (
@@ -154,23 +142,7 @@ function StatItem({ icon: Icon, value, label, isLoading }: { icon: any, value: s
                             <div className="w-8 h-1 bg-neutral-800 rounded animate-pulse" />
                         </motion.div>
                     ) : (
-                        displayValue && (
-                            <motion.span
-                                key={displayValue}
-                                initial={{ y: "100%", opacity: 0, filter: "blur(8px)" }}
-                                animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
-                                exit={{ y: "-100%", opacity: 0, filter: "blur(8px)" }}
-                                transition={{ 
-                                    type: "spring", 
-                                    stiffness: 120, 
-                                    damping: 14,
-                                    mass: 1
-                                }}
-                                className="block tabular-nums whitespace-nowrap"
-                            >
-                                {displayValue}
-                            </motion.span>
-                        )
+                        <NumberTicker value={numValue} />
                     )}
                 </AnimatePresence>
             </div>
@@ -180,4 +152,49 @@ function StatItem({ icon: Icon, value, label, isLoading }: { icon: any, value: s
             </div>
         </div>
     );
+}
+
+function NumberTicker({ value }: { value: number }) {
+    // Format with spaces as thousands separators
+    const formatted = value.toLocaleString('et-EE').replace(/,/g, ' ');
+    const chars = formatted.split('');
+
+    return (
+        <div className="flex items-center justify-center">
+            {chars.map((char, i) => {
+                // If space, render static spacer
+                if (char === ' ' || char === '\u00A0') {
+                    return <span key={`space-${i}`} className="w-[0.25em]">&nbsp;</span>;
+                }
+                // Determine if it's a number to animate
+                return <AnimatedDigit key={`digit-${chars.length - i}`} char={char} />;
+            })}
+        </div>
+    );
+}
+
+function AnimatedDigit({ char }: { char: string }) {
+     return (
+        <div className="relative h-[1.2em] w-[0.6em] overflow-hidden text-center mx-[1px]">
+             <AnimatePresence mode="popLayout" initial={false}>
+                <motion.span
+                    key={char}
+                    initial={{ y: "100%", filter: "blur(4px)", opacity: 0 }}
+                    animate={{ y: "0%", filter: "blur(0px)", opacity: 1 }}
+                    exit={{ y: "-100%", filter: "blur(4px)", opacity: 0 }}
+                    transition={{ 
+                        type: "spring", 
+                        stiffness: 180, 
+                        damping: 18, 
+                        mass: 0.8 
+                    }}
+                    className="absolute inset-0 flex items-center justify-center"
+                >
+                    {char}
+                </motion.span>
+             </AnimatePresence>
+             {/* Invisible spacer to maintain width */}
+             <span className="invisible">{char}</span>
+        </div>
+     )
 }
