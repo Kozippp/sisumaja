@@ -59,6 +59,7 @@ export type Database = {
           links: Json | null
           media_gallery: Json | null
           published_at: string | null
+          show_youtube_stats: boolean | null
           slug: string
           stat_comments: string | null
           stat_likes: string | null
@@ -69,6 +70,7 @@ export type Database = {
           title: string
           updated_at: string | null
           youtube_url: string | null
+          youtube_video_id: string | null
         }
         Insert: {
           client_avatar_url?: string | null
@@ -87,6 +89,7 @@ export type Database = {
           links?: Json | null
           media_gallery?: Json | null
           published_at?: string | null
+          show_youtube_stats?: boolean | null
           slug: string
           stat_comments?: string | null
           stat_likes?: string | null
@@ -97,6 +100,7 @@ export type Database = {
           title: string
           updated_at?: string | null
           youtube_url?: string | null
+          youtube_video_id?: string | null
         }
         Update: {
           client_avatar_url?: string | null
@@ -115,6 +119,7 @@ export type Database = {
           links?: Json | null
           media_gallery?: Json | null
           published_at?: string | null
+          show_youtube_stats?: boolean | null
           slug?: string
           stat_comments?: string | null
           stat_likes?: string | null
@@ -125,6 +130,7 @@ export type Database = {
           title?: string
           updated_at?: string | null
           youtube_url?: string | null
+          youtube_video_id?: string | null
         }
         Relationships: []
       }

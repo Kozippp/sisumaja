@@ -261,65 +261,19 @@ export default async function ProjectPage({ params }: PageProps) {
                 </div>
             </div>
 
-            {/* Stats Bar (Modern) */}
-            {hasStats && (
-                <div className="relative mt-16 mb-12 w-full flex justify-center px-4">
-                    <div className="inline-flex w-full max-w-md md:max-w-none flex-nowrap justify-between md:justify-center gap-4 md:gap-16 pb-8 border-b-2 border-pink-500 px-2 sm:px-4 md:px-12">
-                        {project.stat_views && (
-                            <div className="group flex flex-col items-center justify-center flex-1 min-w-0 md:flex-none md:min-w-[120px]">
-                                <Eye className="w-7 h-7 md:w-8 md:h-8 text-pink-500 mb-3 md:mb-4 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform duration-300" />
-                                <div className="text-xl md:text-3xl font-black text-white tracking-tight mb-1 md:mb-2">
-                                    {parseInt(project.stat_views.replace(/\D/g, '') || '0')
-                                        .toLocaleString('et-EE')
-                                        .replace(/,/g, ' ')}
-                                </div>
-                                <div className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] group-hover:text-pink-400 transition-colors">
-                                    Vaatamist
-                                </div>
-                            </div>
-                        )}
-                        {project.stat_likes && (
-                            <div className="group flex flex-col items-center justify-center flex-1 min-w-0 md:flex-none md:min-w-[120px]">
-                                <Heart className="w-7 h-7 md:w-8 md:h-8 text-pink-500 mb-3 md:mb-4 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform duration-300" />
-                                <div className="text-xl md:text-3xl font-black text-white tracking-tight mb-1 md:mb-2">
-                                    {parseInt(project.stat_likes.replace(/\D/g, '') || '0')
-                                        .toLocaleString('et-EE')
-                                        .replace(/,/g, ' ')}
-                                </div>
-                                <div className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] group-hover:text-pink-400 transition-colors">
-                                    Like&apos;i
-                                </div>
-                            </div>
-                        )}
-                        {project.stat_comments && (
-                            <div className="group flex flex-col items-center justify-center flex-1 min-w-0 md:flex-none md:min-w-[120px]">
-                                <MessageCircle className="w-7 h-7 md:w-8 md:h-8 text-pink-500 mb-3 md:mb-4 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform duration-300" />
-                                <div className="text-xl md:text-3xl font-black text-white tracking-tight mb-1 md:mb-2">
-                                    {parseInt(project.stat_comments.replace(/\D/g, '') || '0')
-                                        .toLocaleString('et-EE')
-                                        .replace(/,/g, ' ')}
-                                </div>
-                                <div className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] group-hover:text-pink-400 transition-colors">
-                                    Kommentaari
-                                </div>
-                            </div>
-                        )}
-                        {project.stat_shares && (
-                            <div className="group flex flex-col items-center justify-center flex-1 min-w-0 md:flex-none md:min-w-[120px]">
-                                <Share2 className="w-7 h-7 md:w-8 md:h-8 text-pink-500 mb-3 md:mb-4 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform duration-300" />
-                                <div className="text-xl md:text-3xl font-black text-white tracking-tight mb-1 md:mb-2">
-                                    {parseInt(project.stat_shares.replace(/\D/g, '') || '0')
-                                        .toLocaleString('et-EE')
-                                        .replace(/,/g, ' ')}
-                                </div>
-                                <div className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] group-hover:text-pink-400 transition-colors">
-                                    Jagamist
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            )}
+            {/* Stats Bar (Modern) - Live Component */}
+            <div className="relative mt-16 mb-12 w-full flex justify-center px-4">
+               <div className="w-full max-w-5xl">
+                <LiveStats 
+                    projectId={project.id}
+                    initialViews={project.stat_views}
+                    initialLikes={project.stat_likes}
+                    initialComments={project.stat_comments}
+                    initialShares={project.stat_shares}
+                    showYoutubeStats={project.show_youtube_stats}
+                />
+               </div>
+            </div>
         </div>
       </div>
 

@@ -54,6 +54,8 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     youtube_url: '',
     tiktok_url: '',
     instagram_url: '',
+    youtube_video_id: '',
+    show_youtube_stats: false,
     stat_views: '',
     stat_likes: '',
     stat_comments: '',
@@ -620,8 +622,62 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
 
       {/* Stats */}
       <div className="bg-neutral-900 p-6 rounded-xl border border-neutral-800 space-y-4">
-        <h3 className="text-xl font-bold border-b border-neutral-800 pb-2 mb-4">Statistika (Täida vaid olemasolevad)</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <h3 className="text-xl font-bold border-b border-neutral-800 pb-2 mb-4">Statistika</h3>
+        
+        {/* Auto Stats Switch */}
+        <div className="bg-black p-4 rounded border border-neutral-700 mb-6">
+            <div className="flex items-center justify-between mb-4">
+                <label className="flex items-center gap-3 cursor-pointer select-none">
+                    <div className="relative">
+                        <input 
+                            type="checkbox" 
+                            name="show_youtube_stats"
+                            checked={formData.show_youtube_stats || false}
+                            onChange={handleChange}
+                            className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+                    </div>
+                    <span className="font-bold text-white flex items-center gap-2">
+                        <Youtube className="w-5 h-5 text-red-500" />
+                        Automaatne YouTube Statistika
+                    </span>
+                </label>
+            </div>
+
+            {formData.show_youtube_stats && (
+                <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-400 mb-1">YouTube Video Link</label>
+                        <div className="flex gap-2">
+                            <input 
+                                type="text"
+                                placeholder="https://www.youtube.com/watch?v=..."
+                                value={formData.youtube_video_id || ''}
+                                onChange={(e) => {
+                                    // Try to extract ID immediately
+                                    const val = e.target.value;
+                                    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+                                    const match = val.match(regExp);
+                                    const id = (match && match[2].length === 11) ? match[2] : val;
+                                    
+                                    setFormData(prev => ({ ...prev, youtube_video_id: id }));
+                                }}
+                                className="flex-1 bg-neutral-900 border border-neutral-700 rounded p-2 text-white"
+                            />
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1">
+                            Video ID: <span className="font-mono text-yellow-500">{formData.youtube_video_id || 'Puudub'}</span>
+                        </p>
+                    </div>
+                     <p className="text-xs text-yellow-500/80 bg-yellow-500/10 p-2 rounded border border-yellow-500/20">
+                        ⚠️ Kui see on sisse lülitatud, kirjutab süsteem allolevad numbrid automaatselt üle iga kord, kui keegi seda projekti vaatab.
+                    </p>
+                </div>
+            )}
+        </div>
+
+        <div className={`grid grid-cols-2 md:grid-cols-4 gap-4 transition-opacity ${formData.show_youtube_stats ? 'opacity-50 pointer-events-none' : ''}`}>
             <div>
                 <label className="block text-sm font-medium text-gray-400 mb-1">Vaatamised</label>
                 <input name="stat_views" value={formData.stat_views || ''} onChange={handleChange} className="w-full bg-black border border-neutral-700 rounded p-2" placeholder="nt. 50k" />
