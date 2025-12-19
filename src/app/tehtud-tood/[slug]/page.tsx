@@ -8,6 +8,7 @@ import { Database } from "@/types/database.types";
 import { ContentBlock, CustomLink } from "@/components/admin/ProjectForm";
 import { Testimonial } from "@/components/Testimonial";
 import LiveStats from "@/components/LiveStats";
+import { MotionWrapper, MotionItem } from "@/components/MotionWrapper";
 
 type Project = Database['public']['Tables']['projects']['Row'];
 
@@ -226,17 +227,22 @@ export default async function ProjectPage({ params }: PageProps) {
       
       {/* Header Section */}
       <div className="relative pt-32 pb-16 px-4 sm:px-6 lg:px-8 border-b border-neutral-900 bg-neutral-950">
-        <div className="max-w-5xl mx-auto text-center">
+        <MotionWrapper className="max-w-5xl mx-auto text-center">
+            <MotionItem>
             <Link href="/tehtud-tood" className="inline-flex items-center text-gray-400 hover:text-white mb-8 transition-colors">
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Tagasi kõikide tööde juurde
             </Link>
+            </MotionItem>
             
+            <MotionItem>
             <h1 className="text-4xl md:text-6xl font-black text-white mb-8 uppercase leading-tight tracking-tight">
                 {project.title}
             </h1>
+            </MotionItem>
 
             {/* Dates Row */}
+            <MotionItem>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-sm text-gray-400 mb-10">
                 {project.collaboration_completed_at && (
                     <div className="flex items-center gap-2">
@@ -261,8 +267,10 @@ export default async function ProjectPage({ params }: PageProps) {
                     </span>
                 </div>
             </div>
+            </MotionItem>
 
             {/* Stats Bar (Modern) - Live Component */}
+            <MotionItem>
             <div className="relative mt-16 mb-12 w-full flex justify-center px-4">
                <div className="w-full max-w-5xl">
                 <LiveStats 
@@ -275,26 +283,29 @@ export default async function ProjectPage({ params }: PageProps) {
                 />
                </div>
             </div>
-        </div>
+            </MotionItem>
+        </MotionWrapper>
       </div>
 
       {/* Content Blocks */}
-      <div className="py-16">
+      <MotionWrapper className="py-16">
           {blocks.map((block) => (
-              block.type === 'text' ? (
-                  <TextBlock key={block.id} block={block} />
+            <MotionItem key={block.id}>
+              {block.type === 'text' ? (
+                  <TextBlock block={block} />
               ) : (
-                  <MediaBlock key={block.id} block={block} />
-              )
+                  <MediaBlock block={block} />
+              )}
+            </MotionItem>
           ))}
-      </div>
+      </MotionWrapper>
 
       {/* Footer / Links Section */}
-      <div className="max-w-5xl mx-auto px-4 pb-0 my-0">
+      <MotionWrapper className="max-w-5xl mx-auto px-4 pb-0 my-0">
 
         {/* Client Quote */}
         {project.client_quote && (
-          <div className="mb-24 px-4">
+          <MotionItem className="mb-24 px-4">
              <Testimonial 
                 quote={project.client_quote}
                 author={project.client_name || "Klient"}
@@ -304,12 +315,12 @@ export default async function ProjectPage({ params }: PageProps) {
                 title={project.client_review_title || undefined}
                 className="max-w-4xl mx-auto"
              />
-          </div>
+          </MotionItem>
         )}
 
         {/* Social Links (Dynamic) */}
         {links.length > 0 && (
-            <div className="mb-24 text-center py-9">
+            <MotionItem className="mb-24 text-center py-9">
                  <h2 className="text-2xl font-bold text-white mb-8 uppercase">Vaata projekti sotsiaalmeedias:</h2>
                  <div className="flex flex-wrap justify-center gap-4">
                     {links.map((link) => {
@@ -352,9 +363,9 @@ export default async function ProjectPage({ params }: PageProps) {
                         );
                     })}
                  </div>
-            </div>
+            </MotionItem>
         )}
-      </div>
+      </MotionWrapper>
 
       {/* See Also */}
       {otherProjects && otherProjects.length > 0 && (
