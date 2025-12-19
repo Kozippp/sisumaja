@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Eye, Heart, MessageCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -32,7 +32,6 @@ export default function LiveStats({
   useEffect(() => {
     if (!showYoutubeStats) return;
 
-    // We store raw numbers in state now, formatting happens in render
     const parseToNumber = (num: number | string) => {
         const raw = String(num).replace(/\s/g, '').replace(/k/i, '000').replace(/\D/g, '');
         return parseInt(raw) || 0;
@@ -54,7 +53,6 @@ export default function LiveStats({
         if (res.ok && isMounted) {
           const data = await res.json();
           if (data.success && data.data) {
-             // Keep data as raw strings/numbers from API
              setStats({
                 views: data.data.stat_views,
                 likes: data.data.stat_likes,
@@ -118,7 +116,6 @@ export default function LiveStats({
 }
 
 function StatItem({ icon: Icon, value, label, isLoading }: { icon: any, value: string | null | number, label: string, isLoading: boolean }) {
-    // Parse value to number for Ticker
     let numValue = 0;
     if (value) {
         const rawString = String(value).replace(/\s/g, '').replace(/k/i, '000').replace(/\D/g, '');
@@ -154,34 +151,67 @@ function StatItem({ icon: Icon, value, label, isLoading }: { icon: any, value: s
     );
 }
 
+function usePrevious(value: number) {
+  const ref = useRef(value);
+  const prev = useRef(value);
+
+  if (value !== ref.current) {
+      prev.current = ref.current;
+      ref.current = value;
+  }
+  return prev.current;
+}
+
 function NumberTicker({ value }: { value: number }) {
-    // Format with spaces as thousands separators
-    const formatted = value.toLocaleString('et-EE').replace(/,/g, ' ');
+    // Regex manual formatting to ensure 1 000 even for 4 digits
+    const formatted = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     const chars = formatted.split('');
+    
+    const prevValue = usePrevious(value);
+    // Direction: 1 = Increase (New comes from TOP), -1 = Decrease (New comes from BOTTOM)
+    const direction = value > prevValue ? 1 : -1;
 
     return (
         <div className="flex items-center justify-center">
             {chars.map((char, i) => {
-                // If space, render static spacer
                 if (char === ' ' || char === '\u00A0') {
                     return <span key={`space-${i}`} className="w-[0.25em]">&nbsp;</span>;
                 }
-                // Determine if it's a number to animate
-                return <AnimatedDigit key={`digit-${chars.length - i}`} char={char} />;
+                return <AnimatedDigit key={`digit-${chars.length - i}`} char={char} direction={direction} />;
             })}
         </div>
     );
 }
 
-function AnimatedDigit({ char }: { char: string }) {
+const variants = {
+    enter: (direction: number) => ({
+        y: direction > 0 ? "-100%" : "100%", // Increase: Enter from Top
+        opacity: 0,
+        filter: "blur(4px)"
+    }),
+    center: {
+        y: "0%",
+        opacity: 1,
+        filter: "blur(0px)"
+    },
+    exit: (direction: number) => ({
+        y: direction > 0 ? "100%" : "-100%", // Increase: Exit to Bottom
+        opacity: 0,
+        filter: "blur(4px)"
+    })
+};
+
+function AnimatedDigit({ char, direction }: { char: string, direction: number }) {
      return (
         <div className="relative h-[1.2em] w-[0.6em] overflow-hidden text-center mx-[1px]">
-             <AnimatePresence mode="popLayout" initial={false}>
+             <AnimatePresence mode="popLayout" initial={false} custom={direction}>
                 <motion.span
                     key={char}
-                    initial={{ y: "100%", filter: "blur(4px)", opacity: 0 }}
-                    animate={{ y: "0%", filter: "blur(0px)", opacity: 1 }}
-                    exit={{ y: "-100%", filter: "blur(4px)", opacity: 0 }}
+                    custom={direction}
+                    variants={variants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
                     transition={{ 
                         type: "spring", 
                         stiffness: 180, 
@@ -193,7 +223,6 @@ function AnimatedDigit({ char }: { char: string }) {
                     {char}
                 </motion.span>
              </AnimatePresence>
-             {/* Invisible spacer to maintain width */}
              <span className="invisible">{char}</span>
         </div>
      )
