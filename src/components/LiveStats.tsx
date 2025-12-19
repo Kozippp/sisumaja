@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Eye, Heart, MessageCircle, Share2 } from 'lucide-react';
+import { Eye, Heart, MessageCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface LiveStatsProps {
@@ -120,12 +120,6 @@ export default function LiveStats({
             value={stats.comments} 
             label="Kommentaari" 
             isLoading={!isLoaded && !!showYoutubeStats && !stats.comments}
-        />
-        <StatItem 
-            icon={Share2}
-            value={stats.shares} 
-            label="Jagamist" 
-            isLoading={false}
         />
     </div>
   );
