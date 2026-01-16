@@ -25,7 +25,7 @@ const TEAM_MEMBERS = [
   { name: "Mihkel", role: "Sisulooja", image: "/Mihkel.jpg" },
   { name: "Maia-Liis", role: "Sisulooja", image: "/Maia-Liis.jpg" },
   { name: "Aston", role: "Sisulooja", image: "/Aston.jpg" },
-  { name: "Gepu", role: "Sisulooja", image: "/Gepu.jpg" },
+  { name: "Gepu", role: "Sisulooja", image: "/Gepu.png" },
 ];
 
 const FEATURES = [
