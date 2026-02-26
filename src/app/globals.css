@@ -24,6 +24,13 @@
   --radius-radius: var(--radius);
 
   --animate-fade-in-up: fadeInUp 0.8s ease-out forwards;
+  --animate-infinite-scroll: infinite-scroll 25s linear infinite;
+  --animate-infinite-scroll-slow: infinite-scroll 45s linear infinite;
+}
+
+@keyframes infinite-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
 }
 
 @layer base {

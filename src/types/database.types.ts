@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      client_logos: {
+        Row: {
+          id: string
+          name: string
+          logo_url: string | null
+          is_mock: boolean
+          display_order: number
+          created_at: string
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          name: string
+          logo_url?: string | null
+          is_mock?: boolean
+          display_order?: number
+          created_at?: string
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          name?: string
+          logo_url?: string | null
+          is_mock?: boolean
+          display_order?: number
+          created_at?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           created_at: string
