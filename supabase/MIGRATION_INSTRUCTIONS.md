@@ -13,6 +13,13 @@
 4. Kleebi see SQL Editori
 5. Kliki "Run" või vajuta Ctrl/Cmd + Enter
 
+### Client Logos Storage Bucket
+1. Vasakpoolselt menüüst vali "SQL Editor"
+2. Kliki "New Query"
+3. Kopeeri kogu sisu failist: `supabase/migrations/create_client_logos_storage_bucket.sql`
+4. Kleebi see SQL Editori
+5. Kliki "Run" või vajuta Ctrl/Cmd + Enter
+
 ### Social Stats tabel (jälgijad ja vaatamised)
 1. Vasakpoolselt menüüst vali "SQL Editor"
 2. Kliki "New Query"
@@ -25,16 +32,8 @@
 2. Peaksid nägema tabeleid:
    - "client_logos" (8 mock klienti)
    - "social_stats" (jälgijate ja vaatamiste arv)
-
-## Valikuline: Storage setup logode jaoks
-Kui soovid kasutada päris logosid (mitte ainult teksti):
-
-1. Mine "Storage" → "New Bucket"
-2. Loo bucket nimega "client-logos"
-3. Märgi "Public bucket" (et logod oleksid avalikud)
-4. Lae üles kliendi logod
-5. Kopeeri pildi avalik URL
-6. Mine admin paneelile `/admin/clients` ja lisa/muuda klienti
+3. Mine "Storage"
+4. Peaksid nägema bucket'i nimega "client-logos"
 
 ## Admin paneel
 Pärast migratsiooni saad hallata:
@@ -43,6 +42,7 @@ Pärast migratsiooni saad hallata:
 - Mine: `/admin/clients`
 - Saad lisada, muuta ja kustutada klientide logosid
 - Saad valida kas kasutada mock lahendust (tekst) või päris pilte
+- **UUS:** Saad otse üles laadida pilte - ei pea enam käsitsi Supabase Storage'sse minema!
 
 ### Sotsiaalmeedia statistika
 - Mine: `/admin/social-stats`

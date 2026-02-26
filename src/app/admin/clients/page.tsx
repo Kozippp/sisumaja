@@ -21,6 +21,9 @@ export default function ClientLogosPage() {
     is_mock: true,
     display_order: 0
   });
+  const [uploading, setUploading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>('');
   const router = useRouter();
 
   const fetchLogos = async () => {
@@ -47,14 +50,70 @@ export default function ClientLogosPage() {
     checkUser();
   }, [router]);
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const uploadFile = async (file: File): Promise<string | null> => {
+    try {
+      setUploading(true);
+      
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+      const filePath = `client-logos/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('client-logos')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      const { data } = supabase.storage
+        .from('client-logos')
+        .getPublicUrl(filePath);
+
+      return data.publicUrl;
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Pildi üleslaadimine ebaõnnestus: ' + (error as Error).message);
+      return null;
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    let logoUrl = formData.logo_url;
+
+    if (!formData.is_mock && selectedFile) {
+      const uploadedUrl = await uploadFile(selectedFile);
+      if (!uploadedUrl) {
+        return;
+      }
+      logoUrl = uploadedUrl;
+    }
 
     if (editingId) {
       const { error } = await supabase
         .from('client_logos')
         .update({
           ...formData,
+          logo_url: logoUrl,
           updated_at: new Date().toISOString()
         })
         .eq('id', editingId);
@@ -69,6 +128,7 @@ export default function ClientLogosPage() {
         .from('client_logos')
         .insert({
           ...formData,
+          logo_url: logoUrl,
           display_order: maxOrder + 1
         });
 
@@ -79,6 +139,8 @@ export default function ClientLogosPage() {
     }
 
     setFormData({ name: '', logo_url: '', is_mock: true, display_order: 0 });
+    setSelectedFile(null);
+    setPreviewUrl('');
     setShowAddForm(false);
     setEditingId(null);
     fetchLogos();
@@ -113,6 +175,8 @@ export default function ClientLogosPage() {
 
   const handleCancel = () => {
     setFormData({ name: '', logo_url: '', is_mock: true, display_order: 0 });
+    setSelectedFile(null);
+    setPreviewUrl('');
     setShowAddForm(false);
     setEditingId(null);
   };
@@ -183,25 +247,54 @@ export default function ClientLogosPage() {
               {!formData.is_mock && (
                 <div>
                   <label className="block text-sm font-medium text-gray-400 mb-2">
-                    Logo URL
+                    Logo pilt
                   </label>
-                  <input
-                    type="url"
-                    value={formData.logo_url}
-                    onChange={(e) => setFormData({ ...formData, logo_url: e.target.value })}
-                    className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-fuchsia-500"
-                    placeholder="https://..."
-                  />
-                  <p className="mt-2 text-xs text-gray-500">
-                    Lae logo üles Supabase Storage'sse ja kopeeri siia URL
-                  </p>
                   
-                  {formData.logo_url && (
+                  <div className="space-y-4">
+                    <div className="border-2 border-dashed border-white/10 rounded-lg p-6 hover:border-fuchsia-500/50 transition-colors">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        className="hidden"
+                        id="logo-upload"
+                      />
+                      <label
+                        htmlFor="logo-upload"
+                        className="cursor-pointer flex flex-col items-center gap-2"
+                      >
+                        <Upload className="w-8 h-8 text-gray-400" />
+                        <span className="text-white font-medium">
+                          {selectedFile ? selectedFile.name : 'Vali pilt või lohista siia'}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          PNG, JPG, SVG, WEBP kuni 2MB
+                        </span>
+                      </label>
+                    </div>
+
+                    <div className="text-center text-gray-500 text-sm">või</div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-400 mb-2">
+                        Logo URL (kui soovid kasutada välislinki)
+                      </label>
+                      <input
+                        type="url"
+                        value={formData.logo_url}
+                        onChange={(e) => setFormData({ ...formData, logo_url: e.target.value })}
+                        className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-fuchsia-500"
+                        placeholder="https://..."
+                      />
+                    </div>
+                  </div>
+                  
+                  {(previewUrl || formData.logo_url) && (
                     <div className="mt-4 p-4 bg-black/50 rounded-lg border border-white/10">
                       <p className="text-sm text-gray-400 mb-2">Eelvaade:</p>
                       <div className="relative h-24 w-48 bg-white/5 rounded-lg overflow-hidden">
                         <Image 
-                          src={formData.logo_url} 
+                          src={previewUrl || formData.logo_url} 
                           alt="Preview"
                           fill
                           className="object-contain"
@@ -215,15 +308,26 @@ export default function ClientLogosPage() {
               <div className="flex gap-4">
                 <button
                   type="submit"
-                  className="bg-fuchsia-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-fuchsia-700 transition-colors flex items-center"
+                  disabled={uploading}
+                  className="bg-fuchsia-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-fuchsia-700 transition-colors flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Check className="w-4 h-4 mr-2" />
-                  {editingId ? 'Salvesta muudatused' : 'Lisa klient'}
+                  {uploading ? (
+                    <>
+                      <div className="w-4 h-4 mr-2 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Laen üles...
+                    </>
+                  ) : (
+                    <>
+                      <Check className="w-4 h-4 mr-2" />
+                      {editingId ? 'Salvesta muudatused' : 'Lisa klient'}
+                    </>
+                  )}
                 </button>
                 <button
                   type="button"
                   onClick={handleCancel}
-                  className="bg-neutral-800 text-gray-400 px-6 py-3 rounded-lg font-bold hover:text-white hover:bg-neutral-700 transition-colors"
+                  disabled={uploading}
+                  className="bg-neutral-800 text-gray-400 px-6 py-3 rounded-lg font-bold hover:text-white hover:bg-neutral-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Tühista
                 </button>
@@ -309,12 +413,14 @@ export default function ClientLogosPage() {
         <div className="mt-8 p-6 bg-neutral-900/50 rounded-xl border border-neutral-800">
           <h3 className="text-lg font-bold text-white mb-3">Kuidas lisada logo pilte?</h3>
           <ol className="space-y-2 text-gray-400 text-sm">
-            <li>1. Mine Supabase Dashboard → Storage</li>
-            <li>2. Loo uus bucket nimega "client-logos" (public)</li>
-            <li>3. Lae üles kliendi logo pilt</li>
-            <li>4. Kopeeri pildi avalik URL</li>
-            <li>5. Kleebi URL siia vormi ja tühista "Mock lahendus" checkbox</li>
+            <li>1. Eemalda "Mock lahendus" checkbox</li>
+            <li>2. Lohista või vali fail üleslaadimisväljas</li>
+            <li>3. Vaata eelvaadet ja kinnita</li>
+            <li>4. Pilt laaditakse automaatselt Supabase Storage&apos;sse</li>
           </ol>
+          <p className="mt-3 text-xs text-gray-500">
+            Võid ka kasutada välist URL-i, kui pilt on juba kusagil hostitud.
+          </p>
         </div>
       </div>
     </div>
