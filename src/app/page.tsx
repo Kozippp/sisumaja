@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
-import { ArrowRight, Play, Star, Zap, TrendingUp, Clapperboard, Users, MessageCircle, Send, CheckCircle, Youtube, Video, Mic } from "lucide-react";
+import { ArrowRight, Play, Star, Zap, TrendingUp, Clapperboard, Users, MessageCircle, Send, CheckCircle, Youtube, Video, Mic, BadgeCheck } from "lucide-react";
 import Image from "next/image";
 import { Database } from "@/types/database.types";
 import * as motion from "framer-motion/client";
@@ -86,16 +86,50 @@ export default async function Home() {
             transition={{ duration: 0.8 }}
             className="mb-8 flex flex-col items-center"
           >
-            <div className="relative mb-8">
-              <div className="absolute inset-0 bg-fuchsia-500 rounded-full blur-[100px] opacity-50 animate-pulse"></div>
-              <div className="relative w-[200px] md:w-[300px] h-[200px] md:h-[300px] rounded-full overflow-hidden border-4 border-white/10">
-                <Image 
-                  src="/kozip-profile.png"
-                  alt="Kozip"
-                  fill
-                  className="object-cover"
-                  priority
-                />
+            <div className="relative mb-8 group cursor-default">
+              {/* Glow effect */}
+              <div className="absolute inset-0 bg-fuchsia-500/30 rounded-3xl blur-[60px] opacity-50 animate-pulse group-hover:opacity-70 transition-opacity duration-500"></div>
+              
+              {/* Instagram-style Card */}
+              <div className="relative bg-black/40 backdrop-blur-xl border border-white/10 p-6 pr-10 rounded-3xl flex items-center gap-6 transform hover:scale-[1.02] transition-transform duration-500">
+                {/* Profile Picture with Story Ring */}
+                <div className="relative">
+                   <div className="absolute -inset-[3px] bg-gradient-to-tr from-yellow-500 via-fuchsia-500 to-purple-600 rounded-full opacity-100"></div>
+                   <div className="relative w-24 h-24 rounded-full overflow-hidden border-[3px] border-black">
+                      <Image 
+                        src="/kozip-profile.png"
+                        alt="Kozip"
+                        fill
+                        className="object-cover"
+                        priority
+                      />
+                   </div>
+                </div>
+
+                {/* Profile Info */}
+                <div className="text-left">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h2 className="text-2xl font-bold text-white tracking-tight">@Kozip_Eesti</h2>
+                    <BadgeCheck className="w-6 h-6 text-blue-500 fill-blue-500/10" />
+                  </div>
+                  <p className="text-gray-400 text-sm font-medium mb-3">Digital Creator</p>
+                  
+                  {/* Stats */}
+                  <div className="flex items-center gap-6 text-sm">
+                    <div className="flex flex-col">
+                      <span className="font-bold text-white">15.4K</span>
+                      <span className="text-gray-500 text-xs">Followers</span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="font-bold text-white">1.2K</span>
+                      <span className="text-gray-500 text-xs">Following</span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="font-bold text-white">1M+</span>
+                      <span className="text-gray-500 text-xs">Views</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto font-light leading-relaxed">
