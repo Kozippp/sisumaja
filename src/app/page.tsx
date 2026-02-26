@@ -105,8 +105,8 @@ export default async function Home() {
               <Link href="#about" className="relative bg-black/40 backdrop-blur-xl border border-white/10 p-6 pr-10 rounded-3xl flex items-center gap-6 transform hover:scale-[1.02] transition-transform duration-500 cursor-pointer">
                 {/* Profile Picture with Story Ring */}
                 <div className="relative">
-                   <div className="absolute -inset-[3px] bg-gradient-to-tr from-yellow-500 via-fuchsia-500 to-purple-600 rounded-full opacity-100"></div>
-                   <div className="relative w-24 h-24 rounded-full overflow-hidden border-[3px] border-black">
+                   <div className="absolute -inset-[4px] bg-gradient-to-tr from-yellow-500 via-fuchsia-500 to-purple-600 rounded-full opacity-100"></div>
+                   <div className="relative w-32 h-32 rounded-full overflow-hidden border-[4px] border-black">
                       <Image 
                         src="/kozip-profile.png"
                         alt="Kozip"
@@ -128,12 +128,12 @@ export default async function Home() {
                   {/* Stats */}
                   <div className="flex items-center gap-8 text-base">
                     <div className="flex flex-col">
-                      <span className="font-bold text-white text-2xl">{socialStats.followers}</span>
-                      <span className="text-gray-500 text-sm">Jälgijaid</span>
+                      <span className="font-bold text-white text-xl">{socialStats.followers}</span>
+                      <span className="text-gray-500 text-xs">Jälgijaid</span>
                     </div>
                     <div className="flex flex-col">
-                      <span className="font-bold text-white text-2xl">{socialStats.views}</span>
-                      <span className="text-gray-500 text-sm">Vaatamisi</span>
+                      <span className="font-bold text-white text-xl">{socialStats.views}</span>
+                      <span className="text-gray-500 text-xs">Vaatamisi</span>
                     </div>
                   </div>
                 </div>
