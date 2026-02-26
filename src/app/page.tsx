@@ -91,7 +91,7 @@ export default async function Home() {
               <div className="absolute inset-0 bg-fuchsia-500/30 rounded-3xl blur-[60px] opacity-50 animate-pulse group-hover:opacity-70 transition-opacity duration-500"></div>
               
               {/* Instagram-style Card */}
-              <div className="relative bg-black/40 backdrop-blur-xl border border-white/10 p-6 pr-10 rounded-3xl flex items-center gap-6 transform hover:scale-[1.02] transition-transform duration-500">
+              <Link href="#about" className="relative bg-black/40 backdrop-blur-xl border border-white/10 p-6 pr-10 rounded-3xl flex items-center gap-6 transform hover:scale-[1.02] transition-transform duration-500 cursor-pointer">
                 {/* Profile Picture with Story Ring */}
                 <div className="relative">
                    <div className="absolute -inset-[3px] bg-gradient-to-tr from-yellow-500 via-fuchsia-500 to-purple-600 rounded-full opacity-100"></div>
@@ -118,22 +118,18 @@ export default async function Home() {
                   <div className="flex items-center gap-6 text-sm">
                     <div className="flex flex-col">
                       <span className="font-bold text-white">15.4K</span>
-                      <span className="text-gray-500 text-xs">Followers</span>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="font-bold text-white">1.2K</span>
-                      <span className="text-gray-500 text-xs">Following</span>
+                      <span className="text-gray-500 text-xs">Jälgijaid</span>
                     </div>
                     <div className="flex flex-col">
                       <span className="font-bold text-white">1M+</span>
-                      <span className="text-gray-500 text-xs">Views</span>
+                      <span className="text-gray-500 text-xs">Vaatamisi</span>
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             </div>
             <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto font-light leading-relaxed">
-              Reklaami oma brändi Eesti <span className="text-fuchsia-500 font-bold">ägedaimates kogupere videote</span> keskel
+              Reklaami oma brändi Eesti <span className="text-fuchsia-500 font-bold">ägedaimate kogupere videote</span> keskel
             </p>
           </motion.div>
 
@@ -203,7 +199,7 @@ export default async function Home() {
       </section>
 
       {/* 4. WHO IS KOZIP */}
-      <section className="py-32 bg-neutral-950 relative">
+      <section id="about" className="py-32 bg-neutral-950 relative">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="relative order-2 lg:order-1">
             <motion.div 
