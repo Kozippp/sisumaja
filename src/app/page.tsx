@@ -9,6 +9,7 @@ export const revalidate = 60;
 
 type Project = Database['public']['Tables']['projects']['Row'];
 type ClientLogo = Database['public']['Tables']['client_logos']['Row'];
+type SocialStats = Database['public']['Tables']['social_stats']['Row'];
 
 async function getRecentProjects(): Promise<Project[]> {
   const { data } = await supabase
@@ -26,6 +27,15 @@ async function getClientLogos(): Promise<ClientLogo[]> {
     .select("*")
     .order("display_order", { ascending: true });
   return data || [];
+}
+
+async function getSocialStats(): Promise<SocialStats> {
+  const { data } = await supabase
+    .from("social_stats")
+    .select("*")
+    .limit(1)
+    .single();
+  return data || { id: '', followers: '15.4K', views: '1M+', updated_at: '' };
 }
 
 const SERVICES = [
@@ -55,6 +65,7 @@ const SERVICES = [
 export default async function Home() {
   const recentProjects = await getRecentProjects();
   const clientLogos = await getClientLogos();
+  const socialStats = await getSocialStats();
 
   return (
     <div className="flex flex-col min-h-screen bg-black overflow-x-hidden text-white font-sans selection:bg-fuchsia-500/30">
@@ -115,20 +126,20 @@ export default async function Home() {
                   <p className="text-gray-400 text-sm font-medium mb-3">Digital Creator</p>
                   
                   {/* Stats */}
-                  <div className="flex items-center gap-6 text-sm">
+                  <div className="flex items-center gap-8 text-base">
                     <div className="flex flex-col">
-                      <span className="font-bold text-white">15.4K</span>
-                      <span className="text-gray-500 text-xs">Jälgijaid</span>
+                      <span className="font-bold text-white text-2xl">{socialStats.followers}</span>
+                      <span className="text-gray-500 text-sm">Jälgijaid</span>
                     </div>
                     <div className="flex flex-col">
-                      <span className="font-bold text-white">1M+</span>
-                      <span className="text-gray-500 text-xs">Vaatamisi</span>
+                      <span className="font-bold text-white text-2xl">{socialStats.views}</span>
+                      <span className="text-gray-500 text-sm">Vaatamisi</span>
                     </div>
                   </div>
                 </div>
               </Link>
             </div>
-            <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto font-light leading-relaxed">
+            <p className="text-xl md:text-2xl text-white-400 max-w-3xl mx-auto font-light leading-relaxed">
               Reklaami oma brändi Eesti <span className="text-fuchsia-500 font-bold">ägedaimate kogupere videote</span> keskel
             </p>
           </motion.div>
@@ -142,7 +153,7 @@ export default async function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 + 0.5 }}
-                className="group relative p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-fuchsia-500/50 hover:bg-white/10 transition-all duration-300 backdrop-blur-sm overflow-hidden flex flex-col items-center text-center"
+                className="group relative p-8 rounded-2xl hover:bg-white/5 hover:border hover:border-white/10 transition-all duration-300 backdrop-blur-sm overflow-hidden flex flex-col items-center text-center"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 

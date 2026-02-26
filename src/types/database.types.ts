@@ -164,6 +164,27 @@ export type Database = {
         }
         Relationships: []
       }
+      social_stats: {
+        Row: {
+          id: string
+          followers: string
+          views: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          followers?: string
+          views?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          followers?: string
+          views?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

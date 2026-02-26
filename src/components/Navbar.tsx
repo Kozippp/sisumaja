@@ -34,11 +34,11 @@ export default function Navbar() {
               className="relative z-50 flex items-center h-10 md:h-12 w-auto"
             >
               <Image
-                src="/LOGOTRANSPARENT.png"
-                alt="Sisumaja logo"
+                src="/kozip-logo.png"
+                alt="Kozip logo"
                 width={240}
                 height={96}
-                className="h-14 md:h-20 w-auto object-contain"
+                className="h-8 md:h-12 w-auto object-contain"
                 priority
               />
             </Link>

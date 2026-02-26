@@ -10,22 +10,24 @@ export default function Footer() {
           <div className="col-span-1 md:col-span-2">
             <div className="flex flex-col items-start">
               <Link href="/" className="block mb-6 w-auto max-w-[220px]">
+                {/* Asenda tulevikus Kozipi logoga */}
                 <Image
-                  src="/LOGOTRANSPARENT.png"
-                  alt="Sisumaja logo"
+                  src="/kozip-logo.png"
+                  alt="Kozip logo"
                   width={220}
                   height={90}
                   className="w-full h-auto object-contain"
                 />
               </Link>
               <p className="text-gray-400 max-w-sm mb-6 leading-relaxed">
-                Sisumaja pakub uuenduslikku meelelahutust Eesti rahvale ning efektiivset turunduskanalit ettevõtetele, kelle väärtused kattuvad meie omadega.
+                Kozip pakub terviklikke sotsiaalmeedia lahendusi, aidates brändidel silma paista ja kasvatada oma jälgijaskonda.
               </p>
               <div className="flex space-x-4">
                 <SocialLink href="https://www.youtube.com/@Sisumajatv" icon={Youtube} />
                 <SocialLink href="https://www.instagram.com/sisumaja.tv/" icon={Instagram} />
+                {/* TikTok ikoon vajab asendust kui pilt muutub */}
                 <SocialLink href="https://www.tiktok.com/@sisumaja.tv" icon={TikTokIcon} />
-                <SocialLink href="mailto:info@sisumaja.ee" icon={Mail} />
+                <SocialLink href="mailto:info@kozip.ee" icon={Mail} />
               </div>
             </div>
           </div>
@@ -44,8 +46,8 @@ export default function Footer() {
             <ul className="space-y-4 text-gray-400">
               <li>Tallinn, Eesti</li>
               <li>
-                <a href="mailto:info@sisumaja.ee" className="hover:text-white transition-colors">
-                  info@sisumaja.ee
+                <a href="mailto:info@kozip.ee" className="hover:text-white transition-colors">
+                  info@kozip.ee
                 </a>
               </li>
             </ul>
@@ -53,7 +55,7 @@ export default function Footer() {
         </div>
         
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-600">
-          <p>&copy; {new Date().getFullYear()} Sisumaja. Kõik õigused kaitstud.</p>
+          <p>&copy; {new Date().getFullYear()} Kozip. Kõik õigused kaitstud.</p>
           <div className="flex space-x-6 mt-4 md:mt-0 flex-wrap justify-end gap-y-2">
             <Link href="/privaatsuspoliitika" className="hover:text-white transition-colors">Privaatsuspoliitika</Link>
             <Link href="/kasutustingimused" className="hover:text-white transition-colors">Kasutustingimused</Link>

@@ -16,8 +16,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Sisumaja | Eesti esimene creatorhouse",
-  description: "Sisumaja on Eesti esimene creatorhouse, kuhu on kolinud kokku 6 eesti sisuloojat.",
+  title: "Kozip | Sinu brändi sotsiaalmeedia partner",
+  description: "Kozip loob sotsiaalmeedia sisu ja pakub reklaamilahendusi Youtube'is ja lühivideotes. Tõstame sinu brändi nähtavust.",
   icons: {
     icon: "/favicon.png",
     shortcut: "/favicon.png",

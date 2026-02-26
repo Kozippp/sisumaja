@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Plus, Edit, Trash2, Eye, EyeOff, LogOut, Users } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, EyeOff, LogOut, Users, TrendingUp } from 'lucide-react';
 import { Database } from '@/types/database.types';
 
 type Project = Database['public']['Tables']['projects']['Row'];
@@ -77,6 +77,13 @@ export default function DashboardPage() {
         <div className="flex justify-between items-center mb-12">
           <h1 className="text-3xl font-bold text-white uppercase">Admin Dashboard</h1>
           <div className="flex gap-4">
+            <Link 
+              href="/admin/social-stats" 
+              className="bg-neutral-800 text-gray-300 px-6 py-2 rounded-lg font-bold hover:bg-neutral-700 hover:text-white transition-colors flex items-center"
+            >
+              <TrendingUp className="w-4 h-4 mr-2" />
+              Statistika
+            </Link>
             <Link 
               href="/admin/clients" 
               className="bg-neutral-800 text-gray-300 px-6 py-2 rounded-lg font-bold hover:bg-neutral-700 hover:text-white transition-colors flex items-center"
