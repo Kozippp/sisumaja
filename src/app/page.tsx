@@ -369,69 +369,12 @@ export default async function Home() {
                   <p>
                     Me ei tee lihtsalt videoid – me loome saateid, mida oodatakse nädalaid ja vaadatakse korduvalt. Meie eesmärk on süstida vaatajasse <span className="text-fuchsia-400 font-medium">julgust järgida oma südant</span> ning teha ka oma elus ägedaid asju.
                   </p>
+                  <p>
+                    <span className="text-white font-bold">Kogukond, mitte lihtsalt numbrid:</span> Meie fännid ei ole lihtsalt passiivsed tarbijad vaid kaasamõtlejad, kes usaldavad meid nagu sõpru. Turundaja jaoks tähendab see brändi viimist keskkonda, kus reklaam on osa oodatud seiklusest, mitte häiriv paus.
+                  </p>
                 </div>
               </motion.div>
             </div>
-          </div>
-
-          {/* How We Do It Cards */}
-          <div className="mb-20">
-             <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="grid grid-cols-1 md:grid-cols-3 gap-6"
-              >
-                {/* Card 1 */}
-                <div className="bg-white/5 p-8 rounded-3xl border border-white/10 hover:border-fuchsia-500/30 transition-all hover:-translate-y-1 duration-300 relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 p-32 bg-fuchsia-500/5 rounded-full blur-3xl group-hover:bg-fuchsia-500/10 transition-colors" />
-                  
-                  <div className="relative z-10">
-                    <div className="w-14 h-14 bg-red-500/10 rounded-2xl flex items-center justify-center text-red-500 mb-6 group-hover:scale-110 transition-transform">
-                      <Youtube className="w-7 h-7" />
-                    </div>
-                    <h3 className="text-xl font-bold text-white mb-3">YouTube’i suurprojektid</h3>
-                    <p className="text-gray-400 mb-4 leading-relaxed">
-                      Meie fookus on pikaformaadilisel sisul – reality-sarjad, väljakutsed ja võrdlusvideod.
-                    </p>
-                    <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-lg">
-                      <span className="text-fuchsia-400 font-bold">14:49</span>
-                      <span className="text-xs text-gray-400 uppercase tracking-wide">Keskmine vaatamisaeg</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Card 2 */}
-                <div className="bg-white/5 p-8 rounded-3xl border border-white/10 hover:border-blue-500/30 transition-all hover:-translate-y-1 duration-300 relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 p-32 bg-blue-500/5 rounded-full blur-3xl group-hover:bg-blue-500/10 transition-colors" />
-                  
-                  <div className="relative z-10">
-                    <div className="w-14 h-14 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-500 mb-6 group-hover:scale-110 transition-transform">
-                      <Video className="w-7 h-7" />
-                    </div>
-                    <h3 className="text-xl font-bold text-white mb-3">Lühivideote kaudu</h3>
-                    <p className="text-gray-400 leading-relaxed">
-                      Jagame vahetuid hetki ja lugusid oma elust luues katkematu ja <span className="text-white font-medium">autentse kontakti</span> fännidega.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Card 3 */}
-                <div className="bg-white/5 p-8 rounded-3xl border border-white/10 hover:border-green-500/30 transition-all hover:-translate-y-1 duration-300 relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 p-32 bg-green-500/5 rounded-full blur-3xl group-hover:bg-green-500/10 transition-colors" />
-                  
-                  <div className="relative z-10">
-                    <div className="w-14 h-14 bg-green-500/10 rounded-2xl flex items-center justify-center text-green-500 mb-6 group-hover:scale-110 transition-transform">
-                      <Users className="w-7 h-7" />
-                    </div>
-                    <h3 className="text-xl font-bold text-white mb-3">Kogukond, mitte numbrid</h3>
-                    <p className="text-gray-400 leading-relaxed">
-                      Meie fännid on kaasamõtlejad. Reklaam on siin keskkonnas <span className="text-white font-medium">osa oodatud seiklusest</span>, mitte häiriv paus.
-                    </p>
-                  </div>
-                </div>
-             </motion.div>
           </div>
 
           {/* YouTube Content Carousel */}
