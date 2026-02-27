@@ -317,20 +317,21 @@ export default async function Home() {
               >
                 <h2 className="text-4xl md:text-5xl font-black uppercase mb-6">Kes on <span className="text-fuchsia-500">Kozip</span>?</h2>
                 <p className="text-xl text-gray-400 mb-6 leading-relaxed">
-                  Oleme seikluslik elustiili- ja meelelahutuskanal, mis loob sisu tuues inimestele juurde rohkem elurõõmu, julgust ja tahet oma südant järgida.
+                  Kozip on seikluslik elustiili- ja meelelahutuskanal, mis keskendub oma vaatajate üllatamisele luues kaasahaaravat, eksperimentaalset ja julget sisu.         </p>
+                  <p className="text-xl text-gray-400 mb-6 leading-relaxed">
+                  Loome sisu suuremahulistest väljakutsetest ja reality-stiilis sarjadest eksperimentide, reisimise ja võrdlusteni. 
                 </p>
-                <p className="text-xl text-gray-400 mb-6 leading-relaxed">
-                  Meie sisu ulatub suuremahulistest väljakutsetest ja reality-stiilis sarjadest kuni eksperimentide ja võrdlusteni. Loome aus ja lähedase suhte oma kogukonnaga – jagame elu kardinate taga, mitte ainult lavaetendust.
-                </p>
-                
+                  <p className="text-xl text-gray-400 mb-6 leading-relaxed">
+                  Meie eesmärk on tuua inimestele juurde rohkem elurõõmu, julgust ja tahet oma südant järgida.
+                  </p>
                 <div className="grid grid-cols-2 gap-6">
                   <div className="bg-white/5 p-6 rounded-2xl border border-white/5">
                     <h4 className="text-3xl font-bold text-white mb-2">14:49</h4>
-                    <p className="text-sm text-gray-400 uppercase tracking-wider">Keskmine vaatamisaeg</p>
+                    <p className="text-sm text-gray-400 uppercase tracking-wider">Youtube'i video keskmine vaatamisaeg</p>
                   </div>
                   <div className="bg-white/5 p-6 rounded-2xl border border-white/5">
-                     <h4 className="text-3xl font-bold text-white mb-2">6.5y</h4>
-                     <p className="text-sm text-gray-400 uppercase tracking-wider">Igakuist vaatamisaega</p>
+                     <h4 className="text-3xl font-bold text-white mb-2">20M+</h4>
+                     <p className="text-sm text-gray-400 uppercase tracking-wider">Vaatamist kokku</p>
                   </div>
                 </div>
               </motion.div>

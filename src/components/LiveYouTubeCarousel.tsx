@@ -71,8 +71,8 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
         <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-neutral-950 to-transparent z-10 pointer-events-none" />
         
         <div className="flex gap-6 animate-infinite-scroll-slow">
-          {/* Duplicate twice for seamless infinite scroll */}
-          {[...videos, ...videos].map((video, idx) => (
+          {/* Triple the videos for true seamless infinite scroll */}
+          {[...videos, ...videos, ...videos].map((video, idx) => (
             <a
               key={`${video.id}-${idx}`}
               href={video.youtube_url}
@@ -110,11 +110,13 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
       {/* Content Categories */}
       <div className="flex flex-wrap justify-center gap-3 mt-12">
         {[
-          "Reality-Sarjad",
-          "Eksperimendid",
+        "Eksperimendid",
+        "Reality-Sarjad",
+          "Reisimine",
           "Odav vs. Kallis",
           "Väljakutsed",
-          "Vlogid"
+          "Toitumine",
+          "Trenn"
         ].map((tag, i) => (
           <span key={i} className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-gray-300 hover:border-fuchsia-500/30 hover:text-white transition-all cursor-default">
             {tag}
