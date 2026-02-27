@@ -1,11 +1,10 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Play } from 'lucide-react';
 import { formatViewCount } from '@/lib/youtube';
 import { Database } from '@/types/database.types';
-import * as motion from 'framer-motion/client';
 
 type FeaturedVideo = Database['public']['Tables']['featured_videos']['Row'];
 
@@ -16,14 +15,11 @@ interface LiveYouTubeCarouselProps {
 export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarouselProps) {
   const [videos, setVideos] = useState<FeaturedVideo[]>(initialVideos);
   const [isLoaded, setIsLoaded] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const animationRef = useRef<number | null>(null);
 
   useEffect(() => {
     let isMounted = true;
 
     const syncVideos = async () => {
-      // Only sync when page is visible
       if (document.hidden) return;
 
       try {
@@ -41,57 +37,16 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
         }
       } catch (err) {
         console.error('Failed to sync videos', err);
-        // Keep showing initial videos on error
         setIsLoaded(true);
       }
     };
 
-    // Sync immediately on mount
     syncVideos();
-
-    // Note: We do NOT set up an interval like LiveStats does
-    // We only fetch once when the user loads the page
     
     return () => {
       isMounted = false;
     };
   }, []);
-
-  // Infinite scroll animation
-  useEffect(() => {
-    const scrollContainer = scrollRef.current;
-    if (!scrollContainer || videos.length === 0) return;
-
-    let scrollPosition = 0;
-    const scrollSpeed = 0.5; // pixels per frame
-    
-    const animate = () => {
-      scrollPosition += scrollSpeed;
-      
-      // Get the width of one set of videos
-      const firstChild = scrollContainer.firstElementChild as HTMLElement;
-      if (firstChild) {
-        const singleSetWidth = firstChild.offsetWidth;
-        
-        // When we've scrolled past one complete set, reset position
-        if (scrollPosition >= singleSetWidth) {
-          scrollPosition = 0;
-        }
-        
-        scrollContainer.style.transform = `translateX(-${scrollPosition}px)`;
-      }
-      
-      animationRef.current = requestAnimationFrame(animate);
-    };
-
-    animationRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, [videos]);
 
   if (videos.length === 0) {
     return (
@@ -101,16 +56,39 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
     );
   }
 
+  // Calculate animation duration based on number of videos
+  // ~8 seconds per video for smooth scrolling
+  const animationDuration = videos.length * 8;
+
   return (
     <>
       {/* Infinite Scroll Carousel */}
+      <style jsx>{`
+        @keyframes scroll-carousel {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+        
+        .carousel-track {
+          animation: scroll-carousel ${animationDuration}s linear infinite;
+        }
+        
+        .carousel-track:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
+
       <div className="relative overflow-hidden">
         <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-neutral-950 to-transparent z-10 pointer-events-none" />
         <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-neutral-950 to-transparent z-10 pointer-events-none" />
         
-        <div ref={scrollRef} className="flex gap-6" style={{ willChange: 'transform' }}>
-          {/* Render videos twice for seamless loop */}
-          {[...videos, ...videos].map((video, idx) => (
+        <div className="carousel-track flex gap-6">
+          {/* Render videos THREE times for truly seamless loop */}
+          {[...videos, ...videos, ...videos].map((video, idx) => (
             <a
               key={`${video.id}-${idx}`}
               href={video.youtube_url}
@@ -119,20 +97,17 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
               className="flex-shrink-0 w-80 group cursor-pointer"
             >
               <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10 group-hover:border-red-500/50 transition-all duration-300 mb-3">
-                {/* YouTube Thumbnail */}
                 <Image
                   src={video.thumbnail_url}
                   alt={video.title}
                   fill
                   className="object-cover group-hover:scale-105 transition-all duration-500"
                 />
-                {/* Play Button Overlay - Only visible on hover */}
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div className="w-16 h-16 rounded-full bg-red-600 flex items-center justify-center shadow-lg shadow-red-600/50 scale-90 group-hover:scale-100 transition-transform duration-300">
                     <Play className="w-6 h-6 text-white fill-current ml-1" />
                   </div>
                 </div>
-                {/* View Count Badge */}
                 <div className="absolute top-2 right-2 px-2 py-1 bg-black/80 backdrop-blur-sm rounded text-xs font-bold text-white">
                   {formatViewCount(video.view_count)} vaatamist
                 </div>
@@ -148,8 +123,8 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
       {/* Content Categories */}
       <div className="flex flex-wrap justify-center gap-3 mt-12">
         {[
-        "Eksperimendid",
-        "Reality-Sarjad",
+          "Eksperimendid",
+          "Reality-Sarjad",
           "Reisimine",
           "Odav vs. Kallis",
           "Väljakutsed",
