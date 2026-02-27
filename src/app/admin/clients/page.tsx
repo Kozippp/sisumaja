@@ -19,7 +19,10 @@ export default function ClientLogosPage() {
     name: '',
     logo_url: '',
     is_mock: true,
-    display_order: 0
+    display_order: 0,
+    logo_scale: 100,
+    logo_position_x: 50,
+    logo_position_y: 50
   });
   const [uploading, setUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -138,7 +141,7 @@ export default function ClientLogosPage() {
       }
     }
 
-    setFormData({ name: '', logo_url: '', is_mock: true, display_order: 0 });
+    setFormData({ name: '', logo_url: '', is_mock: true, display_order: 0, logo_scale: 100, logo_position_x: 50, logo_position_y: 50 });
     setSelectedFile(null);
     setPreviewUrl('');
     setShowAddForm(false);
@@ -151,10 +154,16 @@ export default function ClientLogosPage() {
       name: logo.name,
       logo_url: logo.logo_url || '',
       is_mock: logo.is_mock,
-      display_order: logo.display_order
+      display_order: logo.display_order,
+      logo_scale: (logo.logo_scale as number) || 100,
+      logo_position_x: (logo.logo_position_x as number) || 50,
+      logo_position_y: (logo.logo_position_y as number) || 50
     });
     setEditingId(logo.id);
     setShowAddForm(true);
+    if (logo.logo_url) {
+      setPreviewUrl(logo.logo_url);
+    }
   };
 
   const handleDelete = async (id: string) => {
@@ -174,7 +183,7 @@ export default function ClientLogosPage() {
   };
 
   const handleCancel = () => {
-    setFormData({ name: '', logo_url: '', is_mock: true, display_order: 0 });
+    setFormData({ name: '', logo_url: '', is_mock: true, display_order: 0, logo_scale: 100, logo_position_x: 50, logo_position_y: 50 });
     setSelectedFile(null);
     setPreviewUrl('');
     setShowAddForm(false);
@@ -290,15 +299,120 @@ export default function ClientLogosPage() {
                   </div>
                   
                   {(previewUrl || formData.logo_url) && (
-                    <div className="mt-4 p-4 bg-black/50 rounded-lg border border-white/10">
-                      <p className="text-sm text-gray-400 mb-2">Eelvaade:</p>
-                      <div className="relative h-24 w-48 bg-white/5 rounded-lg overflow-hidden">
-                        <Image 
-                          src={previewUrl || formData.logo_url} 
-                          alt="Preview"
-                          fill
-                          className="object-contain"
-                        />
+                    <div className="mt-6 space-y-6">
+                      <div className="p-6 bg-black/50 rounded-lg border border-white/10">
+                        <p className="text-sm font-medium text-gray-400 mb-4">Logo seadistused</p>
+                        
+                        <div className="space-y-6">
+                          {/* Zoom / Scale Control */}
+                          <div>
+                            <div className="flex justify-between items-center mb-3">
+                              <label className="text-sm text-gray-300">
+                                Zoom (suurus)
+                              </label>
+                              <span className="text-sm font-mono text-fuchsia-400">
+                                {formData.logo_scale}%
+                              </span>
+                            </div>
+                            <input
+                              type="range"
+                              min="50"
+                              max="200"
+                              step="5"
+                              value={formData.logo_scale}
+                              onChange={(e) => setFormData({ ...formData, logo_scale: parseInt(e.target.value) })}
+                              className="w-full h-2 bg-neutral-700 rounded-lg appearance-none cursor-pointer slider-thumb"
+                            />
+                            <div className="flex justify-between text-xs text-gray-500 mt-1">
+                              <span>50% (väiksem)</span>
+                              <span>200% (suurem)</span>
+                            </div>
+                          </div>
+
+                          {/* Position X Control */}
+                          <div>
+                            <div className="flex justify-between items-center mb-3">
+                              <label className="text-sm text-gray-300">
+                                Horisontaalne positsioon
+                              </label>
+                              <span className="text-sm font-mono text-fuchsia-400">
+                                {formData.logo_position_x}%
+                              </span>
+                            </div>
+                            <input
+                              type="range"
+                              min="0"
+                              max="100"
+                              step="5"
+                              value={formData.logo_position_x}
+                              onChange={(e) => setFormData({ ...formData, logo_position_x: parseInt(e.target.value) })}
+                              className="w-full h-2 bg-neutral-700 rounded-lg appearance-none cursor-pointer slider-thumb"
+                            />
+                            <div className="flex justify-between text-xs text-gray-500 mt-1">
+                              <span>Vasak</span>
+                              <span>Keskele</span>
+                              <span>Parem</span>
+                            </div>
+                          </div>
+
+                          {/* Position Y Control */}
+                          <div>
+                            <div className="flex justify-between items-center mb-3">
+                              <label className="text-sm text-gray-300">
+                                Vertikaalne positsioon
+                              </label>
+                              <span className="text-sm font-mono text-fuchsia-400">
+                                {formData.logo_position_y}%
+                              </span>
+                            </div>
+                            <input
+                              type="range"
+                              min="0"
+                              max="100"
+                              step="5"
+                              value={formData.logo_position_y}
+                              onChange={(e) => setFormData({ ...formData, logo_position_y: parseInt(e.target.value) })}
+                              className="w-full h-2 bg-neutral-700 rounded-lg appearance-none cursor-pointer slider-thumb"
+                            />
+                            <div className="flex justify-between text-xs text-gray-500 mt-1">
+                              <span>Üles</span>
+                              <span>Keskele</span>
+                              <span>Alla</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="p-4 bg-black/50 rounded-lg border border-white/10">
+                        <p className="text-sm text-gray-400 mb-3">Eelvaade (nii nagu avalehel näeb):</p>
+                        <div className="relative h-32 w-full bg-white/5 rounded-lg overflow-hidden">
+                          <div 
+                            className="absolute inset-0 flex items-center justify-center"
+                            style={{
+                              transform: `scale(${formData.logo_scale / 100})`,
+                            }}
+                          >
+                            <div 
+                              className="relative w-full h-full"
+                              style={{
+                                objectPosition: `${formData.logo_position_x}% ${formData.logo_position_y}%`
+                              }}
+                            >
+                              <Image 
+                                src={previewUrl || formData.logo_url} 
+                                alt="Preview"
+                                fill
+                                className="object-contain"
+                                style={{
+                                  objectPosition: `${formData.logo_position_x}% ${formData.logo_position_y}%`
+                                }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-2">
+                          Seadista zoom ja positsioon nii, et logo oleks hästi nähtav
+                        </p>
                       </div>
                     </div>
                   )}

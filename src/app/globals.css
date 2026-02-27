@@ -79,6 +79,39 @@
   .text-gradient-primary {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-purple-600;
   }
+
+  /* Custom slider styles */
+  .slider-thumb::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #d946ef 0%, #a855f7 100%);
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(217, 70, 239, 0.5);
+    transition: all 0.2s;
+  }
+
+  .slider-thumb::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 15px rgba(217, 70, 239, 0.8);
+  }
+
+  .slider-thumb::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #d946ef 0%, #a855f7 100%);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 10px rgba(217, 70, 239, 0.5);
+    transition: all 0.2s;
+  }
+
+  .slider-thumb::-moz-range-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 15px rgba(217, 70, 239, 0.8);
+  }
 }
 
 @keyframes fadeInUp {

@@ -88,86 +88,128 @@ export default async function Home() {
           />
         </div>
 
-        <div className="relative z-10 max-w-6xl mx-auto w-full text-center">
+        <div className="relative z-10 max-w-5xl mx-auto w-full">
           
-          {/* Logo / Branding */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="mb-8 flex flex-col items-center"
-          >
-            <div className="relative mb-8 group cursor-default">
-              {/* Glow effect */}
-              <div className="absolute inset-0 bg-fuchsia-500/30 rounded-3xl blur-[60px] opacity-50 animate-pulse group-hover:opacity-70 transition-opacity duration-500"></div>
-              
-              {/* Instagram-style Card */}
-              <Link href="#about" className="relative bg-black/40 backdrop-blur-xl border border-white/10 p-6 pr-10 rounded-3xl flex items-center gap-6 transform hover:scale-[1.02] transition-transform duration-500 cursor-pointer">
-                {/* Profile Picture with Story Ring */}
-                <div className="relative">
-                   <div className="absolute -inset-[4px] bg-gradient-to-tr from-yellow-500 via-fuchsia-500 to-purple-600 rounded-full opacity-100"></div>
-                   <div className="relative w-32 h-32 rounded-full overflow-hidden border-[4px] border-black">
-                      <Image 
-                        src="/kozip-profile.png"
-                        alt="Kozip"
-                        fill
-                        className="object-cover"
-                        priority
-                      />
-                   </div>
-                </div>
+          {/* Two Column Layout: Instagram Profile (Left) + Text (Right) */}
+          <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-16">
+            
+            {/* Oval Glow Effect Behind Both Elements */}
+            <div className="absolute inset-0 -inset-x-20 bg-fuchsia-500/20 rounded-full blur-[100px] opacity-50 animate-pulse"></div>
+            
+            {/* Left: Instagram Profile Card */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="relative flex justify-center lg:justify-end z-10"
+            >
+              <div className="relative group cursor-default">
+                {/* Instagram-style Card */}
+                <Link href="#about" className="relative bg-black/40 backdrop-blur-xl border border-white/10 p-8 pr-12 rounded-3xl flex items-center gap-8 transform hover:scale-[1.02] transition-transform duration-500 cursor-pointer">
+                  {/* Profile Picture with Story Ring */}
+                  <div className="relative">
+                     <div className="absolute -inset-[5px] bg-gradient-to-tr from-yellow-500 via-fuchsia-500 to-purple-600 rounded-full opacity-100"></div>
+                     <div className="relative w-40 h-40 rounded-full overflow-hidden border-[5px] border-black">
+                        <Image 
+                          src="/kozip-profile.png"
+                          alt="Kozip"
+                          fill
+                          className="object-cover"
+                          priority
+                        />
+                     </div>
+                  </div>
 
-                {/* Profile Info */}
-                <div className="text-left">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h2 className="text-2xl font-bold text-white tracking-tight">@Kozip_Eesti</h2>
-                    <BadgeCheck className="w-6 h-6 text-blue-500 fill-blue-500/10" />
-                  </div>
-                  <p className="text-gray-400 text-sm font-medium mb-3">Digital Creator</p>
-                  
-                  {/* Stats */}
-                  <div className="flex items-center gap-8 text-base">
-                    <div className="flex flex-col">
-                      <span className="font-bold text-white text-xl">{socialStats.followers}</span>
-                      <span className="text-gray-500 text-xs">Jälgijaid</span>
+                  {/* Profile Info */}
+                  <div className="text-left">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h2 className="text-2xl font-bold text-white tracking-tight">@Kozip_Eesti</h2>
+                      <BadgeCheck className="w-7 h-7 text-blue-500 fill-blue-500/10" />
                     </div>
-                    <div className="flex flex-col">
-                      <span className="font-bold text-white text-xl">{socialStats.views}</span>
-                      <span className="text-gray-500 text-xs">Vaatamisi</span>
+                    <p className="text-gray-400 text-base font-medium mb-4">Digital Creator</p>
+                    
+                    {/* Stats */}
+                    <div className="flex items-center gap-8 text-base">
+                      <div className="flex flex-col">
+                        <span className="font-bold text-white text-2xl">{socialStats.followers}</span>
+                        <span className="text-gray-500 text-xs">Jälgijaid</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-bold text-white text-2xl">{socialStats.views}</span>
+                        <span className="text-gray-500 text-xs">Vaatamisi</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            </div>
-            <p className="text-xl md:text-2xl text-white-400 max-w-3xl mx-auto font-light leading-relaxed">
-              Reklaami oma brändi Eesti <span className="text-fuchsia-500 font-bold">ägedaimate kogupere videote</span> keskel
-            </p>
-          </motion.div>
+                </Link>
+              </div>
+            </motion.div>
+
+            {/* Right: Main Text */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative text-center lg:text-left z-10"
+            >
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-black leading-tight mb-6">
+                Reklaami oma brändi<br />Eesti <span className="text-fuchsia-500">ägedaimates</span><br />kogupere videotes.
+              </h1>
+            </motion.div>
+
+          </div>
 
           {/* Service Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
-            {SERVICES.map((service, index) => (
-              <motion.a
-                key={service.id}
-                href={service.href}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 + 0.5 }}
-                className="group relative p-8 rounded-2xl hover:bg-white/5 hover:border hover:border-white/10 transition-all duration-300 backdrop-blur-sm overflow-hidden flex flex-col items-center text-center"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
-                <div className="relative z-10 p-4 rounded-full bg-black/50 mb-4 text-fuchsia-400 group-hover:text-white group-hover:scale-110 transition-all duration-300">
-                  {service.icon}
-                </div>
-                <h3 className="relative z-10 text-xl font-bold mb-2 group-hover:text-fuchsia-300 transition-colors">{service.title}</h3>
-                <p className="relative z-10 text-sm text-gray-400 group-hover:text-gray-200 transition-colors">{service.description}</p>
-                
-                <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0 duration-300">
-                  <ArrowRight className="w-5 h-5 text-fuchsia-500" />
-                </div>
-              </motion.a>
-            ))}
+            {SERVICES.map((service, index) => {
+              const colors = {
+                youtube: {
+                  icon: 'text-red-500',
+                  hoverIcon: 'group-hover:text-red-400',
+                  hoverTitle: 'group-hover:text-red-300',
+                  hoverGradient: 'from-red-500/10',
+                  arrow: 'text-red-500'
+                },
+                shorts: {
+                  icon: 'text-blue-500',
+                  hoverIcon: 'group-hover:text-blue-400',
+                  hoverTitle: 'group-hover:text-blue-300',
+                  hoverGradient: 'from-blue-500/10',
+                  arrow: 'text-blue-500'
+                },
+                training: {
+                  icon: 'text-green-500',
+                  hoverIcon: 'group-hover:text-green-400',
+                  hoverTitle: 'group-hover:text-green-300',
+                  hoverGradient: 'from-green-500/10',
+                  arrow: 'text-green-500'
+                }
+              };
+              
+              const serviceColors = colors[service.id as keyof typeof colors];
+              
+              return (
+                <motion.a
+                  key={service.id}
+                  href={service.href}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 + 0.5 }}
+                  className="group relative p-8 rounded-2xl hover:bg-white/5 hover:border hover:border-white/10 transition-all duration-300 backdrop-blur-sm overflow-hidden flex flex-col items-center text-center"
+                >
+                  <div className={`absolute inset-0 bg-gradient-to-br ${serviceColors.hoverGradient} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+                  
+                  <div className={`relative z-10 p-4 rounded-full bg-black/50 mb-4 ${serviceColors.icon} ${serviceColors.hoverIcon} group-hover:scale-110 transition-all duration-300`}>
+                    {service.icon}
+                  </div>
+                  <h3 className={`relative z-10 text-xl font-bold mb-2 ${serviceColors.hoverTitle} transition-colors`}>{service.title}</h3>
+                  <p className="relative z-10 text-sm text-gray-400 group-hover:text-gray-200 transition-colors">{service.description}</p>
+                  
+                  <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0 duration-300">
+                    <ArrowRight className={`w-5 h-5 ${serviceColors.arrow}`} />
+                  </div>
+                </motion.a>
+              );
+            })}
           </div>
 
           {/* Scroll Indicator Removed */}
@@ -192,13 +234,25 @@ export default async function Home() {
                         {client.name}
                       </div>
                     ) : (
-                      <div className="relative h-12 w-32 grayscale hover:grayscale-0 transition-all opacity-70 hover:opacity-100">
-                        <Image 
-                          src={client.logo_url} 
-                          alt={client.name}
-                          fill
-                          className="object-contain"
-                        />
+                      <div className="relative h-12 w-32 grayscale hover:grayscale-0 transition-all opacity-70 hover:opacity-100 overflow-hidden">
+                        <div 
+                          style={{
+                            transform: `scale(${(client.logo_scale || 100) / 100})`,
+                            width: '100%',
+                            height: '100%',
+                            position: 'relative'
+                          }}
+                        >
+                          <Image 
+                            src={client.logo_url} 
+                            alt={client.name}
+                            fill
+                            className="object-contain"
+                            style={{
+                              objectPosition: `${client.logo_position_x || 50}% ${client.logo_position_y || 50}%`
+                            }}
+                          />
+                        </div>
                       </div>
                     )}
                   </div>

@@ -21,6 +21,9 @@ export type Database = {
           logo_url: string | null
           is_mock: boolean
           display_order: number
+          logo_scale: number | null
+          logo_position_x: number | null
+          logo_position_y: number | null
           created_at: string
           updated_at: string | null
         }
@@ -30,6 +33,9 @@ export type Database = {
           logo_url?: string | null
           is_mock?: boolean
           display_order?: number
+          logo_scale?: number | null
+          logo_position_x?: number | null
+          logo_position_y?: number | null
           created_at?: string
           updated_at?: string | null
         }
@@ -39,6 +45,9 @@ export type Database = {
           logo_url?: string | null
           is_mock?: boolean
           display_order?: number
+          logo_scale?: number | null
+          logo_position_x?: number | null
+          logo_position_y?: number | null
           created_at?: string
           updated_at?: string | null
         }

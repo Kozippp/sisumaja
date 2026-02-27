@@ -20,6 +20,13 @@
 4. Kleebi see SQL Editori
 5. Kliki "Run" või vajuta Ctrl/Cmd + Enter
 
+### Client Logos Display Settings (zoom ja positsioon)
+1. Vasakpoolselt menüüst vali "SQL Editor"
+2. Kliki "New Query"
+3. Kopeeri kogu sisu failist: `supabase/migrations/add_logo_display_settings.sql`
+4. Kleebi see SQL Editori
+5. Kliki "Run" või vajuta Ctrl/Cmd + Enter
+
 ### Social Stats tabel (jälgijad ja vaatamised)
 1. Vasakpoolselt menüüst vali "SQL Editor"
 2. Kliki "New Query"
@@ -43,6 +50,7 @@ Pärast migratsiooni saad hallata:
 - Saad lisada, muuta ja kustutada klientide logosid
 - Saad valida kas kasutada mock lahendust (tekst) või päris pilte
 - **UUS:** Saad otse üles laadida pilte - ei pea enam käsitsi Supabase Storage'sse minema!
+- **UUS:** Saad reguleerida logo suurust (zoom 50-200%) ja positsiooni, et kõik logod oleksid ühtlaselt nähtavad
 
 ### Sotsiaalmeedia statistika
 - Mine: `/admin/social-stats`

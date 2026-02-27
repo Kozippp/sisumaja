@@ -9,8 +9,11 @@ VALUES (
 )
 ON CONFLICT (id) DO NOTHING;
 
--- Enable RLS for storage
-ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;
+-- Drop existing policies if they exist
+DROP POLICY IF EXISTS "Allow public read access to client logos" ON storage.objects;
+DROP POLICY IF EXISTS "Allow authenticated users to upload client logos" ON storage.objects;
+DROP POLICY IF EXISTS "Allow authenticated users to update client logos" ON storage.objects;
+DROP POLICY IF EXISTS "Allow authenticated users to delete client logos" ON storage.objects;
 
 -- Policy to allow anyone to read client logos
 CREATE POLICY "Allow public read access to client logos"
