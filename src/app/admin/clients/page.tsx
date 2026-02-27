@@ -317,7 +317,7 @@ export default function ClientLogosPage() {
                             <input
                               type="range"
                               min="50"
-                              max="200"
+                              max="400"
                               step="5"
                               value={formData.logo_scale}
                               onChange={(e) => setFormData({ ...formData, logo_scale: parseInt(e.target.value) })}
@@ -325,7 +325,7 @@ export default function ClientLogosPage() {
                             />
                             <div className="flex justify-between text-xs text-gray-500 mt-1">
                               <span>50% (väiksem)</span>
-                              <span>200% (suurem)</span>
+                              <span>400% (suurem)</span>
                             </div>
                           </div>
 

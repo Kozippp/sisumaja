@@ -50,7 +50,7 @@ Pärast migratsiooni saad hallata:
 - Saad lisada, muuta ja kustutada klientide logosid
 - Saad valida kas kasutada mock lahendust (tekst) või päris pilte
 - **UUS:** Saad otse üles laadida pilte - ei pea enam käsitsi Supabase Storage'sse minema!
-- **UUS:** Saad reguleerida logo suurust (zoom 50-200%) ja positsiooni, et kõik logod oleksid ühtlaselt nähtavad
+- **UUS:** Saad reguleerida logo suurust (zoom 50-400%) ja positsiooni, et kõik logod oleksid ühtlaselt nähtavad
 
 ### Sotsiaalmeedia statistika
 - Mine: `/admin/social-stats`
