@@ -319,7 +319,7 @@ export default async function Home() {
                 <p className="text-xl text-gray-400 mb-6 leading-relaxed">
                   Kozip on seikluslik elustiili- ja meelelahutuskanal, mis keskendub oma vaatajate üllatamisele luues kaasahaaravat, eksperimentaalset ja julget sisu.         </p>
                   <p className="text-xl text-gray-400 mb-6 leading-relaxed">
-                  Loome sisu suuremahulistest väljakutsetest ja reality-stiilis sarjadest eksperimentide, reisimise ja võrdlusteni. 
+                  Loome videoid suuremahulistest väljakutsetest ja reality-stiilis sarjadest eksperimentide, reisimise ja võrdlusteni. 
                 </p>
                   <p className="text-xl text-gray-400 mb-6 leading-relaxed">
                   Meie eesmärk on tuua inimestele juurde rohkem elurõõmu, julgust ja tahet oma südant järgida.

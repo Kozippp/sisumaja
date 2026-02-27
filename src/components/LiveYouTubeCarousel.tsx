@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import { Play } from 'lucide-react';
 import { formatViewCount } from '@/lib/youtube';
@@ -16,6 +16,8 @@ interface LiveYouTubeCarouselProps {
 export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarouselProps) {
   const [videos, setVideos] = useState<FeaturedVideo[]>(initialVideos);
   const [isLoaded, setIsLoaded] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const animationRef = useRef<number | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -55,6 +57,42 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
     };
   }, []);
 
+  // Infinite scroll animation
+  useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    if (!scrollContainer || videos.length === 0) return;
+
+    let scrollPosition = 0;
+    const scrollSpeed = 0.5; // pixels per frame
+    
+    const animate = () => {
+      scrollPosition += scrollSpeed;
+      
+      // Get the width of one set of videos
+      const firstChild = scrollContainer.firstElementChild as HTMLElement;
+      if (firstChild) {
+        const singleSetWidth = firstChild.offsetWidth;
+        
+        // When we've scrolled past one complete set, reset position
+        if (scrollPosition >= singleSetWidth) {
+          scrollPosition = 0;
+        }
+        
+        scrollContainer.style.transform = `translateX(-${scrollPosition}px)`;
+      }
+      
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [videos]);
+
   if (videos.length === 0) {
     return (
       <div className="text-center py-12 text-gray-500">
@@ -70,9 +108,9 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
         <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-neutral-950 to-transparent z-10 pointer-events-none" />
         <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-neutral-950 to-transparent z-10 pointer-events-none" />
         
-        <div className="flex gap-6 animate-infinite-scroll-slow">
-          {/* Triple the videos for true seamless infinite scroll */}
-          {[...videos, ...videos, ...videos].map((video, idx) => (
+        <div ref={scrollRef} className="flex gap-6" style={{ willChange: 'transform' }}>
+          {/* Render videos twice for seamless loop */}
+          {[...videos, ...videos].map((video, idx) => (
             <a
               key={`${video.id}-${idx}`}
               href={video.youtube_url}
