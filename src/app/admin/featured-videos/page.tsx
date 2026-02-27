@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Database } from "@/types/database.types";
-import { ArrowLeft, Plus, Trash2, RefreshCw, Eye, EyeOff, GripVertical, ExternalLink } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, RefreshCw, Eye, EyeOff, GripVertical, ExternalLink, Edit2, Check, X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { formatViewCount } from "@/lib/youtube";
@@ -17,6 +17,8 @@ export default function AdminFeaturedVideos() {
   const [newVideoUrl, setNewVideoUrl] = useState("");
   const [error, setError] = useState("");
   const [syncingId, setSyncingId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editUrl, setEditUrl] = useState("");
 
   useEffect(() => {
     fetchVideos();
@@ -131,6 +133,71 @@ export default function AdminFeaturedVideos() {
     fetchVideos();
   }
 
+  function startEditUrl(video: FeaturedVideo) {
+    setEditingId(video.id);
+    setEditUrl(video.youtube_url);
+  }
+
+  function cancelEdit() {
+    setEditingId(null);
+    setEditUrl("");
+  }
+
+  async function saveEditUrl(id: string) {
+    if (!editUrl.trim()) {
+      alert("URL cannot be empty");
+      return;
+    }
+
+    try {
+      // Extract video ID from the URL using the youtube helper
+      const videoId = await extractVideoId(editUrl);
+      if (!videoId) {
+        alert("Invalid YouTube URL");
+        return;
+      }
+
+      // Update URL and video ID in database
+      const { error } = await supabase
+        .from("featured_videos")
+        .update({ 
+          youtube_url: editUrl,
+          youtube_video_id: videoId
+        })
+        .eq("id", id);
+
+      if (error) {
+        alert("Failed to update URL");
+        return;
+      }
+
+      // Then sync to fetch fresh YouTube data
+      await handleSyncVideo(id);
+      
+      setEditingId(null);
+      setEditUrl("");
+    } catch (err) {
+      console.error("Error updating URL:", err);
+      alert("Failed to update URL");
+    }
+  }
+
+  async function extractVideoId(url: string): Promise<string | null> {
+    // Simple extraction logic
+    const patterns = [
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
+      /^([a-zA-Z0-9_-]{11})$/ // Direct video ID
+    ];
+
+    for (const pattern of patterns) {
+      const match = url.match(pattern);
+      if (match && match[1]) {
+        return match[1];
+      }
+    }
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-neutral-950 text-white p-8">
       <div className="max-w-6xl mx-auto">
@@ -243,15 +310,50 @@ export default function AdminFeaturedVideos() {
                         {formatViewCount(video.view_count)} views
                       </span>
                       <span>•</span>
-                      <a
-                        href={video.youtube_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hover:text-white transition-colors flex items-center gap-1"
-                      >
-                        View on YouTube
-                        <ExternalLink className="w-3 h-3" />
-                      </a>
+                      {editingId === video.id ? (
+                        <div className="flex items-center gap-2 flex-1">
+                          <input
+                            type="text"
+                            value={editUrl}
+                            onChange={(e) => setEditUrl(e.target.value)}
+                            className="flex-1 bg-black/50 border border-white/10 rounded px-2 py-1 text-white text-sm focus:outline-none focus:border-fuchsia-500"
+                            placeholder="YouTube URL"
+                          />
+                          <button
+                            onClick={() => saveEditUrl(video.id)}
+                            className="p-1 hover:bg-green-600/20 text-green-400 rounded transition-colors"
+                            title="Save"
+                          >
+                            <Check className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={cancelEdit}
+                            className="p-1 hover:bg-red-600/20 text-red-400 rounded transition-colors"
+                            title="Cancel"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ) : (
+                        <>
+                          <a
+                            href={video.youtube_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-white transition-colors flex items-center gap-1"
+                          >
+                            View on YouTube
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
+                          <button
+                            onClick={() => startEditUrl(video)}
+                            className="p-1 hover:bg-white/10 rounded transition-colors"
+                            title="Edit URL"
+                          >
+                            <Edit2 className="w-3 h-3" />
+                          </button>
+                        </>
+                      )}
                       {video.last_synced_at && (
                         <>
                           <span>•</span>

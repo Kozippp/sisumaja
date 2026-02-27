@@ -319,7 +319,7 @@ export default async function Home() {
                 <p className="text-xl text-gray-400 mb-6 leading-relaxed">
                   Oleme seikluslik elustiili- ja meelelahutuskanal, mis loob sisu tuues inimestele juurde rohkem elurõõmu, julgust ja tahet oma südant järgida.
                 </p>
-                <p className="text-lg text-gray-500 mb-8 leading-relaxed">
+                <p className="text-xl text-gray-400 mb-6 leading-relaxed">
                   Meie sisu ulatub suuremahulistest väljakutsetest ja reality-stiilis sarjadest kuni eksperimentide ja võrdlusteni. Loome aus ja lähedase suhte oma kogukonnaga – jagame elu kardinate taga, mitte ainult lavaetendust.
                 </p>
                 
@@ -346,7 +346,7 @@ export default async function Home() {
           >
             <div className="text-center mb-10">
               <h3 className="text-2xl md:text-3xl font-bold mb-3">Meie sisu räägib enda eest</h3>
-              <p className="text-gray-500">Suuremahulised väljakutsed, eksperimendid ja seiklused</p>
+              <p className="text-xl text-gray-400 mb-6 leading-relaxed">Suuremahulised väljakutsed, eksperimendid ja seiklused</p>
             </div>
             
             <LiveYouTubeCarousel initialVideos={featuredVideos} />
