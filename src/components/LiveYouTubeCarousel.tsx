@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import Image from 'next/image';
 import { Play } from 'lucide-react';
 import { formatViewCount } from '@/lib/youtube';
@@ -12,9 +12,14 @@ interface LiveYouTubeCarouselProps {
   initialVideos: FeaturedVideo[];
 }
 
+// Tune carousel speed from this single value (seconds per one video card).
+const SECONDS_PER_VIDEO = 6;
+const MIN_SCROLL_DURATION_SECONDS = 16;
+
 export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarouselProps) {
   const [videos, setVideos] = useState<FeaturedVideo[]>(initialVideos);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [scrollDistance, setScrollDistance] = useState(0);
+  const trackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -32,12 +37,10 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
           const data = await res.json();
           if (data.success && data.data) {
             setVideos(data.data);
-            setIsLoaded(true);
           }
         }
       } catch (err) {
         console.error('Failed to sync videos', err);
-        setIsLoaded(true);
       }
     };
 
@@ -48,6 +51,25 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
     };
   }, []);
 
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const updateScrollDistance = () => {
+      // Track contains 2 identical video sets, so half width = one full cycle distance.
+      setScrollDistance(track.scrollWidth / 2);
+    };
+
+    updateScrollDistance();
+
+    const resizeObserver = new ResizeObserver(updateScrollDistance);
+    resizeObserver.observe(track);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [videos]);
+
   if (videos.length === 0) {
     return (
       <div className="text-center py-12 text-gray-500">
@@ -56,39 +78,54 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
     );
   }
 
-  // Calculate animation duration based on number of videos
-  // ~4 seconds per video for smooth scrolling
-  const animationDuration = videos.length * 4;
+  const animationDuration = Math.max(
+    videos.length * SECONDS_PER_VIDEO,
+    MIN_SCROLL_DURATION_SECONDS
+  );
 
   return (
     <>
       {/* Infinite Scroll Carousel */}
-      <style dangerouslySetInnerHTML={{__html: `
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         @keyframes scroll-carousel-${videos[0]?.id || 'default'} {
           0% {
             transform: translateX(0);
           }
           100% {
-            transform: translateX(-50%);
+            transform: translateX(calc(-1 * var(--scroll-distance, 0px)));
           }
         }
         
         .carousel-track-${videos[0]?.id || 'default'} {
-          animation: scroll-carousel-${videos[0]?.id || 'default'} ${animationDuration}s linear infinite;
+          width: max-content;
+          animation: scroll-carousel-${videos[0]?.id || 'default'} var(--scroll-duration, 20s) linear infinite;
         }
         
         .carousel-track-${videos[0]?.id || 'default'}:hover {
           animation-play-state: paused;
         }
-      `}} />
+      `,
+        }}
+      />
 
       <div className="relative overflow-hidden">
         <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-neutral-950 to-transparent z-10 pointer-events-none" />
         <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-neutral-950 to-transparent z-10 pointer-events-none" />
         
-        <div className={`carousel-track-${videos[0]?.id || 'default'} flex gap-6`}>
-          {/* Render videos THREE times for truly seamless loop */}
-          {[...videos, ...videos, ...videos].map((video, idx) => (
+        <div
+          ref={trackRef}
+          className={`carousel-track-${videos[0]?.id || 'default'} flex gap-6`}
+          style={
+            {
+              '--scroll-distance': `${scrollDistance}px`,
+              '--scroll-duration': `${animationDuration}s`,
+            } as CSSProperties
+          }
+        >
+          {/* Render videos twice and scroll exactly one full set width. */}
+          {[...videos, ...videos].map((video, idx) => (
             <a
               key={`${video.id}-${idx}`}
               href={video.youtube_url}

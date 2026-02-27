@@ -100,10 +100,12 @@ export default async function Home() {
           />
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto w-full flex-1 flex flex-col justify-center">
+        <div className="relative z-10 max-w-5xl mx-auto w-full flex-1 flex flex-col">
           
-          {/* Two Column Layout: Instagram Profile (Left) + Text (Right) */}
-          <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-16">
+          {/* Main Content - Centered */}
+          <div className="flex-1 flex flex-col justify-center">
+            {/* Two Column Layout: Instagram Profile (Left) + Text (Right) */}
+            <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-6">
             
             {/* Oval Glow Effect Behind Both Elements */}
             <div className="absolute inset-0 -inset-x-20 bg-fuchsia-500/20 rounded-full blur-[100px] opacity-50 animate-pulse"></div>
@@ -170,58 +172,59 @@ export default async function Home() {
 
           </div>
 
-          {/* Service Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
-            {SERVICES.map((service, index) => {
-              const colors = {
-                youtube: {
-                  icon: 'text-red-500',
-                  hoverIcon: 'group-hover:text-red-400',
-                  hoverTitle: 'group-hover:text-red-300',
-                  hoverGradient: 'from-red-500/10',
-                  arrow: 'text-red-500'
-                },
-                shorts: {
-                  icon: 'text-blue-500',
-                  hoverIcon: 'group-hover:text-blue-400',
-                  hoverTitle: 'group-hover:text-blue-300',
-                  hoverGradient: 'from-blue-500/10',
-                  arrow: 'text-blue-500'
-                },
-                training: {
-                  icon: 'text-green-500',
-                  hoverIcon: 'group-hover:text-green-400',
-                  hoverTitle: 'group-hover:text-green-300',
-                  hoverGradient: 'from-green-500/10',
-                  arrow: 'text-green-500'
-                }
-              };
-              
-              const serviceColors = colors[service.id as keyof typeof colors];
-              
-              return (
-                <motion.a
-                  key={service.id}
-                  href={service.href}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 + 0.5 }}
-                  className="group relative p-8 rounded-2xl hover:bg-white/5 hover:border hover:border-white/10 transition-all duration-300 backdrop-blur-sm overflow-hidden flex flex-col items-center text-center"
-                >
-                  <div className={`absolute inset-0 bg-gradient-to-br ${serviceColors.hoverGradient} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
-                  
-                  <div className={`relative z-10 p-4 rounded-full bg-black/50 mb-4 ${serviceColors.icon} ${serviceColors.hoverIcon} group-hover:scale-110 transition-all duration-300`}>
-                    {service.icon}
-                  </div>
-                  <h3 className={`relative z-10 text-xl font-bold mb-2 ${serviceColors.hoverTitle} transition-colors`}>{service.title}</h3>
-                  <p className="relative z-10 text-sm text-gray-400 group-hover:text-gray-200 transition-colors">{service.description}</p>
-                  
-                  <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0 duration-300">
-                    <ArrowRight className={`w-5 h-5 ${serviceColors.arrow}`} />
-                  </div>
-                </motion.a>
-              );
-            })}
+            {/* Service Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+              {SERVICES.map((service, index) => {
+                const colors = {
+                  youtube: {
+                    icon: 'text-red-500',
+                    hoverIcon: 'group-hover:text-red-400',
+                    hoverTitle: 'group-hover:text-red-300',
+                    hoverGradient: 'from-red-500/10',
+                    arrow: 'text-red-500'
+                  },
+                  shorts: {
+                    icon: 'text-blue-500',
+                    hoverIcon: 'group-hover:text-blue-400',
+                    hoverTitle: 'group-hover:text-blue-300',
+                    hoverGradient: 'from-blue-500/10',
+                    arrow: 'text-blue-500'
+                  },
+                  training: {
+                    icon: 'text-green-500',
+                    hoverIcon: 'group-hover:text-green-400',
+                    hoverTitle: 'group-hover:text-green-300',
+                    hoverGradient: 'from-green-500/10',
+                    arrow: 'text-green-500'
+                  }
+                };
+                
+                const serviceColors = colors[service.id as keyof typeof colors];
+                
+                return (
+                  <motion.a
+                    key={service.id}
+                    href={service.href}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 + 0.5 }}
+                    className="group relative p-8 rounded-2xl hover:bg-white/5 hover:border hover:border-white/10 transition-all duration-300 backdrop-blur-sm overflow-hidden flex flex-col items-center text-center"
+                  >
+                    <div className={`absolute inset-0 bg-gradient-to-br ${serviceColors.hoverGradient} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+                    
+                    <div className={`relative z-10 p-4 rounded-full bg-black/50 mb-4 ${serviceColors.icon} ${serviceColors.hoverIcon} group-hover:scale-110 transition-all duration-300`}>
+                      {service.icon}
+                    </div>
+                    <h3 className={`relative z-10 text-xl font-bold mb-2 ${serviceColors.hoverTitle} transition-colors`}>{service.title}</h3>
+                    <p className="relative z-10 text-sm text-gray-400 group-hover:text-gray-200 transition-colors">{service.description}</p>
+                    
+                    <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0 duration-300">
+                      <ArrowRight className={`w-5 h-5 ${serviceColors.arrow}`} />
+                    </div>
+                  </motion.a>
+                );
+              })}
+            </div>
           </div>
 
           {/* Client Logos - Desktop Only (inside hero, at the bottom) */}
@@ -329,8 +332,8 @@ export default async function Home() {
       <section id="about" className="py-32 bg-neutral-950 relative">
         <div className="max-w-7xl mx-auto px-6">
           
-          {/* Main Content */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
+          {/* Intro & Main Image */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-16">
             <div className="relative order-2 lg:order-1">
               <motion.div 
                 initial={{ opacity: 0, x: -50 }}
@@ -358,34 +361,85 @@ export default async function Home() {
               </motion.div>
             </div>
             
-            <div className="order-1 lg:order-2">
+            <div className="order-1 lg:order-2 flex flex-col justify-center">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
               >
-                <h2 className="text-4xl md:text-5xl font-black uppercase mb-6">Kes on <span className="text-fuchsia-500">Kozip</span>?</h2>
-                <p className="text-xl text-gray-400 mb-6 leading-relaxed">
-                  Kozip on seikluslik elustiili- ja meelelahutuskanal, mis keskendub oma vaatajate üllatamisele luues kaasahaaravat, eksperimentaalset ja julget sisu.         </p>
-                  <p className="text-xl text-gray-400 mb-6 leading-relaxed">
-                  Loome videoid suuremahulistest väljakutsetest ja reality-stiilis sarjadest eksperimentide, reisimise ja võrdlusteni. 
-                </p>
-                  <p className="text-xl text-gray-400 mb-6 leading-relaxed">
-                  Meie eesmärk on tuua inimestele juurde rohkem elurõõmu, julgust ja tahet oma südant järgida.
+                <h2 className="text-4xl md:text-5xl font-black uppercase mb-8">Kes on <span className="text-fuchsia-500">Kozip</span>?</h2>
+                
+                <div className="space-y-6 text-gray-300 text-lg leading-relaxed">
+                  <p>
+                    <span className="text-white font-bold">Kozip on Eesti juhtiv seikluslik meelelahutuskanal</span>, kus kohtuvad hulljulged eksperimendid, põnevad lood ja tipptase videoproduktsioonis.
                   </p>
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="bg-white/5 p-6 rounded-2xl border border-white/5">
-                    <h4 className="text-3xl font-bold text-white mb-2">14:49</h4>
-                    <p className="text-sm text-gray-400 uppercase tracking-wider">Youtube'i video keskmine vaatamisaeg</p>
-                  </div>
-                  <div className="bg-white/5 p-6 rounded-2xl border border-white/5">
-                     <h4 className="text-3xl font-bold text-white mb-2">20M+</h4>
-                     <p className="text-sm text-gray-400 uppercase tracking-wider">Vaatamist kokku</p>
-                  </div>
+                  <p>
+                    Me ei tee lihtsalt videoid – me loome saateid, mida oodatakse nädalaid ja vaadatakse korduvalt. Meie eesmärk on süstida vaatajasse <span className="text-fuchsia-400 font-medium">julgust järgida oma südant</span> ning teha ka oma elus ägedaid asju.
+                  </p>
                 </div>
               </motion.div>
             </div>
+          </div>
+
+          {/* How We Do It Cards */}
+          <div className="mb-20">
+             <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="grid grid-cols-1 md:grid-cols-3 gap-6"
+              >
+                {/* Card 1 */}
+                <div className="bg-white/5 p-8 rounded-3xl border border-white/10 hover:border-fuchsia-500/30 transition-all hover:-translate-y-1 duration-300 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 p-32 bg-fuchsia-500/5 rounded-full blur-3xl group-hover:bg-fuchsia-500/10 transition-colors" />
+                  
+                  <div className="relative z-10">
+                    <div className="w-14 h-14 bg-red-500/10 rounded-2xl flex items-center justify-center text-red-500 mb-6 group-hover:scale-110 transition-transform">
+                      <Youtube className="w-7 h-7" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3">YouTube’i suurprojektid</h3>
+                    <p className="text-gray-400 mb-4 leading-relaxed">
+                      Meie fookus on pikaformaadilisel sisul – reality-sarjad, väljakutsed ja võrdlusvideod.
+                    </p>
+                    <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-lg">
+                      <span className="text-fuchsia-400 font-bold">14:49</span>
+                      <span className="text-xs text-gray-400 uppercase tracking-wide">Keskmine vaatamisaeg</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card 2 */}
+                <div className="bg-white/5 p-8 rounded-3xl border border-white/10 hover:border-blue-500/30 transition-all hover:-translate-y-1 duration-300 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 p-32 bg-blue-500/5 rounded-full blur-3xl group-hover:bg-blue-500/10 transition-colors" />
+                  
+                  <div className="relative z-10">
+                    <div className="w-14 h-14 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-500 mb-6 group-hover:scale-110 transition-transform">
+                      <Video className="w-7 h-7" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3">Lühivideote kaudu</h3>
+                    <p className="text-gray-400 leading-relaxed">
+                      Jagame vahetuid hetki ja lugusid oma elust luues katkematu ja <span className="text-white font-medium">autentse kontakti</span> fännidega.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Card 3 */}
+                <div className="bg-white/5 p-8 rounded-3xl border border-white/10 hover:border-green-500/30 transition-all hover:-translate-y-1 duration-300 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 p-32 bg-green-500/5 rounded-full blur-3xl group-hover:bg-green-500/10 transition-colors" />
+                  
+                  <div className="relative z-10">
+                    <div className="w-14 h-14 bg-green-500/10 rounded-2xl flex items-center justify-center text-green-500 mb-6 group-hover:scale-110 transition-transform">
+                      <Users className="w-7 h-7" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3">Kogukond, mitte numbrid</h3>
+                    <p className="text-gray-400 leading-relaxed">
+                      Meie fännid on kaasamõtlejad. Reklaam on siin keskkonnas <span className="text-white font-medium">osa oodatud seiklusest</span>, mitte häiriv paus.
+                    </p>
+                  </div>
+                </div>
+             </motion.div>
           </div>
 
           {/* YouTube Content Carousel */}
