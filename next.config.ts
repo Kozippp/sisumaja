@@ -7,6 +7,18 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "axcetvmpbzlpoosywmdp.supabase.co",
       },
+      {
+        protocol: "https",
+        hostname: "i.ytimg.com",
+      },
+      {
+        protocol: "https",
+        hostname: "i9.ytimg.com",
+      },
+      {
+        protocol: "https",
+        hostname: "*.ytimg.com",
+      },
     ],
   },
 };
