@@ -71,8 +71,8 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
         <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-neutral-950 to-transparent z-10 pointer-events-none" />
         
         <div className="flex gap-6 animate-infinite-scroll-slow">
-          {/* Duplicate for infinite scroll effect */}
-          {[...videos, ...videos, ...videos].map((video, idx) => (
+          {/* Duplicate twice for seamless infinite scroll */}
+          {[...videos, ...videos].map((video, idx) => (
             <a
               key={`${video.id}-${idx}`}
               href={video.youtube_url}
