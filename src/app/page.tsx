@@ -344,7 +344,7 @@ export default async function Home() {
               >
                 <div className="absolute inset-0 bg-neutral-900 flex items-center justify-center">
                    <Image 
-                     src="/Kes%20on%20kozip%20pilt%201.JPG" 
+                     src="/kes-on-kozip-new.png" 
                      alt="Kozip tiim" 
                      fill 
                      className="object-cover" 
