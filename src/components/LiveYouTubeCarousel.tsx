@@ -86,17 +86,17 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
                   src={video.thumbnail_url}
                   alt={video.title}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="object-cover group-hover:scale-105 brightness-75 group-hover:brightness-100 transition-all duration-500"
                 />
-                {/* Play Button Overlay */}
-                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                  <div className="w-16 h-16 rounded-full bg-red-600/80 backdrop-blur-sm flex items-center justify-center border-2 border-white/30 group-hover:bg-red-600 group-hover:scale-110 transition-all duration-300">
+                {/* Play Button Overlay - Only visible on hover */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="w-16 h-16 rounded-full bg-red-600 flex items-center justify-center shadow-lg shadow-red-600/50 scale-90 group-hover:scale-100 transition-transform duration-300">
                     <Play className="w-6 h-6 text-white fill-current ml-1" />
                   </div>
                 </div>
                 {/* View Count Badge */}
                 <div className="absolute top-2 right-2 px-2 py-1 bg-black/80 backdrop-blur-sm rounded text-xs font-bold text-white">
-                  {formatViewCount(video.view_count)} views
+                  {formatViewCount(video.view_count)} vaatamist
                 </div>
               </div>
               <h4 className="text-sm font-bold text-white mb-1 line-clamp-2 group-hover:text-red-400 transition-colors">
