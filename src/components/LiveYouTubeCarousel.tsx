@@ -57,8 +57,8 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
   }
 
   // Calculate animation duration based on number of videos
-  // ~8 seconds per video for smooth scrolling
-  const animationDuration = videos.length * 8;
+  // ~4 seconds per video for smooth scrolling
+  const animationDuration = videos.length * 4;
 
   return (
     <>

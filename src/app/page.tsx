@@ -83,7 +83,7 @@ export default async function Home() {
     <div className="flex flex-col min-h-screen bg-black overflow-x-hidden text-white font-sans selection:bg-fuchsia-500/30">
       
       {/* 1. HERO SECTION */}
-      <section className="relative min-h-screen flex flex-col justify-center items-center px-4 pt-20 pb-10 overflow-hidden">
+      <section className="relative min-h-screen flex flex-col px-4 pt-20 pb-10 overflow-hidden">
         
         {/* Abstract Background */}
         <div className="absolute inset-0 z-0">
@@ -100,7 +100,7 @@ export default async function Home() {
           />
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto w-full">
+        <div className="relative z-10 max-w-5xl mx-auto w-full flex-1 flex flex-col justify-center">
           
           {/* Two Column Layout: Instagram Profile (Left) + Text (Right) */}
           <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-16">
@@ -224,14 +224,14 @@ export default async function Home() {
             })}
           </div>
 
-          {/* Client Logos - Desktop Only (inside hero) */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="hidden lg:block mt-20"
-          >
-            <div className="relative">
+          {/* Client Logos - Desktop Only (inside hero, at the bottom) */}
+          <div className="hidden lg:block mt-auto pt-12">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+              className="relative"
+            >
               <div className="flex items-center gap-8">
                 <h3 className="text-lg font-bold text-white whitespace-nowrap">Rahulolevad Kliendid:</h3>
                 <div className="flex-1 overflow-hidden relative">
@@ -272,15 +272,15 @@ export default async function Home() {
                   </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
 
         </div>
       </section>
 
       {/* 2. BRAND QUOTE / MISSION REMOVED */}
-      {/* 3. CLIENT CAROUSEL (Infinite) */}
-      <section className="py-12 bg-black overflow-hidden border-y border-white/5">
+      {/* 3. CLIENT CAROUSEL (Mobile Only) */}
+      <section className="lg:hidden py-12 bg-black overflow-hidden border-y border-white/5">
         <div className="relative max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-8">
             <h3 className="text-xl md:text-2xl font-bold text-white whitespace-nowrap">Rahulolevad Kliendid:</h3>
