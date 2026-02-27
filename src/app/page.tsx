@@ -342,21 +342,13 @@ export default async function Home() {
                 transition={{ duration: 0.8 }}
                 className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-white/10"
               >
-                <div className="absolute inset-0 bg-neutral-900 flex items-center justify-center group cursor-pointer">
+                <div className="absolute inset-0 bg-neutral-900 flex items-center justify-center">
                    <Image 
-                     src="/sisumaja-elu.jpg" 
+                     src="/Kes%20on%20kozip%20pilt%201.JPG" 
                      alt="Kozip tiim" 
                      fill 
-                     className="object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-500" 
+                     className="object-cover" 
                    />
-                   <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover:scale-110 transition-transform duration-300">
-                         <Play className="w-8 h-8 text-white fill-current" />
-                      </div>
-                   </div>
-                   <div className="absolute bottom-8 left-8">
-                      <span className="px-3 py-1 rounded-full bg-fuchsia-500 text-xs font-bold uppercase text-white">Vaata treilerit</span>
-                   </div>
                 </div>
               </motion.div>
             </div>
