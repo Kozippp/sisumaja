@@ -265,62 +265,136 @@ export default async function Home() {
 
       {/* 4. WHO IS KOZIP */}
       <section id="about" className="py-32 bg-neutral-950 relative">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <div className="relative order-2 lg:order-1">
-            <motion.div 
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-white/10"
-            >
-              {/* Placeholder for trailer/video */}
-              <div className="absolute inset-0 bg-neutral-900 flex items-center justify-center group cursor-pointer">
-                 <Image 
-                   src="/sisumaja-elu.jpg" 
-                   alt="Kozip tiim" 
-                   fill 
-                   className="object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-500" 
-                 />
-                 <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover:scale-110 transition-transform duration-300">
-                       <Play className="w-8 h-8 text-white fill-current" />
-                    </div>
-                 </div>
-                 <div className="absolute bottom-8 left-8">
-                    <span className="px-3 py-1 rounded-full bg-fuchsia-500 text-xs font-bold uppercase text-white">Vaata treilerit</span>
-                 </div>
-              </div>
-            </motion.div>
-          </div>
+        <div className="max-w-7xl mx-auto px-6">
           
-          <div className="order-1 lg:order-2">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <h2 className="text-4xl md:text-5xl font-black uppercase mb-6">Kes on <span className="text-fuchsia-500">Kozip</span>?</h2>
-              <p className="text-xl text-gray-400 mb-6 leading-relaxed">
-                Kozip on loovagentuur ja sisuloojate kollektiiv, mis on välja kasvanud edukast Sisumaja projektist. Me ühendame tipptasemel videoproduktsiooni ja sotsiaalmeedia ekspertiisi.
-              </p>
-              <p className="text-lg text-gray-500 mb-8 leading-relaxed">
-                Meie eesmärk on aidata ettevõtetel jõuda oma sihtgrupini autentsel ja meeldejääval moel. Me teame, mis töötab TikTokis ja YouTube'is, sest me elame seal.
-              </p>
-              
-              <div className="grid grid-cols-2 gap-6">
-                <div className="bg-white/5 p-6 rounded-2xl border border-white/5">
-                  <h4 className="text-3xl font-bold text-white mb-2">1M+</h4>
-                  <p className="text-sm text-gray-400 uppercase tracking-wider">Igakuist vaatamist</p>
+          {/* Main Content */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
+            <div className="relative order-2 lg:order-1">
+              <motion.div 
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-white/10"
+              >
+                <div className="absolute inset-0 bg-neutral-900 flex items-center justify-center group cursor-pointer">
+                   <Image 
+                     src="/sisumaja-elu.jpg" 
+                     alt="Kozip tiim" 
+                     fill 
+                     className="object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-500" 
+                   />
+                   <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover:scale-110 transition-transform duration-300">
+                         <Play className="w-8 h-8 text-white fill-current" />
+                      </div>
+                   </div>
+                   <div className="absolute bottom-8 left-8">
+                      <span className="px-3 py-1 rounded-full bg-fuchsia-500 text-xs font-bold uppercase text-white">Vaata treilerit</span>
+                   </div>
                 </div>
-                <div className="bg-white/5 p-6 rounded-2xl border border-white/5">
-                   <h4 className="text-3xl font-bold text-white mb-2">100+</h4>
-                   <p className="text-sm text-gray-400 uppercase tracking-wider">Õnnestunud koostööd</p>
+              </motion.div>
+            </div>
+            
+            <div className="order-1 lg:order-2">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+              >
+                <h2 className="text-4xl md:text-5xl font-black uppercase mb-6">Kes on <span className="text-fuchsia-500">Kozip</span>?</h2>
+                <p className="text-xl text-gray-400 mb-6 leading-relaxed">
+                  Oleme seikluslik elustiili- ja meelelahutuskanal, mis loob sisu tuues inimestele juurde rohkem elurõõmu, julgust ja tahet oma südant järgida.
+                </p>
+                <p className="text-lg text-gray-500 mb-8 leading-relaxed">
+                  Meie sisu ulatub suuremahulistest väljakutsetest ja reality-stiilis sarjadest kuni eksperimentide ja võrdlusteni. Loome aus ja lähedase suhte oma kogukonnaga – jagame elu kardinate taga, mitte ainult lavaetendust.
+                </p>
+                
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="bg-white/5 p-6 rounded-2xl border border-white/5">
+                    <h4 className="text-3xl font-bold text-white mb-2">14:49</h4>
+                    <p className="text-sm text-gray-400 uppercase tracking-wider">Keskmine vaatamisaeg</p>
+                  </div>
+                  <div className="bg-white/5 p-6 rounded-2xl border border-white/5">
+                     <h4 className="text-3xl font-bold text-white mb-2">6.5y</h4>
+                     <p className="text-sm text-gray-400 uppercase tracking-wider">Igakuist vaatamisaega</p>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
           </div>
+
+          {/* YouTube Content Carousel */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <div className="text-center mb-10">
+              <h3 className="text-2xl md:text-3xl font-bold mb-3">Meie sisu räägib enda eest</h3>
+              <p className="text-gray-500">Suuremahulised väljakutsed, eksperimendid ja seiklused</p>
+            </div>
+            
+            {/* Infinite Scroll Carousel */}
+            <div className="relative overflow-hidden">
+              <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-neutral-950 to-transparent z-10 pointer-events-none" />
+              <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-neutral-950 to-transparent z-10 pointer-events-none" />
+              
+              <div className="flex gap-6 animate-infinite-scroll-slow">
+                {/* First set - duplicate for infinite effect */}
+                {[
+                  { title: "Viimane sisulooja, kes metsast lahkub", views: "250K+ vaatamisi" },
+                  { title: "5€ vs 500€ Metsas Ellujäämine", views: "180K+ vaatamisi" },
+                  { title: "1€ vs 1500€ Talisuplus", views: "320K+ vaatamisi" },
+                  { title: "24h Väljakutse Metsas", views: "195K+ vaatamisi" },
+                  { title: "Reality-Sarjad", views: "Populaarseim formaat" },
+                ].concat([
+                  { title: "Viimane sisulooja, kes metsast lahkub", views: "250K+ vaatamisi" },
+                  { title: "5€ vs 500€ Metsas Ellujäämine", views: "180K+ vaatamisi" },
+                  { title: "1€ vs 1500€ Talisuplus", views: "320K+ vaatamisi" },
+                  { title: "24h Väljakutse Metsas", views: "195K+ vaatamisi" },
+                  { title: "Reality-Sarjad", views: "Populaarseim formaat" },
+                ]).map((video, idx) => (
+                  <div key={idx} className="flex-shrink-0 w-80 group cursor-pointer">
+                    <div className="relative aspect-video bg-gradient-to-br from-red-900/20 via-neutral-900 to-neutral-800 rounded-xl overflow-hidden border border-white/10 group-hover:border-red-500/50 transition-all duration-300 mb-3">
+                      {/* YouTube Thumbnail Mockup */}
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="text-center p-6">
+                          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-600/20 backdrop-blur-sm flex items-center justify-center border border-red-500/30 group-hover:bg-red-600/30 group-hover:scale-110 transition-all duration-300">
+                            <Play className="w-6 h-6 text-red-500 fill-current ml-1" />
+                          </div>
+                          <h4 className="text-sm font-bold text-white mb-1 line-clamp-2">{video.title}</h4>
+                          <p className="text-xs text-red-400">{video.views}</p>
+                        </div>
+                      </div>
+                      {/* Duration Badge */}
+                      <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/80 rounded text-xs font-bold text-white">
+                        15:23
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Content Categories */}
+            <div className="flex flex-wrap justify-center gap-3 mt-12">
+              {[
+                "Reality-Sarjad",
+                "Eksperimendid",
+                "Odav vs. Kallis",
+                "Väljakutsed",
+                "Vlogid"
+              ].map((tag, i) => (
+                <span key={i} className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-gray-300 hover:border-fuchsia-500/30 hover:text-white transition-all cursor-default">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+
         </div>
       </section>
 
