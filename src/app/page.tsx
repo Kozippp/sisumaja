@@ -224,7 +224,57 @@ export default async function Home() {
             })}
           </div>
 
-          {/* Scroll Indicator Removed */}
+          {/* Client Logos - Desktop Only (inside hero) */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="hidden lg:block mt-20"
+          >
+            <div className="relative">
+              <div className="flex items-center gap-8">
+                <h3 className="text-lg font-bold text-white whitespace-nowrap">Rahulolevad Kliendid:</h3>
+                <div className="flex-1 overflow-hidden relative">
+                  <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-black to-transparent z-10" />
+                  <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-black to-transparent z-10" />
+                  
+                  <div className="flex gap-16 animate-infinite-scroll-slow whitespace-nowrap min-w-max">
+                    {[...clientLogos, ...clientLogos, ...clientLogos].map((client, idx) => (
+                      <div key={idx} className="flex items-center">
+                        {client.is_mock || !client.logo_url ? (
+                          <div className="text-xl font-bold text-gray-700 uppercase hover:text-white transition-colors cursor-default">
+                            {client.name}
+                          </div>
+                        ) : (
+                          <div className="relative h-10 w-28 grayscale hover:grayscale-0 transition-all opacity-70 hover:opacity-100 overflow-hidden">
+                            <div 
+                              style={{
+                                transform: `scale(${(client.logo_scale || 100) / 100})`,
+                                width: '100%',
+                                height: '100%',
+                                position: 'relative'
+                              }}
+                            >
+                              <Image 
+                                src={client.logo_url} 
+                                alt={client.name}
+                                fill
+                                className="object-contain"
+                                style={{
+                                  objectPosition: `${client.logo_position_x || 50}% ${client.logo_position_y || 50}%`
+                                }}
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
         </div>
       </section>
 

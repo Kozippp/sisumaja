@@ -63,8 +63,8 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
   return (
     <>
       {/* Infinite Scroll Carousel */}
-      <style jsx>{`
-        @keyframes scroll-carousel {
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes scroll-carousel-${videos[0]?.id || 'default'} {
           0% {
             transform: translateX(0);
           }
@@ -73,20 +73,20 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
           }
         }
         
-        .carousel-track {
-          animation: scroll-carousel ${animationDuration}s linear infinite;
+        .carousel-track-${videos[0]?.id || 'default'} {
+          animation: scroll-carousel-${videos[0]?.id || 'default'} ${animationDuration}s linear infinite;
         }
         
-        .carousel-track:hover {
+        .carousel-track-${videos[0]?.id || 'default'}:hover {
           animation-play-state: paused;
         }
-      `}</style>
+      `}} />
 
       <div className="relative overflow-hidden">
         <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-neutral-950 to-transparent z-10 pointer-events-none" />
         <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-neutral-950 to-transparent z-10 pointer-events-none" />
         
-        <div className="carousel-track flex gap-6">
+        <div className={`carousel-track-${videos[0]?.id || 'default'} flex gap-6`}>
           {/* Render videos THREE times for truly seamless loop */}
           {[...videos, ...videos, ...videos].map((video, idx) => (
             <a
