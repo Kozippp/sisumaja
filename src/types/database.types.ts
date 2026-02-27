@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      featured_videos: {
+        Row: {
+          id: string
+          youtube_url: string
+          youtube_video_id: string
+          title: string
+          thumbnail_url: string
+          view_count: number
+          display_order: number
+          is_visible: boolean
+          created_at: string
+          updated_at: string
+          last_synced_at: string | null
+        }
+        Insert: {
+          id?: string
+          youtube_url: string
+          youtube_video_id: string
+          title: string
+          thumbnail_url: string
+          view_count?: number
+          display_order?: number
+          is_visible?: boolean
+          created_at?: string
+          updated_at?: string
+          last_synced_at?: string | null
+        }
+        Update: {
+          id?: string
+          youtube_url?: string
+          youtube_video_id?: string
+          title?: string
+          thumbnail_url?: string
+          view_count?: number
+          display_order?: number
+          is_visible?: boolean
+          created_at?: string
+          updated_at?: string
+          last_synced_at?: string | null
+        }
+        Relationships: []
+      }
       client_logos: {
         Row: {
           id: string
