@@ -41,6 +41,14 @@
 4. Kleebi see SQL Editori
 5. Kliki "Run" või vajuta Ctrl/Cmd + Enter
 
+### Fix Featured Videos RLS (OLULINE - käivita kohe pärast eelmist!)
+1. Vasakpoolselt menüüst vali "SQL Editor"
+2. Kliki "New Query"
+3. Kopeeri kogu sisu failist: `supabase/migrations/fix_featured_videos_rls.sql`
+4. Kleebi see SQL Editori
+5. Kliki "Run" või vajuta Ctrl/Cmd + Enter
+   - See parandab Row Level Security seaded, et API saaks videoid lisada
+
 ## Samm 3: Kontrolli tulemust
 1. Mine "Table Editor"
 2. Peaksid nägema tabeleid:
