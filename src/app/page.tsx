@@ -451,7 +451,7 @@ export default async function Home() {
                     </div>
                     <div>
                       <h4 className="text-lg font-bold text-white mb-2">1. Usaldus</h4>
-                      <p className="text-gray-400 text-sm leading-relaxed">
+                      <p className="text-lg text-gray-400 leading-relaxed">
                       Tavareklaamis kiidab bränd end ise. Meie videos soovitab sind sisulooja, keda vaataja juba usaldab ja armastab. See on nagu hea sõbra soovitus, aga jõudes korraga kümnete kui mitte sadade tuhandete inimesteni korraga.
                       </p>
                     </div>
@@ -463,7 +463,7 @@ export default async function Home() {
                     </div>
                     <div>
                       <h4 className="text-lg font-bold text-white mb-2">2. Reaalne huvi</h4>
-                      <p className="text-gray-400 text-sm leading-relaxed">
+                      <p className="text-lg text-gray-400 leading-relaxed">
                         Meie videote statistika kinnitab, et 95-99% vaatajatest vaatab reklaamsegmendi täies mahus ära. See on drastiline erinevus võrreldes Meta reklaamidega, mida enamasti ignoreeritakse, või telekanalite pausidega, mille ajal haaratakse hoopis telefon. 
                       </p>
                     </div>
@@ -475,7 +475,7 @@ export default async function Home() {
                     </div>
                     <div>
                       <h4 className="text-lg font-bold text-white mb-2">3. Pikaajalisus</h4>
-                      <p className="text-gray-400 text-sm leading-relaxed">
+                      <p className="text-lg text-gray-400 leading-relaxed">
                         Me loome sisu, mis on ajatu. Meie videoid avastatakse ja nauditakse ka aastaid peale avaldamist – täpselt nagu oma lemmikfilme. Sinu investeering ei taga hetkelist nähtavust, vaid püsivat väärtust, mis töötab Sinu kasuks aastaid. 
                          </p>
                     </div>
