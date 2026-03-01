@@ -80,7 +80,6 @@ export function TestimonialsSection() {
                 transition: { duration: 0.5, delay: index * 0.1 }
               }}
               viewport={{ once: true }}
-              layoutId={`card-${testimonial.id}`}
               onClick={() => setSelectedId(testimonial.id)}
               className={cn(
                 "break-inside-avoid cursor-pointer",
@@ -121,7 +120,10 @@ export function TestimonialsSection() {
               {/* Main Content Area */}
               <div className="flex-1 flex items-center justify-center pointer-events-auto min-h-0 mb-6">
                 <motion.div
-                  layoutId={`card-${selectedId}`}
+                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                  transition={{ type: "spring", damping: 25, stiffness: 300 }}
                   className="w-auto h-auto max-w-[95vw] max-h-[70vh] bg-neutral-900/90 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl relative flex flex-col overflow-hidden"
                   onClick={(e) => e.stopPropagation()}
                 >
