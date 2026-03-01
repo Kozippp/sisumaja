@@ -1,8 +1,17 @@
+"use client";
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { Instagram, Youtube, Mail } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  if (pathname.startsWith('/admin')) {
+    return null;
+  }
+
   return (
     <footer className="bg-black border-t border-white/10 pt-20 pb-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -67,7 +76,7 @@ export default function Footer() {
   );
 }
 
-function SocialLink({ href, icon: Icon }: { href: string; icon: React.ElementType }) {
+function SocialLink({ href, icon: Icon }: { href: string; icon: any }) {
   const isMailto = href.startsWith('mailto:');
   return (
     <a 
