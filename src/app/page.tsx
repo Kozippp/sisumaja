@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Database } from "@/types/database.types";
 import * as motion from "framer-motion/client";
 import LiveYouTubeCarousel from "@/components/LiveYouTubeCarousel";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
 
 export const revalidate = 60;
 
@@ -396,39 +397,7 @@ export default async function Home() {
       </section>
 
       {/* 5. SOCIAL PROOF */}
-      <section className="py-24 bg-black border-y border-white/5">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold uppercase mb-4">Fännid räägivad</h2>
-            <p className="text-gray-400">Meil on kogukond, mis hoolib ja kaasa elab.</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((i) => (
-              <motion.div 
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="bg-neutral-900/50 p-8 rounded-2xl border border-white/5 hover:border-fuchsia-500/30 transition-colors"
-              >
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 text-fuchsia-500 fill-current" />)}
-                </div>
-                <p className="text-gray-300 italic mb-6">"Teie sisu on lihtsalt nii äge ja inspireeriv! Ootan iga uut videot suure huviga."</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gray-700" />
-                  <div>
-                    <p className="font-bold text-sm text-white">Maria K.</p>
-                    <p className="text-xs text-gray-500">Pikaajaline jälgija</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <TestimonialsSection />
 
       {/* 6. SERVICES DETAIL */}
       <div className="bg-neutral-950">
