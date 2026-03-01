@@ -119,10 +119,10 @@ export function TestimonialsSection() {
             
             <div className="relative w-full h-full flex flex-col pointer-events-none z-10 p-4 md:p-8">
               {/* Main Content Area */}
-              <div className="flex-1 flex items-center justify-center pointer-events-auto min-h-0">
+              <div className="flex-1 flex items-center justify-center pointer-events-auto min-h-0 mb-6">
                 <motion.div
                   layoutId={`card-${selectedId}`}
-                  className="w-auto h-auto max-w-[95vw] max-h-[85vh] bg-neutral-900/90 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl relative flex flex-col overflow-hidden"
+                  className="w-auto h-auto max-w-[95vw] max-h-[70vh] bg-neutral-900/90 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl relative flex flex-col overflow-hidden"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <button 
@@ -133,21 +133,17 @@ export function TestimonialsSection() {
                   </button>
 
                   {selectedTestimonial.type === 'text' ? (
-                    <div className="p-8 md:p-12 overflow-y-auto max-w-3xl">
+                    <div className="p-8 md:p-12 overflow-y-auto max-w-3xl max-h-[70vh]">
                        <TextTestimonialCard testimonial={selectedTestimonial} expanded />
                     </div>
                   ) : (
-                    <div className="relative w-auto h-auto min-w-[300px] min-h-[300px] flex items-center justify-center bg-black/40">
+                    <div className="relative flex items-center justify-center p-2 md:p-6">
                        {selectedTestimonial.image_url && (
-                         /* Container to constrain the image size */
-                         <div className="relative w-auto h-auto max-w-[90vw] max-h-[85vh]">
-                           {/* Using standard img tag for better containment behavior in flex layout when dimensions are unknown/variable */}
-                           <img
-                             src={selectedTestimonial.image_url}
-                             alt="Tagasiside"
-                             className="max-w-full max-h-[85vh] object-contain rounded-2xl"
-                           />
-                         </div>
+                         <img
+                           src={selectedTestimonial.image_url}
+                           alt="Tagasiside"
+                           className="max-w-full max-h-[65vh] w-auto h-auto object-contain rounded-lg shadow-2xl"
+                         />
                        )}
                     </div>
                   )}
@@ -159,15 +155,15 @@ export function TestimonialsSection() {
                 initial={{ opacity: 0, y: 100 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 100 }}
-                className="h-32 mt-8 pointer-events-auto overflow-x-auto flex gap-4 items-center px-4 pb-4 scrollbar-hide snap-x"
+                className="h-24 md:h-32 mt-auto pointer-events-auto overflow-x-auto flex gap-4 items-center justify-center px-4 pb-4 scrollbar-hide snap-x"
               >
                 {testimonials.map((t) => (
                   <button
                     key={t.id}
                     onClick={() => setSelectedId(t.id)}
                     className={cn(
-                      "flex-shrink-0 h-24 w-24 rounded-xl overflow-hidden border-2 transition-all relative snap-center",
-                      selectedId === t.id ? "border-fuchsia-500 scale-110" : "border-white/10 hover:border-white/30 opacity-50 hover:opacity-100"
+                      "flex-shrink-0 h-20 w-20 md:h-24 md:w-24 rounded-xl overflow-hidden border-2 transition-all relative snap-center",
+                      selectedId === t.id ? "border-fuchsia-500 scale-110 shadow-lg shadow-fuchsia-500/20" : "border-white/10 hover:border-white/30 opacity-60 hover:opacity-100"
                     )}
                   >
                     {t.type === 'image' && t.image_url ? (
