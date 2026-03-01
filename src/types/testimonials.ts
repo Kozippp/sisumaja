@@ -13,6 +13,7 @@ export interface Testimonial {
   image_url: string | null;
   status: TestimonialStatus;
   order: number;
+  show_on_mobile: boolean;
 }
 
 export interface TestimonialFormData {
@@ -23,4 +24,5 @@ export interface TestimonialFormData {
   author_company: string;
   image_url: string;
   status: TestimonialStatus;
+  show_on_mobile: boolean;
 }

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { ArrowLeft, Plus, Trash2, Edit2, Eye, EyeOff, Save, X, Upload, MessageSquare, Image as ImageIcon } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Edit2, Eye, EyeOff, Save, X, Upload, MessageSquare, Image as ImageIcon, Smartphone } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Testimonial, TestimonialFormData, TestimonialType } from "@/types/testimonials";
@@ -22,7 +22,8 @@ export default function AdminTestimonials() {
     author_role: '',
     author_company: '',
     image_url: '',
-    status: 'draft'
+    status: 'draft',
+    show_on_mobile: false
   };
 
   const [formData, setFormData] = useState<TestimonialFormData>(initialFormState);
@@ -117,7 +118,8 @@ export default function AdminTestimonials() {
       author_role: testimonial.author_role || '',
       author_company: testimonial.author_company || '',
       image_url: testimonial.image_url || '',
-      status: testimonial.status
+      status: testimonial.status,
+      show_on_mobile: testimonial.show_on_mobile
     });
     setEditingId(testimonial.id);
     setIsFormOpen(true);
@@ -296,6 +298,24 @@ export default function AdminTestimonials() {
                   )}
 
                   <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-1">Mobiilis nähtav</label>
+                    <div className="flex items-center gap-3 p-3 bg-black/50 border border-white/10 rounded-lg">
+                      <input
+                        type="checkbox"
+                        checked={formData.show_on_mobile}
+                        onChange={(e) => setFormData({ ...formData, show_on_mobile: e.target.checked })}
+                        className="w-5 h-5 accent-fuchsia-600 rounded cursor-pointer"
+                        id="show_on_mobile"
+                      />
+                      <label htmlFor="show_on_mobile" className="text-white cursor-pointer select-none flex items-center gap-2">
+                        <Smartphone className="w-4 h-4 text-gray-400" />
+                        Näita mobiilivaates
+                      </label>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">Soovituslik: Vali välja kuni 5 parimat tagasisidet mobiili jaoks.</p>
+                  </div>
+
+                  <div>
                     <label className="block text-sm font-medium text-gray-400 mb-1">Staatus</label>
                     <select
                       value={formData.status}
@@ -401,6 +421,11 @@ export default function AdminTestimonials() {
               >
                 {/* Status Badge */}
                 <div className="absolute top-3 right-3 z-10 flex gap-2">
+                  {testimonial.show_on_mobile && (
+                    <span className="px-2 py-1 rounded text-xs font-bold uppercase bg-blue-500/20 text-blue-400 flex items-center gap-1" title="Nähtav mobiilis">
+                      <Smartphone className="w-3 h-3" />
+                    </span>
+                  )}
                   <span className={cn(
                     "px-2 py-1 rounded text-xs font-bold uppercase",
                     testimonial.status === 'published' 

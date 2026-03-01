@@ -249,6 +249,7 @@ export type Database = {
           image_url: string | null
           status: "draft" | "published"
           order: number
+          show_on_mobile: boolean
         }
         Insert: {
           id?: string
@@ -262,6 +263,7 @@ export type Database = {
           image_url?: string | null
           status?: "draft" | "published"
           order?: number
+          show_on_mobile?: boolean
         }
         Update: {
           id?: string
@@ -275,6 +277,7 @@ export type Database = {
           image_url?: string | null
           status?: "draft" | "published"
           order?: number
+          show_on_mobile?: boolean
         }
         Relationships: []
       }

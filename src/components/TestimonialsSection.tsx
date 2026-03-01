@@ -1,16 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { Testimonial } from "@/types/testimonials";
 import Image from "next/image";
-import { Star, Quote } from "lucide-react";
+import { Star, Quote, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function TestimonialsSection() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchTestimonials() {
@@ -28,8 +29,21 @@ export function TestimonialsSection() {
     fetchTestimonials();
   }, []);
 
+  useEffect(() => {
+    if (selectedId) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedId]);
+
   if (loading) return <div className="py-20 text-center text-white/20">Laen tagasisidet...</div>;
   if (testimonials.length === 0) return null;
+
+  const selectedTestimonial = testimonials.find(t => t.id === selectedId);
 
   return (
     <section className="py-32 bg-neutral-950 relative overflow-hidden">
@@ -60,10 +74,23 @@ export function TestimonialsSection() {
             <motion.div
               key={testimonial.id}
               initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              whileInView={{ 
+                opacity: 1, 
+                y: 0,
+                transition: { duration: 0.5, delay: index * 0.1 }
+              }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="break-inside-avoid"
+              layoutId={`card-${testimonial.id}`}
+              onClick={() => setSelectedId(testimonial.id)}
+              className={cn(
+                "break-inside-avoid cursor-pointer",
+                !testimonial.show_on_mobile && "hidden md:inline-block"
+              )}
+              whileHover={{ 
+                scale: 1.02, 
+                y: -5,
+                transition: { duration: 0.2, delay: 0 }
+              }}
             >
               {testimonial.type === 'text' ? (
                 <TextTestimonialCard testimonial={testimonial} />
@@ -74,19 +101,107 @@ export function TestimonialsSection() {
           ))}
         </div>
       </div>
+
+      {/* Expanded View Modal */}
+      <AnimatePresence>
+        {selectedId && selectedTestimonial && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedId(null)}
+              className="absolute inset-0 bg-black/90 backdrop-blur-md"
+            />
+            
+            <div className="relative w-full max-w-6xl h-full flex flex-col pointer-events-none">
+              {/* Main Content Area */}
+              <div className="flex-1 flex items-center justify-center pointer-events-auto">
+                <motion.div
+                  layoutId={`card-${selectedId}`}
+                  className="w-full max-w-3xl max-h-[80vh] overflow-y-auto bg-neutral-900 rounded-3xl border border-white/10 shadow-2xl relative scrollbar-hide"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button 
+                    onClick={() => setSelectedId(null)}
+                    className="absolute top-4 right-4 p-2 bg-black/50 hover:bg-black/70 rounded-full text-white z-20 transition-colors"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+
+                  {selectedTestimonial.type === 'text' ? (
+                    <div className="p-8 md:p-12">
+                       <TextTestimonialCard testimonial={selectedTestimonial} expanded />
+                    </div>
+                  ) : (
+                    <div className="relative w-full">
+                       {selectedTestimonial.image_url && (
+                         <Image
+                           src={selectedTestimonial.image_url}
+                           alt="Tagasiside"
+                           width={1200}
+                           height={1600}
+                           className="w-full h-auto object-contain"
+                         />
+                       )}
+                    </div>
+                  )}
+                </motion.div>
+              </div>
+
+              {/* Bottom Thumbnails */}
+              <motion.div 
+                initial={{ opacity: 0, y: 100 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 100 }}
+                className="h-32 mt-8 pointer-events-auto overflow-x-auto flex gap-4 items-center px-4 pb-4 scrollbar-hide snap-x"
+              >
+                {testimonials.map((t) => (
+                  <button
+                    key={t.id}
+                    onClick={() => setSelectedId(t.id)}
+                    className={cn(
+                      "flex-shrink-0 h-24 w-24 rounded-xl overflow-hidden border-2 transition-all relative snap-center",
+                      selectedId === t.id ? "border-fuchsia-500 scale-110" : "border-white/10 hover:border-white/30 opacity-50 hover:opacity-100"
+                    )}
+                  >
+                    {t.type === 'image' && t.image_url ? (
+                      <Image 
+                        src={t.image_url} 
+                        alt="" 
+                        fill 
+                        className="object-cover" 
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-neutral-800 flex items-center justify-center p-2 text-center">
+                        <span className="text-[10px] text-gray-400 leading-tight line-clamp-3">
+                          {t.author_name}
+                        </span>
+                      </div>
+                    )}
+                  </button>
+                ))}
+              </motion.div>
+            </div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
 
-function TextTestimonialCard({ testimonial }: { testimonial: Testimonial }) {
+function TextTestimonialCard({ testimonial, expanded = false }: { testimonial: Testimonial, expanded?: boolean }) {
   return (
-    <div className="bg-neutral-900/50 backdrop-blur-md border border-white/5 rounded-3xl p-8 hover:border-white/10 transition-colors relative group">
+    <div className={cn(
+      "bg-neutral-900/50 backdrop-blur-md border border-white/5 rounded-3xl p-8 transition-colors relative group h-full",
+      !expanded && "hover:border-white/10"
+    )}>
       {/* Quote Icon Background */}
       <div className="absolute top-6 right-6 text-white/5 group-hover:text-white/10 transition-colors">
         <Quote className="w-12 h-12 rotate-180" />
       </div>
 
-      <div className="relative z-10">
+      <div className="relative z-10 flex flex-col h-full">
         <div className="flex items-center gap-4 mb-6">
           <div className="relative w-14 h-14 rounded-full overflow-hidden border border-white/10 bg-neutral-800 flex-shrink-0">
             {testimonial.image_url ? (
@@ -121,7 +236,10 @@ function TextTestimonialCard({ testimonial }: { testimonial: Testimonial }) {
           ))}
         </div>
 
-        <p className="text-gray-300 leading-relaxed text-lg italic">
+        <p className={cn(
+          "text-gray-300 leading-relaxed italic",
+          expanded ? "text-xl md:text-2xl" : "text-lg"
+        )}>
           "{testimonial.content}"
         </p>
       </div>
@@ -131,8 +249,7 @@ function TextTestimonialCard({ testimonial }: { testimonial: Testimonial }) {
 
 function ImageTestimonialCard({ testimonial }: { testimonial: Testimonial }) {
   return (
-    <div className="relative rounded-3xl overflow-hidden group border border-white/5 hover:border-white/10 transition-all">
-       {/* Background Overlay for text readability if needed, but mostly just the image */}
+    <div className="relative rounded-3xl overflow-hidden group border border-white/5 hover:border-white/10 transition-all bg-neutral-900">
        <div className="relative w-full">
          {testimonial.image_url && (
            <Image
@@ -140,7 +257,7 @@ function ImageTestimonialCard({ testimonial }: { testimonial: Testimonial }) {
              alt="Tagasiside kuvatõmmis"
              width={600}
              height={800}
-             className="w-full h-auto object-contain bg-neutral-900"
+             className="w-full h-auto object-contain"
            />
          )}
        </div>
