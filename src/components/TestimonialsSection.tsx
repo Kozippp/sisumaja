@@ -144,11 +144,6 @@ function ImageTestimonialCard({ testimonial }: { testimonial: Testimonial }) {
            />
          )}
        </div>
-       
-       {/* Verified Badge */}
-       <div className="absolute top-4 right-4 bg-green-500/90 text-white text-xs font-bold px-3 py-1 rounded-full backdrop-blur-sm shadow-lg">
-         VERIFIED
-       </div>
     </div>
   );
 }
