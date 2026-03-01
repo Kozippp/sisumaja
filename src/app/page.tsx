@@ -484,7 +484,7 @@ export default async function Home() {
               <div className="space-y-8">
                 {/* Stats Card */}
                 <div className="bg-neutral-900/50 border border-white/10 rounded-3xl p-8 backdrop-blur-sm">
-                  <h3 className="text-xl font-bold text-white mb-6">Kes neid videoid vaatab?</h3>
+                  <h3 className="text-xl font-bold text-white mb-6">Kes meie videoid vaatab?</h3>
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="bg-black/40 rounded-xl p-4">
@@ -500,7 +500,7 @@ export default async function Home() {
                     <div className="bg-black/40 rounded-xl p-4">
                       <div className="text-sm text-white-400 mb-1">Peamine seade:</div>
                       <div className="text-3xl font-black text-fuchsia-500 mb-1">Telekas</div>
-                      <div className="text-sm text-gray-400">51% vaatab meie videoid telekalt</div>
+                      <div className="text-sm text-gray-400">51% vaatab meie videoid TV-lt</div>
                     </div>
                     <div className="bg-black/40 rounded-xl p-4">
                       <div className="text-sm text-white-400 mb-1">Sihtrühm</div>
@@ -519,12 +519,12 @@ export default async function Home() {
                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
                    <div className="aspect-video relative bg-neutral-800">
                       <Image 
-                        src="/vaatamisgraafik.png" 
+                        src="/vaatamisgraafik_02.png" 
                         alt="Vaatajate püsimise graafik" 
                         fill 
                         className="object-cover"
                       />
-                      <p className="absolute bottom-4 left-4 z-20 font-bold text-white">Vaatajate püsimise graafik (Retention)</p>
+                      <p className="absolute bottom-4 left-4 z-20 font-bold text-white">Retention reklaamsegmendi ajal</p>
                    </div>
                 </div>
               </div>
