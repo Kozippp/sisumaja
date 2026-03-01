@@ -41,7 +41,6 @@ export default function AdminTestimonials() {
     if (error) {
       console.error("Error fetching testimonials:", error);
     } else {
-      // @ts-ignore - Supabase types might not be up to date yet
       setTestimonials(data || []);
     }
     setLoading(false);

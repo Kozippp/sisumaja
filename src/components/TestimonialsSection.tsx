@@ -21,7 +21,6 @@ export function TestimonialsSection() {
         .order("created_at", { ascending: false });
       
       if (data) {
-        // @ts-ignore
         setTestimonials(data);
       }
       setLoading(false);

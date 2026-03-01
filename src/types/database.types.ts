@@ -236,6 +236,48 @@ export type Database = {
         }
         Relationships: []
       }
+      testimonials: {
+        Row: {
+          id: string
+          created_at: string
+          updated_at: string
+          type: "text" | "image"
+          content: string | null
+          author_name: string | null
+          author_role: string | null
+          author_company: string | null
+          image_url: string | null
+          status: "draft" | "published"
+          order: number
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          type: "text" | "image"
+          content?: string | null
+          author_name?: string | null
+          author_role?: string | null
+          author_company?: string | null
+          image_url?: string | null
+          status?: "draft" | "published"
+          order?: number
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          type?: "text" | "image"
+          content?: string | null
+          author_name?: string | null
+          author_role?: string | null
+          author_company?: string | null
+          image_url?: string | null
+          status?: "draft" | "published"
+          order?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
