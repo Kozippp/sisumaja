@@ -105,21 +105,24 @@ export function TestimonialsSection() {
       {/* Expanded View Modal */}
       <AnimatePresence>
         {selectedId && selectedTestimonial && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8">
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedId(null)}
-              className="absolute inset-0 bg-black/90 backdrop-blur-md"
-            />
+              className="absolute inset-0 bg-black/80 backdrop-blur-md z-0"
+            >
+              {/* Glow Effect Background */}
+              <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-900/20 via-transparent to-blue-900/20 opacity-50" />
+            </motion.div>
             
-            <div className="relative w-full max-w-6xl h-full flex flex-col pointer-events-none">
+            <div className="relative w-full h-full flex flex-col pointer-events-none z-10 p-4 md:p-8">
               {/* Main Content Area */}
-              <div className="flex-1 flex items-center justify-center pointer-events-auto">
+              <div className="flex-1 flex items-center justify-center pointer-events-auto min-h-0">
                 <motion.div
                   layoutId={`card-${selectedId}`}
-                  className="w-full max-w-3xl max-h-[80vh] overflow-y-auto bg-neutral-900 rounded-3xl border border-white/10 shadow-2xl relative scrollbar-hide"
+                  className="w-auto h-auto max-w-[95vw] max-h-[85vh] bg-neutral-900/90 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl relative flex flex-col overflow-hidden"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <button 
@@ -130,19 +133,21 @@ export function TestimonialsSection() {
                   </button>
 
                   {selectedTestimonial.type === 'text' ? (
-                    <div className="p-8 md:p-12">
+                    <div className="p-8 md:p-12 overflow-y-auto max-w-3xl">
                        <TextTestimonialCard testimonial={selectedTestimonial} expanded />
                     </div>
                   ) : (
-                    <div className="relative w-full">
+                    <div className="relative w-auto h-auto min-w-[300px] min-h-[300px] flex items-center justify-center bg-black/40">
                        {selectedTestimonial.image_url && (
-                         <Image
-                           src={selectedTestimonial.image_url}
-                           alt="Tagasiside"
-                           width={1200}
-                           height={1600}
-                           className="w-full h-auto object-contain"
-                         />
+                         /* Container to constrain the image size */
+                         <div className="relative w-auto h-auto max-w-[90vw] max-h-[85vh]">
+                           {/* Using standard img tag for better containment behavior in flex layout when dimensions are unknown/variable */}
+                           <img
+                             src={selectedTestimonial.image_url}
+                             alt="Tagasiside"
+                             className="max-w-full max-h-[85vh] object-contain rounded-2xl"
+                           />
+                         </div>
                        )}
                     </div>
                   )}
