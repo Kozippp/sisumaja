@@ -488,22 +488,22 @@ export default async function Home() {
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="bg-black/40 rounded-xl p-4">
-                      <div className="text-sm text-gray-400 mb-1">Vaatamisi</div>
+                      <div className="text-sm text-white-400 mb-1">Vaatamisi</div>
                       <div className="text-3xl font-black text-blue-500 mb-1">50 000 - 90 000</div>
                       <div className="text-sm text-gray-400">keskmiselt ühe video kohta</div>
                     </div>
                     <div className="bg-black/40 rounded-xl p-4">
-                      <div className="text-sm text-gray-400 mb-1">1 vaatamine =</div>
+                      <div className="text-sm text-white-400 mb-1">1 vaatamine =</div>
                       <div className="text-3xl font-black text-green-500 mb-1">≈ 15 min</div>
                       <div className="text-sm text-gray-400">vaatamisaega</div>
                     </div>
                     <div className="bg-black/40 rounded-xl p-4">
-                      <div className="text-sm text-gray-400 mb-1">Peamine seade:</div>
+                      <div className="text-sm text-white-400 mb-1">Peamine seade:</div>
                       <div className="text-3xl font-black text-fuchsia-500 mb-1">Telekas</div>
                       <div className="text-sm text-gray-400">51% vaatab meie videoid telekalt</div>
                     </div>
                     <div className="bg-black/40 rounded-xl p-4">
-                      <div className="text-sm text-gray-400 mb-1">Sihtrühm</div>
+                      <div className="text-sm text-white-400 mb-1">Sihtrühm</div>
                       <div className="text-3xl font-black text-yellow-500 mb-1">16-28.a</div>
                       <div className="text-sm text-gray-400">Tihti vaatab terve pere koos</div>
                     </div>
@@ -514,11 +514,16 @@ export default async function Home() {
                   </p>
                 </div>
 
-                {/* Placeholder for Retention Graph */}
+                {/* Retention Graph */}
                 <div className="bg-neutral-900 border border-white/10 rounded-3xl overflow-hidden relative group">
                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
-                   <div className="aspect-video relative bg-neutral-800 flex items-center justify-center">
-                      <TrendingUp className="w-16 h-16 text-white/20" />
+                   <div className="aspect-video relative bg-neutral-800">
+                      <Image 
+                        src="/vaatamisgraafik.png" 
+                        alt="Vaatajate püsimise graafik" 
+                        fill 
+                        className="object-cover"
+                      />
                       <p className="absolute bottom-4 left-4 z-20 font-bold text-white">Vaatajate püsimise graafik (Retention)</p>
                    </div>
                 </div>
