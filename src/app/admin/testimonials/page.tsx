@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { ArrowLeft, Plus, Trash2, Edit2, Eye, EyeOff, Save, X, Upload, MessageSquare, Image as ImageIcon, Smartphone } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Edit2, Eye, EyeOff, Save, X, Upload, MessageSquare, Image as ImageIcon, Smartphone, GripVertical } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Testimonial, TestimonialFormData, TestimonialType } from "@/types/testimonials";
@@ -37,6 +37,7 @@ export default function AdminTestimonials() {
     const { data, error } = await supabase
       .from("testimonials")
       .select("*")
+      .order("order", { ascending: true })
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -150,6 +151,47 @@ export default function AdminTestimonials() {
 
     if (!error) {
       fetchTestimonials();
+    }
+  }
+
+  async function handleReorder(id: string, direction: "up" | "down") {
+    const currentIndex = testimonials.findIndex((t) => t.id === id);
+    if (currentIndex === -1) return;
+    if (direction === "up" && currentIndex === 0) return;
+    if (direction === "down" && currentIndex >= testimonials.length - 1) return;
+
+    const swapIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+
+    const currentItem = testimonials[currentIndex];
+    const swapItem = testimonials[swapIndex];
+    
+    // Optimistic UI update
+    const newList = [...testimonials];
+    newList[currentIndex] = swapItem;
+    newList[swapIndex] = currentItem;
+    setTestimonials(newList);
+
+    try {
+      // Swap the order values in the database
+      // If orders are the same or null, use index fallback
+      const order1 = swapItem.order ?? swapIndex;
+      const order2 = currentItem.order ?? currentIndex;
+
+      // If they happen to be equal (e.g. both 0), we need to enforce distinction
+      // Best way: just swap their orders. 
+      // If we assume the list is SORTED by order, then swapItem.order < currentItem.order (for 'up')
+      
+      // Simpler approach: Just swap the order values of the two items.
+      // But we must ensure they HAVE valid order values first.
+      
+      // Let's just update both to match their new visual index.
+      // This is self-healing if orders were messed up.
+      await supabase.from("testimonials").update({ order: swapIndex }).eq("id", currentItem.id);
+      await supabase.from("testimonials").update({ order: currentIndex }).eq("id", swapItem.id);
+
+    } catch (error) {
+      console.error("Error reordering:", error);
+      fetchTestimonials(); // Revert
     }
   }
 
@@ -438,6 +480,26 @@ export default function AdminTestimonials() {
 
                 {/* Content */}
                 <div className="p-6">
+                  {/* Reorder Controls */}
+                  <div className="absolute top-3 left-3 z-10 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-black/50 rounded-lg p-1 backdrop-blur-sm">
+                    <button
+                      onClick={() => handleReorder(testimonial.id, "up")}
+                      disabled={index === 0}
+                      className="p-1 hover:bg-white/20 rounded disabled:opacity-30 disabled:cursor-not-allowed text-white"
+                      title="Liiguta üles"
+                    >
+                      <GripVertical className="w-3 h-3 rotate-180" />
+                    </button>
+                    <button
+                      onClick={() => handleReorder(testimonial.id, "down")}
+                      disabled={index === testimonials.length - 1}
+                      className="p-1 hover:bg-white/20 rounded disabled:opacity-30 disabled:cursor-not-allowed text-white"
+                      title="Liiguta alla"
+                    >
+                      <GripVertical className="w-3 h-3" />
+                    </button>
+                  </div>
+
                   {testimonial.type === 'image' && testimonial.image_url ? (
                     <div className="relative aspect-[3/4] w-full rounded-lg overflow-hidden bg-black mb-4">
                       <Image 

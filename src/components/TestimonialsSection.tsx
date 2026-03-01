@@ -19,7 +19,8 @@ export function TestimonialsSection() {
         .from("testimonials")
         .select("*")
         .eq("status", "published")
-        .order("created_at", { ascending: false });
+        .order("order", { ascending: true })
+      .order("created_at", { ascending: false });
       
       if (data) {
         setTestimonials(data);
