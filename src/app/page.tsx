@@ -516,7 +516,6 @@ export default async function Home() {
 
                 {/* Retention Graph */}
                 <div className="bg-neutral-900 border border-white/10 rounded-3xl overflow-hidden relative group">
-                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
                    <div className="aspect-video relative bg-neutral-800">
                       <Image 
                         src="/vaatamisgraafik_02.png" 
@@ -524,7 +523,6 @@ export default async function Home() {
                         fill 
                         className="object-cover"
                       />
-                      <p className="absolute bottom-4 left-4 z-20 font-bold text-white">Retention reklaamsegmendi ajal</p>
                    </div>
                 </div>
               </div>
