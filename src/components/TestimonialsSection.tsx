@@ -117,14 +117,17 @@ export function TestimonialsSection() {
             </motion.div>
             
             <div className="relative w-full h-full flex flex-col pointer-events-none z-10 p-4 md:p-8">
-              {/* Main Content Area */}
-              <div className="flex-1 flex items-center justify-center pointer-events-auto min-h-0 mb-6">
+              {/* Main Content Area - clicking outside card closes modal */}
+              <div 
+                className="flex-1 flex items-center justify-center pointer-events-auto min-h-0 mb-6 cursor-pointer"
+                onClick={() => setSelectedId(null)}
+              >
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.9, y: 20 }}
                   transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                  className="w-auto h-auto max-w-[95vw] max-h-[70vh] bg-neutral-900/90 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl relative flex flex-col overflow-hidden"
+                  className="w-auto h-auto max-w-[95vw] max-h-[70vh] bg-neutral-900/90 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl relative flex flex-col overflow-hidden cursor-default"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <button 
