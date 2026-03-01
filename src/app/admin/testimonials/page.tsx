@@ -453,8 +453,9 @@ export default function AdminTestimonials() {
               </button>
             </div>
           ) : (
-            testimonials.map((testimonial) => (
+            testimonials.map((testimonial, index) => (
               <div 
+                // key must be stable
                 key={testimonial.id} 
                 className={cn(
                   "bg-neutral-900 rounded-xl overflow-hidden border transition-all hover:border-white/20 group relative",
