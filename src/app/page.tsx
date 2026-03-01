@@ -431,16 +431,19 @@ export default async function Home() {
               </p>
             </div>
 
+            {/* Intro Text - Full Width */}
+            <div className="mb-16 max-w-4xl">
+              <h3 className="text-2xl font-bold text-white mb-4">Mida tähendab YouTube'i videosse integreeritud reklaam?</h3>
+              <p className="text-lg text-gray-400 leading-relaxed">
+                Me loome YouTube'i platformile saateid ning me põimime nende saadete stsenaariumitesse reklaami, mida seda esitleb saatejuht oma sõnadega. Seega brändi integratsioon ei ole segav faktor, vaid loomulik osa meelelahutusest, mida fännid usaldavad.
+              </p>
+            </div>
+
             {/* Content Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-24">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-24 items-start">
               {/* Text Content */}
               <div>
-                <h3 className="text-2xl font-bold text-white mb-4">Mida tähendab YouTube'i videosse integreeritud reklaam?</h3>
-                <p className="text-gray-400 mb-8 leading-relaxed">
-                  Me loome YouTube'i platformile saateid ning me põimime nende saadete stsenaariumitesse reklaami, mida seda esitleb saatejuht oma sõnadega. Seega brändi integratsioon ei ole segav faktor, vaid loomulik osa meelelahutusest, mida fännid usaldavad.
-                </p>
-
-                <h3 className="text-2xl font-bold text-white mb-6">Miks see nii efektiivne on?</h3>
+                <h3 className="text-2xl font-bold text-white mb-8">Miks see nii efektiivne on?</h3>
                 <div className="space-y-8">
                   <div className="flex gap-4">
                     <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-fuchsia-500">
@@ -489,13 +492,13 @@ export default async function Home() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="bg-black/40 rounded-xl p-4">
                       <div className="text-sm text-white-400 mb-1">Vaatamisi</div>
-                      <div className="text-3xl font-black text-blue-500 mb-1">50 000 - 90 000</div>
+                      <div className="text-3xl font-black text-blue-500 mb-1">60 000</div>
                       <div className="text-sm text-gray-400">keskmiselt ühe video kohta</div>
                     </div>
                     <div className="bg-black/40 rounded-xl p-4">
                       <div className="text-sm text-white-400 mb-1">1 vaatamine =</div>
-                      <div className="text-3xl font-black text-green-500 mb-1">≈ 15 min</div>
-                      <div className="text-sm text-gray-400">vaatamisaega</div>
+                      <div className="text-3xl font-black text-green-500 mb-1">15 min</div>
+                      <div className="text-sm text-gray-400">keskmiselt vaatamisaega</div>
                     </div>
                     <div className="bg-black/40 rounded-xl p-4">
                       <div className="text-sm text-white-400 mb-1">Peamine seade:</div>
