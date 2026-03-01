@@ -141,6 +141,7 @@ export type Database = {
           media_gallery: Json | null
           published_at: string | null
           show_youtube_stats: boolean | null
+          show_on_frontpage_youtube: boolean | null
           slug: string
           stat_comments: string | null
           stat_likes: string | null
@@ -171,6 +172,7 @@ export type Database = {
           media_gallery?: Json | null
           published_at?: string | null
           show_youtube_stats?: boolean | null
+          show_on_frontpage_youtube?: boolean | null
           slug: string
           stat_comments?: string | null
           stat_likes?: string | null
@@ -201,6 +203,7 @@ export type Database = {
           media_gallery?: Json | null
           published_at?: string | null
           show_youtube_stats?: boolean | null
+          show_on_frontpage_youtube?: boolean | null
           slug?: string
           stat_comments?: string | null
           stat_likes?: string | null

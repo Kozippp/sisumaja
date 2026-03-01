@@ -6,6 +6,7 @@ import { Database } from "@/types/database.types";
 import * as motion from "framer-motion/client";
 import LiveYouTubeCarousel from "@/components/LiveYouTubeCarousel";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
+import { YouTubeComparisonTable } from "@/components/YouTubeComparisonTable";
 
 export const revalidate = 60;
 
@@ -21,6 +22,16 @@ async function getRecentProjects(): Promise<Project[]> {
     .eq("is_visible", true)
     .order("published_at", { ascending: false })
     .limit(3);
+  return data || [];
+}
+
+async function getYoutubeProjects(): Promise<Project[]> {
+  const { data } = await supabase
+    .from("projects")
+    .select("*")
+    .eq("is_visible", true)
+    .eq("show_on_frontpage_youtube", true)
+    .order("published_at", { ascending: false });
   return data || [];
 }
 
@@ -76,6 +87,7 @@ const SERVICES = [
 
 export default async function Home() {
   const recentProjects = await getRecentProjects();
+  const youtubeProjects = await getYoutubeProjects();
   const clientLogos = await getClientLogos();
   const socialStats = await getSocialStats();
   const featuredVideos = await getFeaturedVideos();
@@ -365,7 +377,7 @@ export default async function Home() {
                 
                 <div className="space-y-6 text-gray-300 text-lg leading-relaxed">
                   <p>
-                    <span className="text-white font-bold">Kozip on Eesti juhtiv seikluslik meelelahutuskanal</span>, kus kohtuvad hulljulged eksperimendid, põnevad lood ja tipptase videoproduktsioonis.
+                    <span className="text-white font-bold">Kozip on üks Eesti juhtivaid seikluslikke meelelahutuskanaleid</span>, kus kohtuvad hulljulged eksperimendid, põnevad lood ja tipptase videoproduktsioonis.
                   </p>
                   <p>
                     Me ei tee lihtsalt videoid – me loome saateid, mida oodatakse nädalaid ja vaadatakse korduvalt. Meie eesmärk on süstida vaatajasse <span className="text-fuchsia-400 font-medium">julgust järgida oma südant</span> ning teha ka oma elus ägedaid asju.
@@ -403,37 +415,165 @@ export default async function Home() {
       <div className="bg-neutral-950">
         
         {/* Service 1: YouTube */}
-        <section id="youtube-service" className="py-32 border-b border-white/5">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-              <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-xs font-bold uppercase tracking-wider mb-6">
-                  <Youtube className="w-4 h-4" /> YouTube
-                </div>
-                <h2 className="text-4xl md:text-5xl font-black mb-6">Kas reklaam Kozipi YouTube'i kanalil oleks sulle kasulik?</h2>
-                <p className="text-xl text-gray-400 mb-8 leading-relaxed">
-                  YouTube on koht, kus inimesed veedavad aega süvenenult. Meie videotesse integreeritud reklaam ei ole lihtsalt "segav faktor", vaid osa sisust, mida vaataja naudib.
-                </p>
-                <ul className="space-y-4 mb-10">
-                  {["Kõrge vaatamismäär", "Pikaajaline nähtavus (SEO)", "Usaldusväärne soovitus"].map((item, i) => (
-                    <li key={i} className="flex items-center gap-3 text-gray-300">
-                      <CheckCircle className="w-5 h-5 text-fuchsia-500" /> {item}
-                    </li>
-                  ))}
-                </ul>
-                <Link href="#contact" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-fuchsia-500 hover:text-white transition-all duration-300">
-                  Võta ühendust <ArrowRight className="w-4 h-4" />
-                </Link>
+        <section id="youtube-service" className="py-32 border-b border-white/5 relative overflow-hidden">
+          {/* Background Gradient */}
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-red-600/5 rounded-full blur-[150px] pointer-events-none" />
+
+          <div className="max-w-7xl mx-auto px-6 relative z-10">
+            {/* Header Area */}
+            <div className="mb-16">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-xs font-bold uppercase tracking-wider mb-6">
+                <Youtube className="w-4 h-4" /> YouTube
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                {/* Mock Portfolio items */}
-                {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className={`rounded-xl overflow-hidden bg-neutral-900 border border-white/10 ${i === 2 ? 'col-span-2 aspect-video' : 'aspect-square'}`}>
-                     <div className="w-full h-full bg-neutral-800 animate-pulse" /> 
+              <h2 className="text-4xl md:text-5xl font-black mb-6">Reklaam YouTube'i videos</h2>
+              <p className="text-xl text-gray-400 max-w-3xl leading-relaxed">
+                YouTube'i videosse loodud reklaam on praegu üks maailma efektiivsemaid turundusmeetodeid.
+              </p>
+            </div>
+
+            {/* Content Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-24">
+              {/* Text Content */}
+              <div>
+                <h3 className="text-2xl font-bold text-white mb-4">Mida tähendab YouTube'i videosse integreeritud reklaam?</h3>
+                <p className="text-gray-400 mb-8 leading-relaxed">
+                  Me loome YouTube'i platformile saateid ning me põimime nende saadete stsenaariumitesse reklaami, mida seda esitleb saatejuht oma sõnadega. Seega brändi integratsioon ei ole segav faktor, vaid loomulik osa meelelahutusest, mida fännid usaldavad.
+                </p>
+
+                <h3 className="text-2xl font-bold text-white mb-6">Miks see nii efektiivne on?</h3>
+                <div className="space-y-8">
+                  <div className="flex gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-fuchsia-500">
+                      <BadgeCheck className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-bold text-white mb-2">1. Usaldus</h4>
+                      <p className="text-gray-400 text-sm leading-relaxed">
+                      Tavareklaamis kiidab bränd end ise. Meie videos soovitab sind sisulooja, keda vaataja juba usaldab ja armastab. See on nagu hea sõbra soovitus, aga jõudes korraga kümnete kui mitte sadade tuhandete inimesteni korraga.
+                      </p>
+                    </div>
                   </div>
-                ))}
+
+                  <div className="flex gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-blue-500">
+                      <TrendingUp className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-bold text-white mb-2">2. Reaalne huvi</h4>
+                      <p className="text-gray-400 text-sm leading-relaxed">
+                        Meie videote statistika kinnitab, et 95-99% vaatajatest vaatab reklaamsegmendi täies mahus ära. See on drastiline erinevus võrreldes Meta reklaamidega, mida enamasti ignoreeritakse, või telekanalite pausidega, mille ajal haaratakse hoopis telefon. 
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-green-500">
+                      <Zap className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-bold text-white mb-2">3. Pikaajalisus</h4>
+                      <p className="text-gray-400 text-sm leading-relaxed">
+                        Me loome sisu, mis on ajatu. Meie videoid avastatakse ja nauditakse ka aastaid peale avaldamist – täpselt nagu oma lemmikfilme. Sinu investeering ei taga hetkelist nähtavust, vaid püsivat väärtust, mis töötab Sinu kasuks aastaid. 
+                         </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Stats & Visuals */}
+              <div className="space-y-8">
+                {/* Stats Card */}
+                <div className="bg-neutral-900/50 border border-white/10 rounded-3xl p-8 backdrop-blur-sm">
+                  <h3 className="text-xl font-bold text-white mb-6">Kes neid videoid vaatab?</h3>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="bg-black/40 rounded-xl p-4">
+                      <div className="text-sm text-gray-400 mb-1">Vaatamisi</div>
+                      <div className="text-3xl font-black text-blue-500 mb-1">50 000 - 90 000</div>
+                      <div className="text-sm text-gray-400">keskmiselt ühe video kohta</div>
+                    </div>
+                    <div className="bg-black/40 rounded-xl p-4">
+                      <div className="text-sm text-gray-400 mb-1">1 vaatamine =</div>
+                      <div className="text-3xl font-black text-green-500 mb-1">≈ 15 min</div>
+                      <div className="text-sm text-gray-400">vaatamisaega</div>
+                    </div>
+                    <div className="bg-black/40 rounded-xl p-4">
+                      <div className="text-sm text-gray-400 mb-1">Peamine seade:</div>
+                      <div className="text-3xl font-black text-fuchsia-500 mb-1">Telekas</div>
+                      <div className="text-sm text-gray-400">51% vaatab meie videoid telekalt</div>
+                    </div>
+                    <div className="bg-black/40 rounded-xl p-4">
+                      <div className="text-sm text-gray-400 mb-1">Sihtrühm</div>
+                      <div className="text-3xl font-black text-yellow-500 mb-1">16-28.a</div>
+                      <div className="text-sm text-gray-400">Tihti vaatab terve pere koos</div>
+                    </div>
+                  </div>
+                  
+                  <p className="text-gray-400 text-sm mt-6">
+                    Meie videoid vaadatakse sageli koos sõprade, oma kaasa või perega koos diivanil.
+                  </p>
+                </div>
+
+                {/* Placeholder for Retention Graph */}
+                <div className="bg-neutral-900 border border-white/10 rounded-3xl overflow-hidden relative group">
+                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
+                   <div className="aspect-video relative bg-neutral-800 flex items-center justify-center">
+                      <TrendingUp className="w-16 h-16 text-white/20" />
+                      <p className="absolute bottom-4 left-4 z-20 font-bold text-white">Vaatajate püsimise graafik (Retention)</p>
+                   </div>
+                </div>
               </div>
             </div>
+
+            {/* Comparison Table */}
+            <div className="mb-24">
+              <h3 className="text-2xl font-bold text-white mb-8 text-center">Miks valida YouTube'i reklaam?</h3>
+              <YouTubeComparisonTable />
+            </div>
+
+            {/* Selected Works Section */}
+            <div>
+              <div className="flex justify-between items-end mb-12">
+                <h3 className="text-2xl font-bold text-white">Tehtud tööd</h3>
+                <Link href="/tehtud-tood" className="text-sm font-bold uppercase text-gray-400 hover:text-white flex items-center gap-2">
+                  Vaata kõiki <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {youtubeProjects.length > 0 ? (
+                  youtubeProjects.map((project) => (
+                    <Link key={project.id} href={`/tehtud-tood/${project.slug}`} className="group block">
+                      <div className="aspect-video bg-neutral-900 rounded-2xl overflow-hidden mb-4 border border-white/5 group-hover:border-fuchsia-500/50 transition-all duration-300 relative">
+                        {project.thumbnail_url ? (
+                          <img src={project.thumbnail_url} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-700">Pilt puudub</div>
+                        )}
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                          <div className="bg-white/10 backdrop-blur-md p-3 rounded-full">
+                            <ArrowRight className="w-6 h-6 text-white" />
+                          </div>
+                        </div>
+                      </div>
+                      <h3 className="text-xl font-bold text-white mb-1 group-hover:text-fuchsia-500 transition-colors">{project.title}</h3>
+                      <p className="text-sm text-gray-500 line-clamp-2">{project.description}</p>
+                    </Link>
+                  ))
+                ) : (
+                  <div className="col-span-3 text-center py-10 bg-white/5 rounded-2xl border border-dashed border-white/10 text-gray-500">
+                    <p>Vali projektid admin paneelist, et neid siin kuvada.</p>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            <div className="mt-16 text-center">
+              <Link href="#contact" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-fuchsia-500 hover:text-white transition-all duration-300">
+                Võta ühendust <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+
           </div>
         </section>
 

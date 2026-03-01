@@ -62,10 +62,10 @@ export function TestimonialsSection() {
           className="text-center mb-20"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Fännid <span className="text-fuchsia-500">räägivad</span>
+            Rahvas <span className="text-fuchsia-500">räägib</span>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-            Vaata, mida meie kliendid ja koostööpartnerid meie kohta arvavad.
+            Vaata, mida koostööpartnerid ja fännid meie kohta arvavad.
           </p>
         </motion.div>
 
