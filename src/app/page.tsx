@@ -7,6 +7,7 @@ import * as motion from "framer-motion/client";
 import LiveYouTubeCarousel from "@/components/LiveYouTubeCarousel";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { YouTubeComparisonTable } from "@/components/YouTubeComparisonTable";
+import { SocialMediaComparisonTable } from "@/components/SocialMediaComparisonTable";
 
 export const revalidate = 60;
 
@@ -614,9 +615,11 @@ export default async function Home() {
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-500 text-xs font-bold uppercase tracking-wider mb-6">
                 <Smartphone className="w-4 h-4" /> Shorts & Reels & TikTok
               </div>
-              <h2 className="text-4xl md:text-5xl font-black mb-6">Valluta tähelepanu <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-fuchsia-500">vertikaalselt</span>.</h2>
+              <h2 className="text-4xl md:text-5xl font-black mb-6">
+                94% Z-põlvkonnast usaldab <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-fuchsia-500">sisuloojaid</span> rohkem kui reklaame.
+              </h2>
               <p className="text-xl text-gray-400 leading-relaxed">
-                Lühivideo on täna sotsiaalmeedia supervõime. See on ainus formaat, kus null jälgijaga kontod võivad jõuda miljonite inimesteni – kui sisu on õige.
+                Koostöövideo on sild sinu toote ja fänni vahel, mida ei kerita edasi. See on ainus formaat, kus null jälgijaga kontod võivad jõuda miljonite inimesteni.
               </p>
             </div>
 
@@ -643,18 +646,18 @@ export default async function Home() {
 
               {/* Right: Why It Works (The "Expert" text) */}
               <div>
-                <h3 className="text-2xl font-bold text-white mb-6">Miks turundajad lühivideoid armastavad?</h3>
+                <h3 className="text-2xl font-bold text-white mb-6">Miks see töötab?</h3>
                 
                 <div className="space-y-8">
                   <div className="group">
                     <div className="flex items-start gap-4">
                       <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500 mt-1 group-hover:bg-blue-500 group-hover:text-white transition-colors">
-                        <Zap className="w-5 h-5" />
+                        <Users className="w-5 h-5" />
                       </div>
                       <div>
-                        <h4 className="text-lg font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">Algoritmiline levi (Discovery)</h4>
+                        <h4 className="text-lg font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">Usaldus ja Sõbra Nõuanne</h4>
                         <p className="text-gray-400 leading-relaxed">
-                          Erinevalt tavalistest postitustest, mida näevad vaid sinu jälgijad, suruvad platvormid lühivideoid agressiivselt võõrastele inimestele. See on tasuta reklaam uuele auditooriumile.
+                          Sisulooja on ehitanud oma auditooriumiga suhet aastaid. Kui tema soovitab, on see sõbra nõuanne, mitte korporatiivne müügijutt.
                         </p>
                       </div>
                     </div>
@@ -663,12 +666,12 @@ export default async function Home() {
                   <div className="group">
                     <div className="flex items-start gap-4">
                       <div className="flex-shrink-0 w-10 h-10 rounded-full bg-fuchsia-500/10 flex items-center justify-center text-fuchsia-500 mt-1 group-hover:bg-fuchsia-500 group-hover:text-white transition-colors">
-                        <ThumbsUp className="w-5 h-5" />
+                        <Zap className="w-5 h-5" />
                       </div>
                       <div>
-                        <h4 className="text-lg font-bold text-white mb-2 group-hover:text-fuchsia-400 transition-colors">"See ei tundu reklaamina"</h4>
+                        <h4 className="text-lg font-bold text-white mb-2 group-hover:text-fuchsia-400 transition-colors">Tootmiskulude sääst</h4>
                         <p className="text-gray-400 leading-relaxed">
-                          Gen Z ja noored ignoreerivad bännereid ja teleklippe. Meie videod on meelelahutus – naljakad sketšid, eksperimendid või "life-hackid", kus bränd on loomulik osa loost.
+                          Sa ei vaja 10-liikmelist võttemeeskonda. Me vastutame kõige eest. Oleme korraga stsenarist, näitleja, operaator ja monteerija, kes teab täpselt, mis töötab.
                         </p>
                       </div>
                     </div>
@@ -676,13 +679,13 @@ export default async function Home() {
 
                   <div className="group">
                     <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white mt-1 group-hover:bg-white group-hover:text-black transition-colors">
-                        <Smartphone className="w-5 h-5" />
+                      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-green-500 mt-1 group-hover:bg-green-500 group-hover:text-white transition-colors">
+                        <BarChart3 className="w-5 h-5" />
                       </div>
                       <div>
-                        <h4 className="text-lg font-bold text-white mb-2 group-hover:text-gray-300 transition-colors">Mobiilne dominants</h4>
+                        <h4 className="text-lg font-bold text-white mb-2 group-hover:text-green-400 transition-colors">Kõrge ROI (Tasuvus)</h4>
                         <p className="text-gray-400 leading-relaxed">
-                          90% sotsiaalmeedia tarbimisest toimub telefonis. Vertikaalne video on loodud täpselt selleks – see täidab ekraani ja ei lase tähelepanul hajuda.
+                          Koostöövideote engagement rate on keskmiselt 3-5 korda kõrgem kui brändi enda postitustel. See on kindel viis jõuda kiirelt ja usaldatult inimesteni.
                         </p>
                       </div>
                     </div>
@@ -697,56 +700,57 @@ export default async function Home() {
               </div>
             </div>
 
-            {/* Comparison Section: Old Way vs New Way */}
-            <div className="bg-neutral-900/50 border border-white/5 rounded-3xl p-8 md:p-12">
-              <h3 className="text-2xl font-bold text-white mb-8 text-center">Reklaam vs. Sisuturundus</h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative">
-                {/* VS Badge */}
-                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-black border border-white/20 rounded-full flex items-center justify-center font-black italic z-10 text-white hidden md:flex">
-                  VS
-                </div>
+            {/* Comparison Section: Brand vs Creator */}
+            <div className="mb-24">
+              <h3 className="text-2xl font-bold text-white mb-8 text-center">Brändi sisu vs. Koostöö sisuloojaga</h3>
+              <SocialMediaComparisonTable />
+            </div>
 
-                {/* The Old Way */}
-                <div className="bg-red-900/10 border border-red-500/10 rounded-2xl p-6 opacity-60">
-                  <h4 className="text-red-400 font-bold uppercase tracking-wider mb-4 text-sm">Tavaline bänner / Reklaamklipp</h4>
-                  <ul className="space-y-4">
-                    <li className="flex items-start gap-3 text-gray-400">
-                      <span className="text-red-500 font-bold">×</span> Inimesed kerivad kiiresti edasi (skip ad)
-                    </li>
-                    <li className="flex items-start gap-3 text-gray-400">
-                      <span className="text-red-500 font-bold">×</span> Tundub pealetükkiv ja tüütu
-                    </li>
-                    <li className="flex items-start gap-3 text-gray-400">
-                      <span className="text-red-500 font-bold">×</span> Levib ainult siis, kui maksad (Paid reach)
-                    </li>
-                    <li className="flex items-start gap-3 text-gray-400">
-                      <span className="text-red-500 font-bold">×</span> Ühekülgne "osta mind" sõnum
-                    </li>
-                  </ul>
-                </div>
+            {/* Tehtud tööd (Shorts/Reels) */}
+            <div className="relative">
+              <div className="flex justify-between items-end mb-12">
+                <h3 className="text-2xl font-bold text-white">Tehtud tööd: Lühivideod</h3>
+                <Link href="/tehtud-tood" className="text-sm font-bold uppercase text-gray-400 hover:text-white flex items-center gap-2">
+                  Vaata kõiki <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
 
-                {/* The New Way */}
-                <div className="bg-blue-900/10 border border-blue-500/20 rounded-2xl p-6 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-20 h-20 bg-blue-500/10 blur-[40px] rounded-full"></div>
-                  <h4 className="text-blue-400 font-bold uppercase tracking-wider mb-4 text-sm flex items-center gap-2">
-                    <BadgeCheck className="w-4 h-4" /> Kozip Short & Reel
-                  </h4>
-                  <ul className="space-y-4">
-                    <li className="flex items-start gap-3 text-gray-200">
-                      <span className="text-green-500 font-bold">✓</span> Haarav "Hook" esimesel sekundil
-                    </li>
-                    <li className="flex items-start gap-3 text-gray-200">
-                      <span className="text-green-500 font-bold">✓</span> Inimesed jagavad sõpradega (Viral loop)
-                    </li>
-                    <li className="flex items-start gap-3 text-gray-200">
-                      <span className="text-green-500 font-bold">✓</span> Orgaaniline levi (tasuta lisavaatamised)
-                    </li>
-                    <li className="flex items-start gap-3 text-gray-200">
-                      <span className="text-green-500 font-bold">✓</span> Usaldusväärne soovitus "oma inimeselt"
-                    </li>
-                  </ul>
-                </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {/* Placeholder items for Shorts portfolio - using recent projects or generic placeholders if none explicitly tagged as shorts */}
+                {recentProjects.length > 0 ? (
+                  // Showing first 4 items (or repeating if fewer) to fill the grid visually
+                  [...recentProjects, ...recentProjects].slice(0, 4).map((project, idx) => (
+                    <Link key={`${project.id}-${idx}`} href={`/tehtud-tood/${project.slug}`} className="group block relative aspect-[9/16] bg-neutral-900 rounded-2xl overflow-hidden border border-white/5 hover:border-fuchsia-500/50 transition-all duration-300">
+                      {project.thumbnail_url ? (
+                        <img src={project.thumbnail_url} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-gray-700 bg-neutral-800">
+                           <Video className="w-12 h-12 opacity-20" />
+                        </div>
+                      )}
+                      
+                      {/* Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90 group-hover:opacity-100 transition-opacity" />
+                      
+                      <div className="absolute bottom-0 left-0 right-0 p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                           <div className="p-1.5 bg-white/10 backdrop-blur-md rounded-full">
+                              <Play className="w-3 h-3 text-white fill-current" />
+                           </div>
+                           <span className="text-xs font-bold text-gray-300 uppercase tracking-wider">Reel / TikTok</span>
+                        </div>
+                        <h4 className="text-sm font-bold text-white line-clamp-2 leading-snug group-hover:text-fuchsia-400 transition-colors">{project.title}</h4>
+                      </div>
+                    </Link>
+                  ))
+                ) : (
+                   // Fallback if no projects
+                   [1, 2, 3, 4].map((i) => (
+                    <div key={i} className="aspect-[9/16] bg-neutral-900 rounded-2xl border border-white/5 flex items-center justify-center">
+                       <p className="text-gray-600 text-sm">Näidisvideo {i}</p>
+                    </div>
+                   ))
+                )}
               </div>
             </div>
 
