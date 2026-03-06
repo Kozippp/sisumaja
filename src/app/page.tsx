@@ -625,40 +625,19 @@ export default async function Home() {
               
               {/* Left: The "Phone" Visuals */}
               <div className="relative mx-auto w-full max-w-md lg:max-w-full">
-                <div className="grid grid-cols-2 gap-4">
-                  {/* Card 1: Reach */}
-                  <div className="bg-neutral-800/50 backdrop-blur-sm p-6 rounded-2xl border border-white/10 transform translate-y-8">
-                     <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center text-blue-400 mb-4">
-                        <BarChart3 className="w-6 h-6" />
-                     </div>
-                     <h4 className="text-4xl font-black text-white mb-2">3x</h4>
-                     <p className="text-gray-400 text-sm">Rohkem levi kui tavapostitusel tänu algoritmile.</p>
-                  </div>
-
-                  {/* Card 2: Platforms */}
-                  <div className="bg-neutral-800/50 backdrop-blur-sm p-6 rounded-2xl border border-white/10">
-                     <div className="w-12 h-12 bg-fuchsia-500/20 rounded-full flex items-center justify-center text-fuchsia-400 mb-4">
-                        <Repeat className="w-6 h-6" />
-                     </div>
-                     <h4 className="text-xl font-bold text-white mb-2">3-in-1 Levi</h4>
-                     <p className="text-gray-400 text-sm">Üks video, mis töötab korraga YouTube Shortsis, Instagram Reelsis ja TikTokis.</p>
-                  </div>
-
-                  {/* Card 3: Retention */}
-                  <div className="bg-neutral-800/50 backdrop-blur-sm p-6 rounded-2xl border border-white/10 transform translate-y-8 col-span-2">
-                     <div className="flex items-center gap-4 mb-4">
-                        <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center text-green-400">
-                           <Eye className="w-6 h-6" />
-                        </div>
-                        <div>
-                           <h4 className="text-xl font-bold text-white">100% Ekraanist</h4>
-                           <p className="text-gray-400 text-xs">Vertikaalne video haarab kogu fookuse.</p>
-                        </div>
-                     </div>
-                     <div className="w-full bg-white/10 h-2 rounded-full overflow-hidden">
-                        <div className="bg-green-500 h-full w-[95%]" />
-                     </div>
-                  </div>
+                <div className="grid grid-cols-3 gap-4">
+                   {[1, 2, 3].map((i) => (
+                    <div key={i} className="relative rounded-2xl overflow-hidden bg-neutral-900 border border-white/10 aspect-[9/16] shadow-2xl transform hover:-translate-y-2 transition-transform duration-300 group">
+                       <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent" />
+                       
+                       {/* Phone Screen Placeholder */}
+                       <div className="absolute inset-2 bg-neutral-800 rounded-xl overflow-hidden">
+                          <div className="w-full h-full bg-neutral-900/50 flex items-center justify-center">
+                              <Play className="w-8 h-8 text-white/20 group-hover:text-fuchsia-500/50 transition-colors fill-current" />
+                          </div>
+                       </div>
+                    </div>
+                  ))}
                 </div>
               </div>
 
