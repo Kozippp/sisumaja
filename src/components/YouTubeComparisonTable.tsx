@@ -8,8 +8,8 @@ export function YouTubeComparisonTable() {
         <thead>
           <tr className="border-b border-white/10">
             <th className="py-4 px-4 text-sm font-bold text-gray-400 uppercase tracking-wider">Kanal</th>
-            <th className="py-4 px-4 text-sm font-bold text-gray-400 uppercase tracking-wider">Kui palju vaadatakse</th>
             <th className="py-4 px-4 text-sm font-bold text-gray-400 uppercase tracking-wider">Usaldus</th>
+            <th className="py-4 px-4 text-sm font-bold text-gray-400 uppercase tracking-wider">Tähelepanu</th>
             <th className="py-4 px-4 text-sm font-bold text-gray-400 uppercase tracking-wider">Kui kaua töötab</th>
             <th className="py-4 px-4 text-sm font-bold text-gray-400 uppercase tracking-wider">Kuidas vaadatakse</th>
           </tr>
@@ -21,19 +21,19 @@ export function YouTubeComparisonTable() {
               <div className="p-2 bg-red-500/20 rounded-lg text-red-500 flex-shrink-0">
                 <Youtube className="w-6 h-6" />
               </div>
-              <span className="whitespace-nowrap">Meie YouTube</span>
-            </td>
-            <td className="py-6 px-4">
-              <span className="text-green-400 font-bold text-lg block mb-1">95-99%</span>
-              <div className="text-xs text-gray-400">Reklaam on osa loost - vaatajad jälgivad tähelepanelikult</div>
+              <span className="whitespace-nowrap">Kozipi YT reklaam</span>
             </td>
             <td className="py-6 px-4">
               <span className="text-green-400 font-bold text-lg block mb-1">Väga kõrge</span>
-              <div className="text-xs text-gray-400">Nagu sõbra soovitus - sisuloojat juba usaldatakse</div>
+              <div className="text-xs text-gray-400">See on nagu soovitus sõbralt/eksperdilt, keda usaldatakse</div>
+            </td>
+            <td className="py-6 px-4">
+              <span className="text-green-400 font-bold text-lg block mb-1">Väga kõrge</span>
+              <div className="text-xs text-gray-400">95-99% vaatavad reklaami täielikult läbi</div>
             </td>
             <td className="py-6 px-4">
               <span className="text-green-400 font-bold text-lg block mb-1">Aastad</span>
-              <div className="text-xs text-gray-400">Videot vaadatakse ka pärast aastat - sisu ei aegu</div>
+              <div className="text-xs text-gray-400">Videot vaadatakse aastaid. See pole kulu vaid investeering</div>
             </td>
             <td className="py-6 px-4">
               <span className="text-green-400 font-bold text-lg block mb-1">Rahulikult</span>
@@ -50,19 +50,19 @@ export function YouTubeComparisonTable() {
               <span className="whitespace-nowrap">TV-reklaamid</span>
             </td>
             <td className="py-6 px-4">
+              <span className="text-yellow-500 font-medium text-lg block mb-1">Standardne</span>
+              <div className="text-xs text-gray-500">Ametlik, kuid vaataja on harjunud seda ignoreerima kui "tavalist müügimüra"</div>
+            </td>
+            <td className="py-6 px-4">
               <span className="text-yellow-500 font-medium text-lg block mb-1">Madal</span>
-              <div className="text-xs text-gray-500">Reklaami ajal võetakse telefon kätte või vahetatakse kanalit</div>
+              <div className="text-xs text-gray-500">Reklaami ajal haaratakse telefon või lahkutakse ruumist. Maksad "ekraaniaja", mitte reaalse tähelepanu eest.</div>
             </td>
             <td className="py-6 px-4">
-              <span className="text-yellow-500 font-medium text-lg block mb-1">Keskmine</span>
-              <div className="text-xs text-gray-500">Tuttav ja ametlik, aga selgelt tavalinen reklaam</div>
+              <span className="text-yellow-500 font-medium text-lg block mb-1">Kampaania ajal</span>
+              <div className="text-xs text-gray-500">Töötab ainult siis, kui eetriaja eest maksad</div>
             </td>
             <td className="py-6 px-4">
-              <span className="text-red-500 font-medium text-lg block mb-1">Kampaania ajal</span>
-              <div className="text-xs text-gray-500">Töötab ainult siis, kui eetrisse maksad</div>
-            </td>
-            <td className="py-6 px-4">
-              <span className="text-yellow-500 font-medium text-lg block mb-1">Katkendlik</span>
+              <span className="text-red-500 font-medium text-lg block mb-1">Katkendlik</span>
               <div className="text-xs text-gray-500">Segab saate vaatamist - enamasti ignoreeritakse</div>
             </td>
           </tr>
@@ -73,18 +73,18 @@ export function YouTubeComparisonTable() {
               <div className="p-2 bg-purple-500/10 rounded-lg text-purple-500 flex-shrink-0">
                 <Smartphone className="w-5 h-5" />
               </div>
-              <span className="whitespace-nowrap">Meta/TikTok reklaamid</span>
+              <span className="whitespace-nowrap">Meta reklaamid</span>
+            </td>
+            <td className="py-6 px-4">
+              <span className="text-yellow-500 font-medium text-lg block mb-1">Madal</span>
+              <div className="text-xs text-gray-500">Enesekeskne reklaamvideo, mis võistleb meemide ja kassivideotega.</div>
             </td>
             <td className="py-6 px-4">
               <span className="text-red-500 font-medium text-lg block mb-1">Väga madal</span>
-              <div className="text-xs text-gray-500">Keritud kohe edasi - keegi ei taha reklaame näha</div>
+              <div className="text-xs text-gray-500">Võõras müügisõnum keset ägedat sisu on paljude jaoks automatne scroll</div>
             </td>
             <td className="py-6 px-4">
-              <span className="text-red-500 font-medium text-lg block mb-1">Madal</span>
-              <div className="text-xs text-gray-500">Tundmatu bränd, mis segab oma voogu</div>
-            </td>
-            <td className="py-6 px-4">
-              <span className="text-red-500 font-medium text-lg block mb-1">Mõni päev</span>
+              <span className="text-yellow-500 font-medium text-lg block mb-1">Mõni päev</span>
               <div className="text-xs text-gray-500">Algoritm matab sisu kiiresti ära</div>
             </td>
             <td className="py-6 px-4">
