@@ -420,72 +420,29 @@ export default async function Home() {
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-red-600/5 rounded-full blur-[150px] pointer-events-none" />
 
           <div className="max-w-7xl mx-auto px-6 relative z-10">
-            {/* Header Area */}
-            <div className="mb-16">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-xs font-bold uppercase tracking-wider mb-6">
-                <Youtube className="w-4 h-4" /> YouTube
-              </div>
-              <h2 className="text-4xl md:text-5xl font-black mb-6">Reklaam YouTube'i videos</h2>
-              <p className="text-xl text-gray-400 max-w-3xl leading-relaxed">
-                YouTube'i videosse loodud reklaam on praegu üks maailma efektiivsemaid turundusmeetodeid.
-              </p>
-            </div>
-
-            {/* Intro Text - Full Width */}
-            <div className="mb-16 max-w-4xl">
-              <h3 className="text-2xl font-bold text-white mb-4">Mida tähendab YouTube'i videosse integreeritud reklaam?</h3>
-              <p className="text-lg text-gray-400 leading-relaxed">
-                Me loome YouTube'i platformile saateid ning me põimime nende saadete stsenaariumitesse reklaami, mida seda esitleb saatejuht oma sõnadega. Seega brändi integratsioon ei ole segav faktor, vaid loomulik osa meelelahutusest, mida fännid usaldavad.
-              </p>
-            </div>
-
-            {/* Content Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-24 items-start">
-              {/* Text Content */}
+            
+            {/* First Row: Header + Intro + Stats */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-16 items-start">
+              {/* Left Column: Header + Intro */}
               <div>
-                <h3 className="text-2xl font-bold text-white mb-8">Miks see nii efektiivne on?</h3>
-                <div className="space-y-8">
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-fuchsia-500">
-                      <BadgeCheck className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-bold text-white mb-2">1. Usaldus</h4>
-                      <p className="text-lg text-gray-400 leading-relaxed">
-                      Tavareklaamis kiidab bränd end ise. Meie videos soovitab sind sisulooja, keda vaataja juba usaldab ja armastab. See on nagu hea sõbra soovitus, aga jõudes korraga kümnete kui mitte sadade tuhandete inimesteni korraga.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-blue-500">
-                      <TrendingUp className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-bold text-white mb-2">2. Reaalne huvi</h4>
-                      <p className="text-lg text-gray-400 leading-relaxed">
-                        Meie videote statistika kinnitab, et 95-99% vaatajatest vaatab reklaamsegmendi täies mahus ära. See on drastiline erinevus võrreldes Meta reklaamidega, mida enamasti ignoreeritakse, või telekanalite pausidega, mille ajal haaratakse hoopis telefon. 
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-green-500">
-                      <Zap className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-bold text-white mb-2">3. Pikaajalisus</h4>
-                      <p className="text-lg text-gray-400 leading-relaxed">
-                        Me loome sisu, mis on ajatu. Meie videoid avastatakse ja nauditakse ka aastaid peale avaldamist – täpselt nagu oma lemmikfilme. Sinu investeering ei taga hetkelist nähtavust, vaid püsivat väärtust, mis töötab Sinu kasuks aastaid. 
-                         </p>
-                    </div>
-                  </div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-xs font-bold uppercase tracking-wider mb-6">
+                  <Youtube className="w-4 h-4" /> YouTube
+                </div>
+                <h2 className="text-4xl md:text-5xl font-black mb-6">Reklaam YouTube'i videos</h2>
+                <p className="text-xl text-gray-400 mb-8 leading-relaxed">
+                  YouTube'i videosse loodud reklaam on praegu üks maailma efektiivsemaid turundusmeetodeid.
+                </p>
+                
+                <div>
+                  <h3 className="text-2xl font-bold text-white mb-4">Mida tähendab YouTube'i videosse integreeritud reklaam?</h3>
+                  <p className="text-lg text-gray-400 leading-relaxed">
+                    Me loome YouTube'i platformile saateid ning me põimime nende saadete stsenaariumitesse reklaami, mida seda esitleb saatejuht oma sõnadega. Seega brändi integratsioon ei ole segav faktor, vaid loomulik osa meelelahutusest, mida fännid usaldavad.
+                  </p>
                 </div>
               </div>
 
-              {/* Stats & Visuals */}
-              <div className="space-y-8">
-                {/* Stats Card */}
+              {/* Right Column: Stats Card */}
+              <div>
                 <div className="bg-neutral-900/50 border border-white/10 rounded-3xl p-8 backdrop-blur-sm">
                   <h3 className="text-xl font-bold text-white mb-6">Kes meie videoid vaatab?</h3>
                   
@@ -516,8 +473,13 @@ export default async function Home() {
                     Meie videoid vaadatakse sageli koos sõprade, oma kaasa või perega koos diivanil.
                   </p>
                 </div>
+              </div>
+            </div>
 
-                {/* Retention Graph */}
+            {/* Second Row: Graph + Why Effective */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-24 items-start">
+              {/* Left Column: Retention Graph */}
+              <div>
                 <div className="bg-neutral-900 border border-white/10 rounded-3xl overflow-hidden relative group">
                    <div className="aspect-video relative bg-neutral-800">
                       <Image 
@@ -527,6 +489,48 @@ export default async function Home() {
                         className="object-cover"
                       />
                    </div>
+                </div>
+              </div>
+
+              {/* Right Column: All 3 Points */}
+              <div>
+                <h3 className="text-2xl font-bold text-white mb-8">Miks see nii efektiivne on?</h3>
+                <div className="space-y-8">
+                  <div className="flex gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-fuchsia-500">
+                      <BadgeCheck className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-bold text-white mb-2">1. Usaldus</h4>
+                      <p className="text-lg text-gray-400 leading-relaxed">
+                        Tavareklaamis kiidab bränd end ise. Meie videos soovitab sind sisulooja, keda vaataja juba usaldab ja armastab. See on nagu hea sõbra soovitus, aga jõudes korraga kümnete kui mitte sadade tuhandete inimesteni korraga.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-blue-500">
+                      <TrendingUp className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-bold text-white mb-2">2. Reaalne huvi</h4>
+                      <p className="text-lg text-gray-400 leading-relaxed">
+                        Meie videote statistika kinnitab, et 95-99% vaatajatest vaatab reklaamsegmendi täies mahus ära. See on drastiline erinevus võrreldes Meta reklaamidega, mida enamasti ignoreeritakse, või telekanalite pausidega, mille ajal haaratakse hoopis telefon. 
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-green-500">
+                      <Zap className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-bold text-white mb-2">3. Pikaajalisus</h4>
+                      <p className="text-lg text-gray-400 leading-relaxed">
+                        Me loome sisu, mis on ajatu. Meie videoid avastatakse ja nauditakse ka aastaid peale avaldamist – täpselt nagu oma lemmikfilme. Sinu investeering ei taga hetkelist nähtavust, vaid püsivat väärtust, mis töötab Sinu kasuks aastaid. 
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
