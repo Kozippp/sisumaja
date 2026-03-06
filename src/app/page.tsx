@@ -619,7 +619,7 @@ export default async function Home() {
                 94% Z-põlvkonnast usaldab <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-fuchsia-500">sisuloojaid</span> rohkem kui reklaame.
               </h2>
               <p className="text-xl text-gray-400 leading-relaxed">
-                Koostöövideo on sild sinu toote ja fänni vahel, mida ei kerita edasi. See on ainus formaat, kus null jälgijaga kontod võivad jõuda miljonite inimesteni.
+                Koostöövideo on sild sinu toote ja fänni vahel, mida ei kerita edasi.
               </p>
             </div>
 
@@ -692,11 +692,6 @@ export default async function Home() {
                   </div>
                 </div>
 
-                <div className="mt-10">
-                   <Link href="#contact" className="inline-flex items-center gap-2 text-white font-bold hover:text-blue-400 transition-colors border-b border-blue-500/50 pb-1">
-                      Broneeri strateegiakõne <ArrowRight className="w-4 h-4" />
-                   </Link>
-                </div>
               </div>
             </div>
 
