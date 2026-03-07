@@ -9,6 +9,7 @@ import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { YouTubeComparisonTable } from "@/components/YouTubeComparisonTable";
 import { VideoPlayer } from "@/components/VideoPlayer";
 import { SocialMediaComparisonTable } from "@/components/SocialMediaComparisonTable";
+import { TrainingSection } from "@/components/TrainingSection";
 
 export const revalidate = 60;
 
@@ -630,7 +631,7 @@ export default async function Home() {
               </div>
               <h2 className="text-4xl md:text-5xl font-black mb-6">Reklaam <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-fuchsia-500">TikToki</span> koostöövideos</h2>
               <p className="text-xl text-gray-400 leading-relaxed">
-              Koostöövideo on väga kiire ja tõhus viis tutvustada oma toodet ligi 100 000 potentsiaalsele kliendile.               </p>
+              Koostöövideo meiega on väga kiire ja tõhus viis tutvustada oma toodet ligi 100 000 potentsiaalsele kliendile.               </p>
             </div>
 
             {/* Main Feature Grid */}
@@ -769,39 +770,7 @@ export default async function Home() {
         </section>
 
         {/* Service 3: Training */}
-        <section id="training-service" className="py-32 border-b border-white/5">
-          <div className="max-w-7xl mx-auto px-6 text-center">
-             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 text-green-500 text-xs font-bold uppercase tracking-wider mb-6">
-                <Mic className="w-4 h-4" /> Koolitused
-             </div>
-             <h2 className="text-4xl md:text-5xl font-black mb-6 max-w-3xl mx-auto">Jagame oma teadmisi laval ja koolitusruumis.</h2>
-             <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">
-               Oleme esinenud suurimatel lavadel ja koolitanud ettevõtteid sisuloome teemadel.
-             </p>
-             
-             {/* Carousel Placeholder */}
-             <div className="relative max-w-4xl mx-auto aspect-video bg-neutral-900 rounded-3xl overflow-hidden border border-white/10 mb-12 group">
-                <div className="absolute inset-0 flex items-center justify-center">
-                   <p className="text-gray-600">Koolituste galerii karusell</p>
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black to-transparent text-left">
-                   <h3 className="text-2xl font-bold text-white mb-2">Turunduskonverents 2025</h3>
-                   <p className="text-gray-300">Rääkisime sellest, kuidas luua sisu, mis kõnetab noori...</p>
-                </div>
-             </div>
-
-             <div className="flex flex-wrap justify-center gap-4">
-                {["Sisuloome koolitus", "Õhtujuhtimine", "Sotsiaalmeedia strateegia", "Noorteturundus"].map((tag, i) => (
-                   <span key={i} className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-gray-300">{tag}</span>
-                ))}
-             </div>
-             <div className="mt-12">
-               <Link href="#contact" className="inline-flex items-center gap-2 px-8 py-4 bg-fuchsia-600 text-white font-bold rounded-full hover:bg-fuchsia-700 transition-all duration-300 shadow-lg shadow-fuchsia-900/50">
-                  Kutsu meid esinema <Zap className="w-4 h-4" />
-                </Link>
-             </div>
-          </div>
-        </section>
+        <TrainingSection />
       </div>
 
       {/* 7. CONTACT FORM */}
