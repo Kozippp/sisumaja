@@ -69,7 +69,9 @@ export default function WorkPageClient({ projects }: WorkPageClientProps) {
               {Icon && <Icon className="w-4 h-4" />}
               {label}
               <span className={`text-xs px-1.5 py-0.5 rounded-full font-normal ${
-                activeFilter === value ? 'bg-white/20 text-white' : 'bg-neutral-800 text-gray-500'
+                activeFilter === value
+                  ? value === 'all' ? 'bg-black/15 text-black' : 'bg-white/25 text-white'
+                  : 'bg-neutral-800 text-gray-500'
               }`}>
                 {counts[value]}
               </span>
