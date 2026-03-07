@@ -29,7 +29,7 @@ export default function Footer() {
                 />
               </Link>
               <p className="text-gray-400 max-w-sm mb-6 leading-relaxed">
-                We create family-friendly content that puts your brand in front of thousands of Estonians — through YouTube ads, short-form videos, and live events.
+                Loome kogupere sisu, mis toob sinu brändi tuhandete eestlaste ette — YouTube'i reklaamide, lühivideote ja live-ürituste kaudu.
               </p>
               <div className="flex space-x-4">
                 <SocialLink href="https://www.youtube.com/@Sisumajatv" icon={Youtube} />
