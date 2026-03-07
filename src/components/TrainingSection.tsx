@@ -182,9 +182,8 @@ export function TrainingSection({ trainingProjects = [] }: TrainingSectionProps)
              viewport={{ once: true }}
              className="text-center"
           >
-             <Link href="#contact" className="group inline-flex items-center gap-3 px-10 py-5 bg-white text-black text-lg font-bold rounded-full hover:bg-green-500 hover:text-white transition-all duration-300 shadow-xl hover:shadow-green-500/20">
-                Kutsu meid esinema 
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+             <Link href="#contact" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-fuchsia-500 hover:text-white transition-all duration-300">
+                Kutsu meid esinema <ArrowRight className="w-4 h-4" />
              </Link>
           </motion.div>
        </div>

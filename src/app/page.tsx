@@ -492,7 +492,7 @@ export default async function Home() {
               <div className="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-xs font-bold uppercase tracking-wider mb-6">
                 <Youtube className="w-4 h-4" /> YouTube
               </div>
-              <h2 className="text-4xl md:text-5xl font-black mb-6">Reklaam <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-fuchsia-500">YouTube'i</span> videos</h2>
+              <h2 className="text-4xl md:text-5xl font-black mb-6">Reklaam <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-500 to-red-600">YouTube'i</span> videos</h2>
               <p className="text-xl text-gray-400 leading-relaxed">
                 YouTube'i videosse loodud reklaam on praegu üks maailma efektiivsemaid turundusmeetodeid.
               </p>
@@ -783,6 +783,13 @@ export default async function Home() {
                 </div>
 
               </div>
+            </div>
+
+            {/* CTA below TikTok video segment */}
+            <div className="mb-24 text-center">
+              <Link href="#contact" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-fuchsia-500 hover:text-white transition-all duration-300">
+                Koostööpäring <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
 
             {/* New Statistics Section - Koostöövideote statistika */}
