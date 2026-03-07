@@ -9,11 +9,37 @@ interface VideoPlayerProps {
   title?: string;
 }
 
+// Function to detect if URL is a YouTube Shorts URL
+function isYouTubeUrl(url: string): boolean {
+  return url.includes('youtube.com') || url.includes('youtu.be');
+}
+
+// Function to extract YouTube video ID
+function getYouTubeVideoId(url: string): string | null {
+  const patterns = [
+    /(?:youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/,
+    /(?:youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/,
+    /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+  ];
+
+  for (const pattern of patterns) {
+    const match = url.match(pattern);
+    if (match && match[1]) {
+      return match[1];
+    }
+  }
+  return null;
+}
+
 export const VideoPlayer = ({ videoUrl, thumbnailUrl, title }: VideoPlayerProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [showControls, setShowControls] = useState(true);
+
+  // Check if it's a YouTube video
+  const isYouTube = isYouTubeUrl(videoUrl);
+  const youtubeVideoId = isYouTube ? getYouTubeVideoId(videoUrl) : null;
 
   const togglePlay = () => {
     if (videoRef.current) {
@@ -37,6 +63,24 @@ export const VideoPlayer = ({ videoUrl, thumbnailUrl, title }: VideoPlayerProps)
     togglePlay();
   };
 
+  // If it's YouTube, render iframe
+  if (isYouTube && youtubeVideoId) {
+    return (
+      <div className="relative rounded-[2.5rem] overflow-hidden bg-black border border-white/10 shadow-2xl inline-block max-w-[605px] min-w-[325px]">
+        <div className="relative aspect-[9/16] bg-black">
+          <iframe
+            src={`https://www.youtube.com/embed/${youtubeVideoId}?controls=1&modestbranding=1&rel=0`}
+            title={title || 'YouTube video'}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="w-full h-full"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // Regular video player
   return (
     <div 
       className="relative rounded-[2.5rem] overflow-hidden bg-black border border-white/10 shadow-2xl inline-block max-w-[605px] min-w-[325px]"
