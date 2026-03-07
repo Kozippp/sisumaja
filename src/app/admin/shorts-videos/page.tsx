@@ -14,6 +14,8 @@ export default function AdminShortsVideos() {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadStage, setUploadStage] = useState<'video' | 'thumbnail' | 'database' | null>(null);
   
   // Form state
   const [showForm, setShowForm] = useState(false);
@@ -56,11 +58,14 @@ export default function AdminShortsVideos() {
     }
 
     setUploading(true);
+    setUploadProgress(0);
 
     try {
       // Upload video file
+      setUploadStage('video');
       const videoExt = videoFile.name.split('.').pop();
       const videoFileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${videoExt}`;
+      
       const { error: videoUploadError, data: videoData } = await supabase.storage
         .from('shorts-videos')
         .upload(`videos/${videoFileName}`, videoFile, {
@@ -69,6 +74,7 @@ export default function AdminShortsVideos() {
         });
 
       if (videoUploadError) throw videoUploadError;
+      setUploadProgress(thumbnailFile ? 50 : 80);
 
       const { data: { publicUrl: videoUrl } } = supabase.storage
         .from('shorts-videos')
@@ -77,6 +83,7 @@ export default function AdminShortsVideos() {
       // Upload thumbnail if provided
       let thumbnailUrl = null;
       if (thumbnailFile) {
+        setUploadStage('thumbnail');
         const thumbExt = thumbnailFile.name.split('.').pop();
         const thumbFileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${thumbExt}`;
         const { error: thumbUploadError } = await supabase.storage
@@ -87,6 +94,7 @@ export default function AdminShortsVideos() {
           });
 
         if (thumbUploadError) throw thumbUploadError;
+        setUploadProgress(80);
 
         const { data: { publicUrl } } = supabase.storage
           .from('shorts-videos')
@@ -96,6 +104,9 @@ export default function AdminShortsVideos() {
       }
 
       // Get next display order
+      setUploadStage('database');
+      setUploadProgress(90);
+      
       const maxOrder = videos.length > 0 
         ? Math.max(...videos.map(v => v.display_order)) 
         : 0;
@@ -113,6 +124,8 @@ export default function AdminShortsVideos() {
         });
 
       if (dbError) throw dbError;
+      
+      setUploadProgress(100);
 
       // Reset form
       setTitle("");
@@ -128,6 +141,8 @@ export default function AdminShortsVideos() {
     }
     
     setUploading(false);
+    setUploadProgress(0);
+    setUploadStage(null);
   }
 
   async function handleToggleVisibility(video: ShortsVideo) {
@@ -258,6 +273,25 @@ export default function AdminShortsVideos() {
 
               {error && (
                 <p className="text-red-500 text-sm">{error}</p>
+              )}
+
+              {uploading && (
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-400">
+                      {uploadStage === 'video' && 'Uploading video...'}
+                      {uploadStage === 'thumbnail' && 'Uploading thumbnail...'}
+                      {uploadStage === 'database' && 'Saving to database...'}
+                    </span>
+                    <span className="text-fuchsia-400 font-semibold">{uploadProgress}%</span>
+                  </div>
+                  <div className="w-full bg-neutral-800 rounded-full h-3 overflow-hidden">
+                    <div 
+                      className="bg-gradient-to-r from-fuchsia-600 to-purple-600 h-full transition-all duration-300 ease-out rounded-full"
+                      style={{ width: `${uploadProgress}%` }}
+                    />
+                  </div>
+                </div>
               )}
 
               <button
