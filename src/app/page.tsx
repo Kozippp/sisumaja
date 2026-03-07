@@ -315,9 +315,9 @@ export default async function Home() {
               transition={{ duration: 0.8, delay: 0.8 }}
               className="relative"
             >
-              <div className="flex items-center gap-8">
-                <h3 className="text-lg font-bold text-white whitespace-nowrap">Rahulolevad Kliendid:</h3>
-                <div className="flex-1 overflow-hidden relative">
+              <div className="flex flex-col items-center gap-6 w-full">
+                <h3 className="text-lg font-bold text-white text-center">Rahulolevad Kliendid:</h3>
+                <div className="w-full overflow-hidden relative">
                   <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-black to-transparent z-10" />
                   <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-black to-transparent z-10" />
                   
@@ -365,7 +365,7 @@ export default async function Home() {
       {/* 3. CLIENT CAROUSEL (Mobile Only) - Title on top, carousel below */}
       <section className="lg:hidden py-12 bg-black overflow-hidden border-y border-white/5">
         <div className="relative max-w-7xl mx-auto px-6 flex flex-col gap-6">
-          <h3 className="text-xl md:text-2xl font-bold text-white text-center md:text-left">Rahulolevad Kliendid:</h3>
+          <h3 className="text-xl md:text-2xl font-bold text-white text-center">Rahulolevad Kliendid:</h3>
           <div className="w-full overflow-hidden relative min-h-[3rem]">
             <div className="absolute inset-y-0 left-0 w-12 md:w-20 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
             <div className="absolute inset-y-0 right-0 w-12 md:w-20 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
