@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
-import { ArrowRight, Play, Star, Zap, TrendingUp, Clapperboard, Users, MessageCircle, Send, CheckCircle, Youtube, Video, Mic, BadgeCheck, Smartphone, Repeat, Eye, BarChart3, ThumbsUp, Target } from "lucide-react";
+import { ArrowRight, Play, Star, Zap, TrendingUp, Clapperboard, Users, MessageCircle, CheckCircle, Youtube, Video, Mic, BadgeCheck, Smartphone, Repeat, Eye, BarChart3, ThumbsUp, Target } from "lucide-react";
 import Image from "next/image";
 import { Database } from "@/types/database.types";
 import * as motion from "framer-motion/client";
@@ -13,6 +13,7 @@ import { SocialMediaComparisonTable } from "@/components/SocialMediaComparisonTa
 import { TrainingSection } from "@/components/TrainingSection";
 import { RetentionImagesModal } from "@/components/RetentionImagesModal";
 import { RetentionLink } from "@/components/RetentionLink";
+import { ContactForm } from "@/components/ContactForm";
 
 export const revalidate = 60;
 
@@ -875,7 +876,7 @@ export default async function Home() {
         <TrainingSection trainingProjects={trainingProjects} />
       </div>
 
-      {/* 7. CONTACT FORM */}
+      {/* 7. CONTACT FORM – same as /kontakt */}
       <section id="contact" className="py-32 bg-black relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-fuchsia-900/20 rounded-full blur-[150px] pointer-events-none" />
         
@@ -885,25 +886,7 @@ export default async function Home() {
             <p className="text-gray-400">Kirjuta meile oma ideest ja teeme selle teoks.</p>
           </div>
 
-          <form className="bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 backdrop-blur-sm">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div className="space-y-2">
-                <label htmlFor="name" className="text-sm font-bold uppercase text-gray-400">Nimi</label>
-                <input type="text" id="name" className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-fuchsia-500 transition-colors" placeholder="Sinu nimi" />
-              </div>
-              <div className="space-y-2">
-                <label htmlFor="email" className="text-sm font-bold uppercase text-gray-400">Email</label>
-                <input type="email" id="email" className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-fuchsia-500 transition-colors" placeholder="sinu@email.ee" />
-              </div>
-            </div>
-            <div className="space-y-2 mb-8">
-               <label htmlFor="message" className="text-sm font-bold uppercase text-gray-400">Sõnum</label>
-               <textarea id="message" rows={4} className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-fuchsia-500 transition-colors" placeholder="Kirjelda oma ideed või küsimust..."></textarea>
-            </div>
-            <button type="submit" className="w-full bg-white text-black font-bold uppercase tracking-wider py-4 rounded-xl hover:bg-fuchsia-500 hover:text-white transition-all duration-300 flex items-center justify-center gap-2">
-              Saada kiri <Send className="w-4 h-4" />
-            </button>
-          </form>
+          <ContactForm />
         </div>
       </section>
 
