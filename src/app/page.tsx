@@ -7,7 +7,7 @@ import * as motion from "framer-motion/client";
 import LiveYouTubeCarousel from "@/components/LiveYouTubeCarousel";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { YouTubeComparisonTable } from "@/components/YouTubeComparisonTable";
-import { TikTokEmbed } from "@/components/TikTokEmbed";
+import { VideoPlayer } from "@/components/VideoPlayer";
 import { SocialMediaComparisonTable } from "@/components/SocialMediaComparisonTable";
 
 export const revalidate = 60;
@@ -16,6 +16,7 @@ type Project = Database['public']['Tables']['projects']['Row'];
 type ClientLogo = Database['public']['Tables']['client_logos']['Row'];
 type SocialStats = Database['public']['Tables']['social_stats']['Row'];
 type FeaturedVideo = Database['public']['Tables']['featured_videos']['Row'];
+type ShortsVideo = Database['public']['Tables']['shorts_videos']['Row'];
 
 async function getRecentProjects(): Promise<Project[]> {
   const { data } = await supabase
@@ -63,6 +64,16 @@ async function getFeaturedVideos(): Promise<FeaturedVideo[]> {
   return data || [];
 }
 
+async function getShortsVideos(): Promise<ShortsVideo[]> {
+  const { data } = await supabase
+    .from("shorts_videos")
+    .select("*")
+    .eq("is_visible", true)
+    .order("display_order", { ascending: true })
+    .limit(1);
+  return data || [];
+}
+
 const SERVICES = [
   {
     id: "youtube",
@@ -93,6 +104,7 @@ export default async function Home() {
   const clientLogos = await getClientLogos();
   const socialStats = await getSocialStats();
   const featuredVideos = await getFeaturedVideos();
+  const shortsVideos = await getShortsVideos();
 
   return (
     <div className="flex flex-col min-h-screen bg-black overflow-x-hidden text-white font-sans selection:bg-fuchsia-500/30">
@@ -624,9 +636,21 @@ export default async function Home() {
             {/* Main Feature Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
               
-              {/* Left: The "Phone" Visuals */}
+              {/* Left: The Video Player */}
               <div className="relative mx-auto w-full max-w-md lg:max-w-full flex justify-center lg:justify-start">
-                <TikTokEmbed videoId="7608589597550988566" />
+                {shortsVideos.length > 0 ? (
+                  <VideoPlayer 
+                    videoUrl={shortsVideos[0].video_url}
+                    thumbnailUrl={shortsVideos[0].thumbnail_url}
+                    title={shortsVideos[0].title}
+                  />
+                ) : (
+                  <div className="rounded-[2.5rem] overflow-hidden bg-neutral-900 border border-white/10 shadow-2xl inline-block max-w-[605px] min-w-[325px]">
+                    <div className="aspect-[9/16] flex items-center justify-center text-gray-500">
+                      <p>Lisa video admin lehelt</p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Right: Why It Works (The "Expert" text) */}

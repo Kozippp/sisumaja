@@ -56,6 +56,42 @@ export type Database = {
         }
         Relationships: []
       }
+      shorts_videos: {
+        Row: {
+          id: string
+          title: string
+          description: string | null
+          video_url: string
+          thumbnail_url: string | null
+          display_order: number
+          is_visible: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          description?: string | null
+          video_url: string
+          thumbnail_url?: string | null
+          display_order?: number
+          is_visible?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          description?: string | null
+          video_url?: string
+          thumbnail_url?: string | null
+          display_order?: number
+          is_visible?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       client_logos: {
         Row: {
           id: string

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Plus, Edit, Trash2, Eye, EyeOff, LogOut, Users, TrendingUp, Youtube, MessageSquare } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, EyeOff, LogOut, Users, TrendingUp, Youtube, MessageSquare, Video } from 'lucide-react';
 import { Database } from '@/types/database.types';
 
 type Project = Database['public']['Tables']['projects']['Row'];
@@ -97,6 +97,13 @@ export default function DashboardPage() {
             >
               <Youtube className="w-4 h-4 mr-2" />
               YouTube Videod
+            </Link>
+            <Link 
+              href="/admin/shorts-videos" 
+              className="bg-neutral-800 text-gray-300 px-6 py-2 rounded-lg font-bold hover:bg-neutral-700 hover:text-white transition-colors flex items-center"
+            >
+              <Video className="w-4 h-4 mr-2" />
+              Lühivideod
             </Link>
             <Link 
               href="/admin/testimonials" 

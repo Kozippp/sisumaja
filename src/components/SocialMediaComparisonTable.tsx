@@ -60,7 +60,7 @@ export function SocialMediaComparisonTable() {
               </td>
               <td className="py-6 px-6">
                 <span className="text-green-400 font-bold block mb-1">Sõbra soovitus</span>
-                <span className="text-sm text-gray-300">94% Gen Z usaldab loojat rohkem kui brändi ennast.</span>
+                <span className="text-sm text-gray-300">94% Gen Z usaldab sisuloojaid rohkem kui brändi ennast.</span>
               </td>
             </tr>
 
