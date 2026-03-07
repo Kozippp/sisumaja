@@ -15,21 +15,21 @@ export default function Kasutustingimused() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4 text-white">1. Üldtingimused</h2>
             <p className="mb-4">
-              Tere tulemast Sisumaja veebilehele (edaspidi "Veebileht"). Veebilehte külastades ja kasutades nõustute järgima käesolevaid kasutustingimusi. Kui te ei nõustu nende tingimustega, palume teil Veebilehte mitte kasutada.
+              Tere tulemast Kozip veebilehele (edaspidi "Veebileht"). Veebileht kuulub ettevõttele Kozip Productions OÜ (registrikood 16496138). Veebilehte külastades ja kasutades nõustute järgima käesolevaid kasutustingimusi. Kui te ei nõustu nende tingimustega, palume teil Veebilehte mitte kasutada.
             </p>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4 text-white">2. Teenuste kirjeldus</h2>
             <p className="mb-4">
-              Sisumaja pakub meelelahutuslikku sisu ja turundusteenuseid. Me jätame endale õiguse muuta, peatada või lõpetada Veebilehe või selle osade teenuse pakkumine igal ajal ilma etteteatamata.
+              Kozip pakub meelelahutuslikku sisu ja turundusteenuseid. Me jätame endale õiguse muuta, peatada või lõpetada Veebilehe või selle osade teenuse pakkumine igal ajal ilma etteteatamata.
             </p>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4 text-white">3. Intellektuaalomand</h2>
             <p className="mb-4">
-              Kogu Veebilehel olev sisu, sealhulgas tekstid, graafika, logod, pildid, videod ja tarkvara, on Sisumaja omand või litsentsitud Sisumajale ning on kaitstud autoriõiguse ja muude intellektuaalomandi seadustega. Sisu kopeerimine, levitamine või muul viisil kasutamine ilma meie eelneva kirjaliku nõusolekuta on keelatud.
+              Kogu Veebilehel olev sisu, sealhulgas tekstid, graafika, logod, pildid, videod ja tarkvara, on Kozip omand või litsentsitud Kozipile ning on kaitstud autoriõiguse ja muude intellektuaalomandi seadustega. Sisu kopeerimine, levitamine või muul viisil kasutamine ilma meie eelneva kirjaliku nõusolekuta on keelatud.
             </p>
           </section>
 
@@ -49,7 +49,7 @@ export default function Kasutustingimused() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4 text-white">5. Vastutuse piiramine</h2>
             <p className="mb-4">
-              Sisumaja ei vastuta otseste ega kaudsete kahjude eest, mis võivad tekkida Veebilehe kasutamisest või selle kasutamise võimatusest. Me ei garanteeri, et Veebileht on alati kättesaadav või veavaba.
+              Kozip ei vastuta otseste ega kaudsete kahjude eest, mis võivad tekkida Veebilehe kasutamisest või selle kasutamise võimatusest. Me ei garanteeri, et Veebileht on alati kättesaadav või veavaba.
             </p>
           </section>
 
@@ -63,7 +63,7 @@ export default function Kasutustingimused() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4 text-white">7. Kontakt</h2>
             <p className="mb-4">
-              Kui teil on küsimusi nende kasutustingimuste kohta, võtke meiega ühendust aadressil <a href="mailto:info@sisumaja.ee" className="text-white underline hover:text-gray-300">info@sisumaja.ee</a>.
+              Kui teil on küsimusi nende kasutustingimuste kohta, võtke meiega ühendust: <strong>Kozip Productions OÜ</strong> (registrikood 16496138), e-post <a href="mailto:info@kozip.ee" className="text-white underline hover:text-gray-300">info@kozip.ee</a>.
             </p>
           </section>
         </div>

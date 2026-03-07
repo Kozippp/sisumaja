@@ -11,6 +11,9 @@ export default function KupsistePoliitika() {
           <p className="mb-4">
             Viimati uuendatud: {new Date().toLocaleDateString('et-EE')}
           </p>
+          <p className="mb-4">
+            Küpsiste töötleja on <strong>Kozip Productions OÜ</strong> (registrikood 16496138). Täpsem info isikuandmete käsitlemise kohta on meie <a href="/privaatsuspoliitika" className="text-white underline hover:text-gray-300">privaatsuspoliitikas</a>.
+          </p>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4 text-white">1. Mis on küpsised?</h2>
@@ -22,7 +25,7 @@ export default function KupsistePoliitika() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4 text-white">2. Kuidas me küpsiseid kasutame?</h2>
             <p className="mb-4">
-              Sisumaja kasutab küpsiseid järgmistel eesmärkidel:
+              Kozip (Kozip Productions OÜ) kasutab küpsiseid järgmistel eesmärkidel:
             </p>
             <ul className="list-disc pl-6 mb-4 space-y-2">
               <li><strong>Hädavajalikud küpsised:</strong> Need on vajalikud veebilehe toimimiseks ja ei saa meie süsteemides välja lülitada.</li>
@@ -51,7 +54,7 @@ export default function KupsistePoliitika() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4 text-white">5. Kontakt</h2>
             <p className="mb-4">
-              Kui teil on küsimusi meie küpsiste poliitika kohta, võtke meiega ühendust aadressil <a href="mailto:info@sisumaja.ee" className="text-white underline hover:text-gray-300">info@sisumaja.ee</a>.
+              Kui teil on küsimusi meie küpsiste poliitika kohta, võtke meiega ühendust aadressil <a href="mailto:info@kozip.ee" className="text-white underline hover:text-gray-300">info@kozip.ee</a>.
             </p>
           </section>
         </div>
