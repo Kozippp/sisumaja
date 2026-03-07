@@ -7,6 +7,7 @@ import * as motion from "framer-motion/client";
 import LiveYouTubeCarousel from "@/components/LiveYouTubeCarousel";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { YouTubeComparisonTable } from "@/components/YouTubeComparisonTable";
+import { TikTokEmbed } from "@/components/TikTokEmbed";
 import { SocialMediaComparisonTable } from "@/components/SocialMediaComparisonTable";
 
 export const revalidate = 60;
@@ -624,21 +625,8 @@ export default async function Home() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
               
               {/* Left: The "Phone" Visuals */}
-              <div className="relative mx-auto w-full max-w-md lg:max-w-full">
-                <div className="grid grid-cols-3 gap-4">
-                   {[1, 2, 3].map((i) => (
-                    <div key={i} className="relative rounded-2xl overflow-hidden bg-neutral-900 border border-white/10 aspect-[9/16] shadow-2xl transform hover:-translate-y-2 transition-transform duration-300 group">
-                       <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent" />
-                       
-                       {/* Phone Screen Placeholder */}
-                       <div className="absolute inset-2 bg-neutral-800 rounded-xl overflow-hidden">
-                          <div className="w-full h-full bg-neutral-900/50 flex items-center justify-center">
-                              <Play className="w-8 h-8 text-white/20 group-hover:text-fuchsia-500/50 transition-colors fill-current" />
-                          </div>
-                       </div>
-                    </div>
-                  ))}
-                </div>
+              <div className="relative mx-auto w-full max-w-md lg:max-w-full flex justify-center lg:justify-start">
+                <TikTokEmbed videoId="7608589597550988566" />
               </div>
 
               {/* Right: Why It Works (The "Expert" text) */}
@@ -687,7 +675,7 @@ export default async function Home() {
                         <BarChart3 className="w-5 h-5" />
                       </div>
                       <div>
-                        <h4 className="text-lg font-bold text-white mb-2 group-hover:text-green-400 transition-colors">Meie eesmärk on sinu tulemus</h4>
+                        <h4 className="text-lg font-bold text-white mb-2 group-hover:text-green-400 transition-colors">Vastutame kõige eest</h4>
                         <p className="text-gray-400 leading-relaxed">
                           Me ei vaja "käehoidmist" ega pikki juhendeid – meile piisab sinu eesmärgist. Saada meile toode ja vaata, kuidas numbrid kasvavad, kuni sina saad keskenduda muule.
                         </p>
