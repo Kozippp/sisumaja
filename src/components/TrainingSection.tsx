@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mic, Users, ArrowRight, Star, Sparkles, School } from "lucide-react";
+import { Mic, Users, ArrowRight, Star, School } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -9,7 +9,7 @@ const SERVICES = [
   {
     title: "Õhtujuhtimine",
     description: "Loome tervikliku atmosfääri ja hoiame sündmuse rütmi.",
-    icon: <Sparkles className="w-6 h-6" />,
+    icon: <Users className="w-6 h-6" />,
     color: "bg-blue-500",
     textColor: "text-blue-500",
     gradient: "from-blue-500/20 to-transparent"
@@ -105,6 +105,16 @@ export function TrainingSection() {
                 Me aitame tuua sinu üritusele särtsu, juhtides meeleolukalt õhtut või jagades praktilisi teadmisi teemadel, milles ise igapäevaselt tegutseme. Oleme partneriks nii sündmuste korraldajatele, kes otsivad karismaatilist duot esinema, kui ka ettevõtetele, kes soovivad oma meeskonda meie eskpertiisivallas arendada.
              </motion.p>
           </div>
+
+          {/* 3 Cards Title */}
+          <motion.h3 
+             initial={{ opacity: 0, y: 20 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true }}
+             className="text-2xl md:text-3xl font-bold text-center mb-10"
+          >
+             Kuidas saame sind aidata?
+          </motion.h3>
 
           {/* 3 Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
