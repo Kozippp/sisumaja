@@ -462,43 +462,29 @@ export default async function Home() {
 
           <div className="max-w-7xl mx-auto px-6 relative z-10">
             
-            {/* First Row: Header + Intro + Stats */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-16 items-start">
-              {/* Left Column: Header + Intro */}
-              <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-xs font-bold uppercase tracking-wider mb-6">
-                  <Youtube className="w-4 h-4" /> YouTube
-                </div>
-                <h2 className="text-4xl md:text-5xl font-black mb-6">Reklaam <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-fuchsia-500">YouTube'i</span> videos</h2>
-                <p className="text-xl text-gray-400 mb-8 leading-relaxed">
-                  YouTube'i videosse loodud reklaam on praegu üks maailma efektiivsemaid turundusmeetodeid.
-                </p>
-                
-                <div className="mb-8">
-                  <h3 className="text-2xl font-bold text-white mb-4">Mida tähendab YouTube'i videosse integreeritud reklaam?</h3>
-                  <p className="text-lg text-gray-400 leading-relaxed">
-                    Me loome YouTube'i platformile saateid ning me põimime nende saadete stsenaariumitesse reklaami, mida seda esitleb saatejuht oma sõnadega. Seega brändi integratsioon ei ole segav faktor, vaid loomulik osa meelelahutusest, mida fännid usaldavad.
-                  </p>
-                </div>
+            {/* Centered Intro */}
+            <div className="text-center max-w-4xl mx-auto mb-16">
+              <div className="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-xs font-bold uppercase tracking-wider mb-6">
+                <Youtube className="w-4 h-4" /> YouTube
+              </div>
+              <h2 className="text-4xl md:text-5xl font-black mb-6">Reklaam <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-fuchsia-500">YouTube'i</span> videos</h2>
+              <p className="text-xl text-gray-400 leading-relaxed">
+                YouTube'i videosse loodud reklaam on praegu üks maailma efektiivsemaid turundusmeetodeid.
+              </p>
+            </div>
 
-                {/* Mobile: Video under "Mida tähendab..." */}
-                <div className="lg:hidden mb-8">
-                   {youtubeAdVideos.length > 0 ? (
-                      <StandardVideoPlayer 
-                        videoUrl={youtubeAdVideos[0].video_url}
-                        thumbnailUrl={youtubeAdVideos[0].thumbnail_url}
-                        title={youtubeAdVideos[0].title}
-                      />
-                   ) : (
-                      <div className="aspect-video bg-neutral-900 rounded-2xl border border-white/10 flex items-center justify-center text-gray-500">
-                        <p>Video puudub</p>
-                      </div>
-                   )}
-                </div>
+            {/* Two Column: "Mida tähendab..." + Video */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-24 items-center">
+              {/* Left Column: Text */}
+              <div>
+                <h3 className="text-2xl font-bold text-white mb-4">Mida tähendab YouTube'i videosse integreeritud reklaam?</h3>
+                <p className="text-lg text-gray-400 leading-relaxed">
+                  Me loome YouTube'i platformile saateid ning me põimime nende saadete stsenaariumitesse reklaami, mida seda esitleb saatejuht oma sõnadega. Seega brändi integratsioon ei ole segav faktor, vaid loomulik osa meelelahutusest, mida fännid usaldavad.
+                </p>
               </div>
 
-              {/* Right Column: Desktop Video */}
-              <div className="hidden lg:block sticky top-24">
+              {/* Right Column: Video */}
+              <div>
                 {youtubeAdVideos.length > 0 ? (
                   <StandardVideoPlayer 
                     videoUrl={youtubeAdVideos[0].video_url}
@@ -514,7 +500,7 @@ export default async function Home() {
             </div>
 
             {/* Second Row: Stats Card + Why Effective */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-24 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-24 items-center">
               {/* Left Column: Stats Card "Kes meie videoid vaatab?" - Hidden on mobile, shown on desktop */}
               <div className="hidden lg:block">
                 <div className="bg-neutral-900/50 border border-white/10 rounded-3xl p-8 backdrop-blur-sm">
