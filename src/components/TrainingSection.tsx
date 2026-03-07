@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mic, Users, Presentation, ArrowRight, Star, Sparkles, School } from "lucide-react";
+import { Mic, Users, ArrowRight, Star, Sparkles, School } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
