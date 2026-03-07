@@ -362,47 +362,45 @@ export default async function Home() {
       </section>
 
       {/* 2. BRAND QUOTE / MISSION REMOVED */}
-      {/* 3. CLIENT CAROUSEL (Mobile Only) */}
+      {/* 3. CLIENT CAROUSEL (Mobile Only) - Title on top, carousel below */}
       <section className="lg:hidden py-12 bg-black overflow-hidden border-y border-white/5">
-        <div className="relative max-w-7xl mx-auto px-6">
-          <div className="flex items-center gap-8">
-            <h3 className="text-xl md:text-2xl font-bold text-white whitespace-nowrap">Rahulolevad Kliendid:</h3>
-            <div className="flex-1 overflow-hidden relative">
-              <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-black to-transparent z-10" />
-              <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-black to-transparent z-10" />
-              
-              <div className="flex gap-16 animate-infinite-scroll-slow whitespace-nowrap min-w-max">
-                {[...clientLogos, ...clientLogos, ...clientLogos].map((client, idx) => (
-                  <div key={idx} className="flex items-center">
-                    {client.is_mock || !client.logo_url ? (
-                      <div className="text-2xl font-bold text-gray-700 uppercase hover:text-white transition-colors cursor-default">
-                        {client.name}
-                      </div>
-                    ) : (
-                      <div className="relative h-12 w-32 grayscale hover:grayscale-0 transition-all opacity-70 hover:opacity-100 overflow-hidden">
-                        <div 
+        <div className="relative max-w-7xl mx-auto px-6 flex flex-col gap-6">
+          <h3 className="text-xl md:text-2xl font-bold text-white text-center md:text-left">Rahulolevad Kliendid:</h3>
+          <div className="w-full overflow-hidden relative min-h-[3rem]">
+            <div className="absolute inset-y-0 left-0 w-12 md:w-20 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
+            <div className="absolute inset-y-0 right-0 w-12 md:w-20 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
+            
+            <div className="flex gap-12 md:gap-16 animate-infinite-scroll-slow whitespace-nowrap min-w-max py-2">
+              {[...clientLogos, ...clientLogos, ...clientLogos].map((client, idx) => (
+                <div key={idx} className="flex items-center shrink-0">
+                  {client.is_mock || !client.logo_url ? (
+                    <div className="text-xl md:text-2xl font-bold text-gray-700 uppercase hover:text-white transition-colors cursor-default">
+                      {client.name}
+                    </div>
+                  ) : (
+                    <div className="relative h-10 w-24 md:h-12 md:w-32 grayscale hover:grayscale-0 transition-all opacity-70 hover:opacity-100 overflow-hidden shrink-0">
+                      <div 
+                        style={{
+                          transform: `scale(${(client.logo_scale || 100) / 100})`,
+                          width: '100%',
+                          height: '100%',
+                          position: 'relative'
+                        }}
+                      >
+                        <Image 
+                          src={client.logo_url} 
+                          alt={client.name}
+                          fill
+                          className="object-contain"
                           style={{
-                            transform: `scale(${(client.logo_scale || 100) / 100})`,
-                            width: '100%',
-                            height: '100%',
-                            position: 'relative'
+                            objectPosition: `${client.logo_position_x || 50}% ${client.logo_position_y || 50}%`
                           }}
-                        >
-                          <Image 
-                            src={client.logo_url} 
-                            alt={client.name}
-                            fill
-                            className="object-contain"
-                            style={{
-                              objectPosition: `${client.logo_position_x || 50}% ${client.logo_position_y || 50}%`
-                            }}
-                          />
-                        </div>
+                        />
                       </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -883,7 +881,7 @@ export default async function Home() {
         <div className="max-w-3xl mx-auto px-6 relative z-10">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-black uppercase mb-4">Alustame koostööd</h2>
-            <p className="text-gray-400">Kirjuta meile oma ideest ja teeme selle teoks.</p>
+            <p className="text-gray-400">Sul on idee koostööks? Kirjuta meile ja kui teie Bränd Kozipi väärtustega klapib, siis ehk saame midagi väga vinget ellu viia!            </p>
           </div>
 
           <ContactForm />
