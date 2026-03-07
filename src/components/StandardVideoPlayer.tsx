@@ -31,6 +31,33 @@ function getYouTubeVideoId(url: string): string | null {
   return null;
 }
 
+// Function to extract start time from YouTube URL
+function getYouTubeStartTime(url: string): string | null {
+  const match = url.match(/[?&]t=([^&]+)/);
+  if (!match) return null;
+  
+  const timeStr = match[1];
+  
+  // Handle simple seconds (e.g. "825", "825s")
+  if (/^\d+s?$/.test(timeStr)) {
+    return timeStr.replace('s', '');
+  }
+  
+  // Handle h/m/s format
+  let seconds = 0;
+  const hours = timeStr.match(/(\d+)h/);
+  const minutes = timeStr.match(/(\d+)m/);
+  const secs = timeStr.match(/(\d+)s/);
+  
+  if (hours) seconds += parseInt(hours[1]) * 3600;
+  if (minutes) seconds += parseInt(minutes[1]) * 60;
+  if (secs) seconds += parseInt(secs[1]);
+  
+  if (seconds > 0) return seconds.toString();
+  
+  return null;
+}
+
 export const StandardVideoPlayer = ({ videoUrl, thumbnailUrl, title }: StandardVideoPlayerProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -40,6 +67,7 @@ export const StandardVideoPlayer = ({ videoUrl, thumbnailUrl, title }: StandardV
   // Check if it's a YouTube video
   const isYouTube = isYouTubeUrl(videoUrl);
   const youtubeVideoId = isYouTube ? getYouTubeVideoId(videoUrl) : null;
+  const youtubeStartTime = isYouTube ? getYouTubeStartTime(videoUrl) : null;
 
   const togglePlay = () => {
     if (videoRef.current) {
@@ -69,7 +97,7 @@ export const StandardVideoPlayer = ({ videoUrl, thumbnailUrl, title }: StandardV
       <div className="relative rounded-2xl overflow-hidden bg-neutral-900 border border-white/10 shadow-2xl w-full">
         <div className="relative aspect-video bg-black">
           <iframe
-            src={`https://www.youtube.com/embed/${youtubeVideoId}?controls=1&modestbranding=1&rel=0`}
+            src={`https://www.youtube.com/embed/${youtubeVideoId}?controls=1&modestbranding=1&rel=0${youtubeStartTime ? `&start=${youtubeStartTime}` : ''}`}
             title={title || 'YouTube video'}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
