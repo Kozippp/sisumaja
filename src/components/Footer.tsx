@@ -29,7 +29,7 @@ export default function Footer() {
                 />
               </Link>
               <p className="text-gray-400 max-w-sm mb-6 leading-relaxed">
-                Kozip pakub terviklikke sotsiaalmeedia lahendusi, aidates brändidel silma paista ja kasvatada oma jälgijaskonda.
+                We create family-friendly content that puts your brand in front of thousands of Estonians — through YouTube ads, short-form videos, and live events.
               </p>
               <div className="flex space-x-4">
                 <SocialLink href="https://www.youtube.com/@Sisumajatv" icon={Youtube} />
