@@ -637,7 +637,7 @@ export default async function Home() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
               
               {/* Left: The Video Player */}
-              <div className="relative mx-auto w-full max-w-md lg:max-w-full flex justify-center lg:justify-start">
+              <div className="relative mx-auto w-full max-w-md lg:max-w-full flex justify-center">
                 {shortsVideos.length > 0 ? (
                   <VideoPlayer 
                     videoUrl={shortsVideos[0].video_url}

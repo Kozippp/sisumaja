@@ -99,8 +99,8 @@ export function SocialMediaComparisonTable() {
                 <span className="text-sm opacity-70">Orgaaniline levik on sageli piiratud.</span>
               </td>
               <td className="py-6 px-6">
-                <span className="text-green-400 font-bold block mb-1">3-5x kõrgem kaasatus</span>
-                <span className="text-sm text-gray-300">Kindel tulemus, sest tunneme oma publikut.</span>
+                <span className="text-green-400 font-bold block mb-1">Kindel tulemus</span>
+                <span className="text-sm text-gray-300">3-5x suurem kaasatus ning ennustatavad vaatamisnumbrid.</span>
               </td>
             </tr>
           </tbody>
