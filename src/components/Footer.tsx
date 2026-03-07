@@ -29,7 +29,7 @@ export default function Footer() {
                 />
               </Link>
               <p className="text-gray-400 max-w-sm mb-6 leading-relaxed">
-                Loome kogupere sisu, mis toob sinu brändi tuhandete eestlaste ette — YouTube'i reklaamide, lühivideote ja live-ürituste kaudu.
+                Loome kogupere sisu ning pakume brändidele võimalust tuhandete vaatajate ette jõuda — YouTube'i reklaamide, lühivideote ja esinemiste kaudu.
               </p>
               <div className="flex space-x-4">
                 <SocialLink href="https://www.youtube.com/@Sisumajatv" icon={Youtube} />

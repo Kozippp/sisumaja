@@ -785,13 +785,6 @@ export default async function Home() {
               </div>
             </div>
 
-            {/* CTA below TikTok video segment */}
-            <div className="mb-24 text-center">
-              <Link href="#contact" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-fuchsia-500 hover:text-white transition-all duration-300">
-                Koostööpäring <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-
             {/* New Statistics Section - Koostöövideote statistika */}
             <div className="mb-24">
               <div className="bg-neutral-900/50 border border-white/10 rounded-3xl p-8 backdrop-blur-sm">
@@ -867,6 +860,13 @@ export default async function Home() {
               </div>
             </div>
             )}
+
+            {/* CTA at end of TikTok block */}
+            <div className="mt-16 text-center">
+              <Link href="#contact" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-fuchsia-500 hover:text-white transition-all duration-300">
+                Koostööpäring <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
 
           </div>
         </section>

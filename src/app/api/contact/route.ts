@@ -40,8 +40,9 @@ export async function POST(req: NextRequest) {
       : undefined;
     const user = process.env.SMTP_USER;
     const pass = process.env.SMTP_PASS;
-    const from = process.env.SMTP_FROM || 'Sisumaja <info@sisumaja.ee>';
-    const to = 'info@sisumaja.ee';
+    const from = process.env.SMTP_FROM || 'Kozip <info@kozip.ee>';
+    // Saaja aadress – kasuta CONTACT_EMAIL_TO (nt Vercelis), vaikimisi info@kozip.ee
+    const to = (process.env.CONTACT_EMAIL_TO || 'info@kozip.ee').trim();
 
     if (host && port && user && pass) {
       const transporter = nodemailer.createTransport({
@@ -57,7 +58,7 @@ export async function POST(req: NextRequest) {
       const subject = `Uus kontaktivormi sõnum - ${name}`;
 
       const textBody = [
-        'Uus sõnum Sisumaja kontaktivormist:',
+        'Uus sõnum Kozip kontaktivormist:',
         '',
         `Nimi: ${name}`,
         `E-mail: ${email}`,
@@ -68,7 +69,7 @@ export async function POST(req: NextRequest) {
       ].join('\n');
 
       const htmlBody = `
-        <h2>Uus sõnum Sisumaja kontaktivormist</h2>
+        <h2>Uus sõnum Kozip kontaktivormist</h2>
         <p><strong>Nimi:</strong> ${name}</p>
         <p><strong>E-mail:</strong> ${email}</p>
         <p><strong>Telefon:</strong> ${phone || '—'}</p>
@@ -84,6 +85,31 @@ export async function POST(req: NextRequest) {
           subject,
           text: textBody,
           html: htmlBody,
+        });
+
+        // Kinnitus kirjutajale: sinu kiri jõudis meieni
+        const confirmSubject = 'Kozip – Sinu sõnum jõudis meieni';
+        const confirmText = [
+          `Tere ${name},`,
+          '',
+          'Täname Sind, et võtsid meiega ühendust!',
+          'Sinu sõnum on meieni jõudnud ja vastame Sulle esimesel võimalusel.',
+          '',
+          'Parimate soovidega,',
+          'Kozip meeskond',
+        ].join('\n');
+        const confirmHtml = `
+          <p>Tere ${name},</p>
+          <p>Täname Sind, et võtsid meiega ühendust! Sinu sõnum on meieni jõudnud ja vastame Sulle esimesel võimalusel.</p>
+          <p>Parimate soovidega,<br /><strong>Kozip meeskond</strong></p>
+        `;
+        await transporter.sendMail({
+          from,
+          to: email,
+          replyTo: 'info@kozip.ee',
+          subject: confirmSubject,
+          text: confirmText,
+          html: confirmHtml,
         });
       } catch (emailError) {
         console.error('Email send error:', emailError);
