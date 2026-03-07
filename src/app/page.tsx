@@ -697,11 +697,11 @@ export default async function Home() {
 
                   <div className="group">
                     <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 mt-1 group-hover:bg-red-500 group-hover:text-white transition-colors">
-                        <Target className="w-5 h-5" />
+                      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-green-500 mt-1 group-hover:bg-green-500 group-hover:text-white transition-colors">
+                        <TrendingUp className="w-5 h-5" />
                       </div>
                       <div>
-                        <h4 className="text-lg font-bold text-white mb-2 group-hover:text-red-400 transition-colors">Meie eesmärk on sinu tulemus</h4>
+                        <h4 className="text-lg font-bold text-white mb-2 group-hover:text-green-400 transition-colors">Meie eesmärk on sinu tulemus</h4>
                         <p className="text-gray-400 leading-relaxed">
                           Me ei vaja "käehoidmist" ega pikki juhendeid – meile piisab sinu eesmärgist. Saada meile toode ja vaata, kuidas numbrid kasvavad, kuni sina saad keskenduda muule.
                         </p>
