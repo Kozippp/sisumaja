@@ -10,9 +10,9 @@ const SERVICES = [
     title: "Õhtujuhtimine",
     description: "Loome tervikliku atmosfääri ja hoiame sündmuse rütmi.",
     icon: <Users className="w-6 h-6" />,
-    color: "bg-blue-500",
-    textColor: "text-blue-500",
-    gradient: "from-blue-500/20 to-transparent"
+    color: "bg-yellow-500",
+    textColor: "text-yellow-500",
+    gradient: "from-yellow-500/20 to-transparent"
   },
   {
     title: "Esinemised",
@@ -26,9 +26,9 @@ const SERVICES = [
     title: "Koolitused",
     description: "Jagame ettevõtetele oma teadmisi sotsiaalmeedia, sisuloome ning turunduse vallas.",
     icon: <School className="w-6 h-6" />,
-    color: "bg-green-500",
-    textColor: "text-green-500",
-    gradient: "from-green-500/20 to-transparent"
+    color: "bg-blue-500",
+    textColor: "text-blue-500",
+    gradient: "from-blue-500/20 to-transparent"
   }
 ];
 
