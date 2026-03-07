@@ -760,6 +760,43 @@ export default async function Home() {
               </div>
             </div>
 
+            {/* New Statistics Section - Koostöövideote statistika */}
+            <div className="mb-24">
+              <div className="bg-neutral-900/50 border border-white/10 rounded-3xl p-8 backdrop-blur-sm">
+                <h3 className="text-xl font-bold text-white mb-6">Koostöövideote statistika</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                  {/* 1. Vaatamisi */}
+                  <div className="bg-black/40 rounded-xl p-4">
+                    <div className="text-sm text-gray-400 mb-1">Vaatamisi</div>
+                    <div className="text-3xl font-black text-blue-500 mb-1">100 000</div>
+                    <div className="text-sm text-gray-400">keskmiselt ühe video kohta</div>
+                  </div>
+
+                  {/* 2. Platvormid */}
+                  <div className="bg-black/40 rounded-xl p-4">
+                    <div className="text-sm text-gray-400 mb-1">Postitame</div>
+                    <div className="text-3xl font-black text-fuchsia-500 mb-1">5 Platvormi</div>
+                    <div className="text-sm text-gray-400 leading-tight">TikTok, Instagram, FB, YouTube, Snapchat</div>
+                  </div>
+
+                  {/* 3. Kaasatus */}
+                  <div className="bg-black/40 rounded-xl p-4">
+                    <div className="text-sm text-gray-400 mb-1">Kaasatus</div>
+                    <div className="text-3xl font-black text-green-500 mb-1">Väga Kõrge</div>
+                    <div className="text-sm text-gray-400">6-10% vaatajatest on kaasatud</div>
+                  </div>
+
+                  {/* 4. Nišš */}
+                  <div className="bg-black/40 rounded-xl p-4">
+                    <div className="text-sm text-gray-400 mb-1">Nišš</div>
+                    <div className="text-3xl font-black text-yellow-500 mb-1">Elustiil</div>
+                    <div className="text-sm text-gray-400 leading-tight">Toitumine, sõbrad, suhe, trenn, sketšid</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Comparison Section: Brand vs Creator */}
             <div className="mb-24">
               <h3 className="text-2xl font-bold text-white mb-8 text-center">Brändi sisu vs. Koostöö sisuloojaga</h3>
