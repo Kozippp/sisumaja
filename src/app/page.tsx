@@ -483,42 +483,22 @@ export default async function Home() {
                    )}
                 </div>
 
-                {/* Mobile: Stats Card */}
-                <div className="lg:hidden">
-                    <div className="bg-neutral-900/50 border border-white/10 rounded-3xl p-8 backdrop-blur-sm">
-                      <h3 className="text-xl font-bold text-white mb-6">Kes meie videoid vaatab?</h3>
-                      
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        <div className="bg-black/40 rounded-xl p-4">
-                          <div className="text-sm text-white-400 mb-1">Vaatamisi</div>
-                          <div className="text-3xl font-black text-blue-500 mb-1">60 000</div>
-                          <div className="text-sm text-gray-400">keskmiselt ühe video kohta</div>
-                        </div>
-                        <div className="bg-black/40 rounded-xl p-4">
-                          <div className="text-sm text-white-400 mb-1">1 vaatamine =</div>
-                          <div className="text-3xl font-black text-green-500 mb-1">15 min</div>
-                          <div className="text-sm text-gray-400">keskmiselt vaatamisaega</div>
-                        </div>
-                        <div className="bg-black/40 rounded-xl p-4">
-                          <div className="text-sm text-white-400 mb-1">Peamine seade:</div>
-                          <div className="text-3xl font-black text-fuchsia-500 mb-1">Telekas</div>
-                          <div className="text-sm text-gray-400">51% vaatab meie videoid TV-lt</div>
-                        </div>
-                        <div className="bg-black/40 rounded-xl p-4">
-                          <div className="text-sm text-white-400 mb-1">Sihtrühm</div>
-                          <div className="text-3xl font-black text-yellow-500 mb-1">16-28.a</div>
-                          <div className="text-sm text-gray-400">Tihti vaatab terve pere koos</div>
-                        </div>
-                      </div>
-                      
-                      <p className="text-gray-400 text-sm mt-6">
-                        Sageli 1 vaatamine = sõbrad, noorpaar või pere koos diivanil vaatamas.
-                      </p>
-                    </div>
+                {/* Mobile: Retention Graph */}
+                <div className="lg:hidden mb-8">
+                  <div className="bg-neutral-900 border border-white/10 rounded-3xl overflow-hidden relative group">
+                     <div className="aspect-video relative bg-neutral-800">
+                        <Image 
+                          src="/vaatamisgraafik_02.png" 
+                          alt="Vaatajate püsimise graafik" 
+                          fill 
+                          className="object-cover"
+                        />
+                     </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Right Column: Desktop Video + Stats */}
+              {/* Right Column: Desktop Video + Retention Graph */}
               <div className="hidden lg:block sticky top-24">
                 <div className="mb-8">
                   {youtubeAdVideos.length > 0 ? (
@@ -534,6 +514,23 @@ export default async function Home() {
                   )}
                 </div>
 
+                <div className="bg-neutral-900 border border-white/10 rounded-3xl overflow-hidden relative group">
+                   <div className="aspect-video relative bg-neutral-800">
+                      <Image 
+                        src="/vaatamisgraafik_02.png" 
+                        alt="Vaatajate püsimise graafik" 
+                        fill 
+                        className="object-cover"
+                      />
+                   </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Second Row: Stats Card + Why Effective */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-24 items-start">
+              {/* Left Column: Stats Card "Kes meie videoid vaatab?" - Hidden on mobile, shown on desktop */}
+              <div className="hidden lg:block">
                 <div className="bg-neutral-900/50 border border-white/10 rounded-3xl p-8 backdrop-blur-sm">
                   <h3 className="text-xl font-bold text-white mb-6">Kes meie videoid vaatab?</h3>
                   
@@ -563,23 +560,6 @@ export default async function Home() {
                   <p className="text-gray-400 text-sm mt-6">
                     Sageli 1 vaatamine = sõbrad, noorpaar või pere koos diivanil vaatamas.
                   </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Second Row: Graph + Why Effective */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-24 items-start">
-              {/* Left Column: Retention Graph - Hidden on mobile, shown on desktop */}
-              <div className="hidden lg:block">
-                <div className="bg-neutral-900 border border-white/10 rounded-3xl overflow-hidden relative group">
-                   <div className="aspect-video relative bg-neutral-800">
-                      <Image 
-                        src="/vaatamisgraafik_02.png" 
-                        alt="Vaatajate püsimise graafik" 
-                        fill 
-                        className="object-cover"
-                      />
-                   </div>
                 </div>
               </div>
 
@@ -623,20 +603,40 @@ export default async function Home() {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            {/* Mobile: Stats Card "Kes meie videoid vaatab?" - Shown below the "Miks see nii efektiivne on?" section */}
+            <div className="lg:hidden mb-24">
+              <div className="bg-neutral-900/50 border border-white/10 rounded-3xl p-8 backdrop-blur-sm">
+                <h3 className="text-xl font-bold text-white mb-6">Kes meie videoid vaatab?</h3>
                 
-                {/* Retention Graph - Shown on mobile below the points */}
-                <div className="lg:hidden mt-8">
-                  <div className="bg-neutral-900 border border-white/10 rounded-3xl overflow-hidden relative group">
-                     <div className="aspect-video relative bg-neutral-800">
-                        <Image 
-                          src="/vaatamisgraafik_02.png" 
-                          alt="Vaatajate püsimise graafik" 
-                          fill 
-                          className="object-cover"
-                        />
-                     </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div className="bg-black/40 rounded-xl p-4">
+                    <div className="text-sm text-white-400 mb-1">Vaatamisi</div>
+                    <div className="text-3xl font-black text-blue-500 mb-1">60 000</div>
+                    <div className="text-sm text-gray-400">keskmiselt ühe video kohta</div>
+                  </div>
+                  <div className="bg-black/40 rounded-xl p-4">
+                    <div className="text-sm text-white-400 mb-1">1 vaatamine =</div>
+                    <div className="text-3xl font-black text-green-500 mb-1">15 min</div>
+                    <div className="text-sm text-gray-400">keskmiselt vaatamisaega</div>
+                  </div>
+                  <div className="bg-black/40 rounded-xl p-4">
+                    <div className="text-sm text-white-400 mb-1">Peamine seade:</div>
+                    <div className="text-3xl font-black text-fuchsia-500 mb-1">Telekas</div>
+                    <div className="text-sm text-gray-400">51% vaatab meie videoid TV-lt</div>
+                  </div>
+                  <div className="bg-black/40 rounded-xl p-4">
+                    <div className="text-sm text-white-400 mb-1">Sihtrühm</div>
+                    <div className="text-3xl font-black text-yellow-500 mb-1">16-28.a</div>
+                    <div className="text-sm text-gray-400">Tihti vaatab terve pere koos</div>
                   </div>
                 </div>
+                
+                <p className="text-gray-400 text-sm mt-6">
+                  Sageli 1 vaatamine = sõbrad, noorpaar või pere koos diivanil vaatamas.
+                </p>
               </div>
             </div>
 
