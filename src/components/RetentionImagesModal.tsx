@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { X } from "lucide-react";
 import { RetentionImage } from "@/types/retention-images";
 import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface RetentionImagesModalProps {
   images: RetentionImage[];
@@ -15,113 +16,98 @@ interface RetentionImagesModalProps {
 export function RetentionImagesModal({ images, isOpen, onClose }: RetentionImagesModalProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  if (!isOpen || images.length === 0) return null;
-
-  const handlePrevious = () => {
-    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-  };
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-  };
-
-  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
-      onClose();
+  // Reset index when opening or changing images
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
     }
-  };
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
 
   const currentImage = images[currentIndex];
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 animate-in fade-in duration-200"
-      onClick={handleBackdropClick}
-    >
-      <div className="relative max-w-5xl w-full bg-neutral-900 rounded-3xl border border-white/10 overflow-hidden animate-in zoom-in-95 duration-300">
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 z-20 p-2 bg-black/50 hover:bg-black/70 rounded-full text-white transition-colors backdrop-blur-sm"
-          aria-label="Sulge"
-        >
-          <X className="w-6 h-6" />
-        </button>
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="absolute inset-0 bg-black/80 backdrop-blur-md z-0"
+          >
+            {/* Glow Effect Background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-900/20 via-transparent to-blue-900/20 opacity-50" />
+          </motion.div>
+          
+          <div className="relative w-full h-full flex flex-col pointer-events-none z-10 p-4 md:p-8">
+            {/* Main Content Area - clicking outside card closes modal */}
+            <div 
+              className="flex-1 flex items-center justify-center pointer-events-auto min-h-0 mb-6 cursor-pointer"
+              onClick={onClose}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                className="w-auto h-auto max-w-[95vw] max-h-[70vh] bg-neutral-900/90 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl relative flex flex-col overflow-hidden cursor-default"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button 
+                  onClick={onClose}
+                  className="absolute top-4 right-4 p-2 bg-black/50 hover:bg-black/70 rounded-full text-white z-20 transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
 
-        {/* Image Container */}
-        <div className="relative aspect-video bg-neutral-800">
-          <Image
-            src={currentImage.image_url}
-            alt={currentImage.title}
-            fill
-            className="object-contain"
-            priority
-          />
-        </div>
-
-        {/* Image Info & Navigation */}
-        <div className="p-6 border-t border-white/10">
-          <div className="flex items-center justify-between gap-4">
-            {/* Left: Image Info */}
-            <div className="flex-1">
-              <h3 className="text-xl font-bold text-white mb-1">{currentImage.title}</h3>
-              {currentImage.description && (
-                <p className="text-gray-400 text-sm">{currentImage.description}</p>
-              )}
+                <div className="relative flex items-center justify-center p-2 md:p-6">
+                   {currentImage && (
+                     <img
+                       src={currentImage.image_url}
+                       alt={currentImage.title}
+                       className="max-w-full max-h-[65vh] w-auto h-auto object-contain rounded-lg shadow-2xl"
+                     />
+                   )}
+                </div>
+              </motion.div>
             </div>
 
-            {/* Right: Navigation (only if multiple images) */}
-            {images.length > 1 && (
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={handlePrevious}
-                  className="p-2 bg-white/5 hover:bg-white/10 rounded-full text-white transition-colors"
-                  aria-label="Eelmine pilt"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-                
-                <span className="text-sm text-gray-400 font-medium min-w-[60px] text-center">
-                  {currentIndex + 1} / {images.length}
-                </span>
-                
-                <button
-                  onClick={handleNext}
-                  className="p-2 bg-white/5 hover:bg-white/10 rounded-full text-white transition-colors"
-                  aria-label="Järgmine pilt"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-              </div>
+            {/* Bottom Thumbnails */}
+            {images.length > 0 && (
+              <motion.div 
+                initial={{ opacity: 0, y: 100 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 100 }}
+                className="h-24 md:h-32 mt-auto pointer-events-auto overflow-x-auto flex gap-4 items-center justify-center px-4 pb-4 scrollbar-hide snap-x"
+              >
+                {images.map((image, index) => (
+                  <button
+                    key={image.id}
+                    onClick={() => setCurrentIndex(index)}
+                    className={cn(
+                      "flex-shrink-0 h-20 w-20 md:h-24 md:w-24 rounded-xl overflow-hidden border-2 transition-all relative snap-center",
+                      index === currentIndex ? "border-fuchsia-500 scale-110 shadow-lg shadow-fuchsia-500/20" : "border-white/10 hover:border-white/30 opacity-60 hover:opacity-100"
+                    )}
+                  >
+                    <Image 
+                      src={image.image_url} 
+                      alt={image.title} 
+                      fill 
+                      className="object-cover" 
+                    />
+                  </button>
+                ))}
+              </motion.div>
             )}
           </div>
-
-          {/* Thumbnail Navigation (if multiple images) */}
-          {images.length > 1 && (
-            <div className="flex gap-2 mt-6 overflow-x-auto pb-2">
-              {images.map((image, index) => (
-                <button
-                  key={image.id}
-                  onClick={() => setCurrentIndex(index)}
-                  className={cn(
-                    "relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all",
-                    index === currentIndex
-                      ? "border-fuchsia-500 opacity-100"
-                      : "border-white/10 opacity-50 hover:opacity-75"
-                  )}
-                >
-                  <Image
-                    src={image.image_url}
-                    alt={image.title}
-                    fill
-                    className="object-cover"
-                  />
-                </button>
-              ))}
-            </div>
-          )}
         </div>
-      </div>
-    </div>
+      )}
+    </AnimatePresence>
   );
 }
