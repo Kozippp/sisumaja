@@ -683,20 +683,6 @@ export default async function Home() {
 
                   <div className="group">
                     <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-green-500 mt-1 group-hover:bg-green-500 group-hover:text-white transition-colors">
-                        <BarChart3 className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <h4 className="text-lg font-bold text-white mb-2 group-hover:text-green-400 transition-colors">Kõrge ROI (Tasuvus)</h4>
-                        <p className="text-gray-400 leading-relaxed">
-                          Koostöövideote engagement rate on keskmiselt 3-5 korda kõrgem kui brändi enda postitustel. See on kindel viis jõuda kiirelt ja usaldatult inimesteni.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="group">
-                    <div className="flex items-start gap-4">
                       <div className="flex-shrink-0 w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center text-yellow-500 mt-1 group-hover:bg-yellow-500 group-hover:text-white transition-colors">
                         <ThumbsUp className="w-5 h-5" />
                       </div>
