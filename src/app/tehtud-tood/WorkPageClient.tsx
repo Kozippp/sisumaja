@@ -10,8 +10,15 @@ type FilterType = 'all' | 'youtube_ad' | 'shorts' | 'training';
 
 const TYPE_LABELS: Record<string, { label: string; icon: React.ElementType; color: string }> = {
   youtube_ad: { label: 'YouTube reklaam', icon: Youtube, color: 'text-red-400 bg-red-500/10' },
-  shorts: { label: 'Lühivideo koostöö', icon: Clapperboard, color: 'text-fuchsia-400 bg-fuchsia-500/10' },
+  shorts: { label: 'Lühivideo koostöö', icon: Clapperboard, color: 'text-blue-400 bg-blue-500/10' },
   training: { label: 'Koolitus / Üritus', icon: GraduationCap, color: 'text-green-400 bg-green-500/10' },
+};
+
+const FILTER_ACTIVE_STYLES: Record<FilterType, string> = {
+  all: 'bg-white border-white text-black',
+  youtube_ad: 'bg-red-500 border-red-500 text-white',
+  shorts: 'bg-blue-500 border-blue-500 text-white',
+  training: 'bg-green-500 border-green-500 text-white',
 };
 
 interface WorkPageClientProps {
@@ -55,7 +62,7 @@ export default function WorkPageClient({ projects }: WorkPageClientProps) {
               onClick={() => setActiveFilter(value)}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-all border ${
                 activeFilter === value
-                  ? 'bg-primary border-primary text-white'
+                  ? FILTER_ACTIVE_STYLES[value]
                   : 'bg-transparent border-neutral-700 text-gray-400 hover:border-neutral-500 hover:text-white'
               }`}
             >
