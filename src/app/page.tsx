@@ -11,6 +11,8 @@ import { VideoPlayer } from "@/components/VideoPlayer";
 import { StandardVideoPlayer } from "@/components/StandardVideoPlayer";
 import { SocialMediaComparisonTable } from "@/components/SocialMediaComparisonTable";
 import { TrainingSection } from "@/components/TrainingSection";
+import { RetentionImagesModal } from "@/components/RetentionImagesModal";
+import { RetentionLink } from "@/components/RetentionLink";
 
 export const revalidate = 60;
 
@@ -20,6 +22,7 @@ type SocialStats = Database['public']['Tables']['social_stats']['Row'];
 type FeaturedVideo = Database['public']['Tables']['featured_videos']['Row'];
 type ShortsVideo = Database['public']['Tables']['shorts_videos']['Row'];
 type YoutubeAdVideo = Database['public']['Tables']['youtube_ad_videos']['Row'];
+type RetentionImage = Database['public']['Tables']['retention_images']['Row'];
 
 async function getRecentProjects(): Promise<Project[]> {
   const { data } = await supabase
@@ -87,6 +90,15 @@ async function getYoutubeAdVideos(): Promise<YoutubeAdVideo[]> {
   return data || [];
 }
 
+async function getRetentionImages(): Promise<RetentionImage[]> {
+  const { data } = await supabase
+    .from("retention_images")
+    .select("*")
+    .eq("is_active", true)
+    .order("display_order", { ascending: true });
+  return data || [];
+}
+
 const SERVICES = [
   {
     id: "youtube",
@@ -119,6 +131,7 @@ export default async function Home() {
   const featuredVideos = await getFeaturedVideos();
   const shortsVideos = await getShortsVideos();
   const youtubeAdVideos = await getYoutubeAdVideos();
+  const retentionImages = await getRetentionImages();
 
   return (
     <div className="flex flex-col min-h-screen bg-black overflow-x-hidden text-white font-sans selection:bg-fuchsia-500/30">
@@ -482,48 +495,21 @@ export default async function Home() {
                       </div>
                    )}
                 </div>
-
-                {/* Mobile: Retention Graph */}
-                <div className="lg:hidden mb-8">
-                  <div className="bg-neutral-900 border border-white/10 rounded-3xl overflow-hidden relative group">
-                     <div className="aspect-video relative bg-neutral-800">
-                        <Image 
-                          src="/vaatamisgraafik_02.png" 
-                          alt="Vaatajate püsimise graafik" 
-                          fill 
-                          className="object-cover"
-                        />
-                     </div>
-                  </div>
-                </div>
               </div>
 
-              {/* Right Column: Desktop Video + Retention Graph */}
+              {/* Right Column: Desktop Video */}
               <div className="hidden lg:block sticky top-24">
-                <div className="mb-8">
-                  {youtubeAdVideos.length > 0 ? (
-                    <StandardVideoPlayer 
-                      videoUrl={youtubeAdVideos[0].video_url}
-                      thumbnailUrl={youtubeAdVideos[0].thumbnail_url}
-                      title={youtubeAdVideos[0].title}
-                    />
-                  ) : (
-                    <div className="aspect-video bg-neutral-900 rounded-2xl border border-white/10 flex items-center justify-center text-gray-500">
-                      <p>Video puudub</p>
-                    </div>
-                  )}
-                </div>
-
-                <div className="bg-neutral-900 border border-white/10 rounded-3xl overflow-hidden relative group">
-                   <div className="aspect-video relative bg-neutral-800">
-                      <Image 
-                        src="/vaatamisgraafik_02.png" 
-                        alt="Vaatajate püsimise graafik" 
-                        fill 
-                        className="object-cover"
-                      />
-                   </div>
-                </div>
+                {youtubeAdVideos.length > 0 ? (
+                  <StandardVideoPlayer 
+                    videoUrl={youtubeAdVideos[0].video_url}
+                    thumbnailUrl={youtubeAdVideos[0].thumbnail_url}
+                    title={youtubeAdVideos[0].title}
+                  />
+                ) : (
+                  <div className="aspect-video bg-neutral-900 rounded-2xl border border-white/10 flex items-center justify-center text-gray-500">
+                    <p>Video puudub</p>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -586,7 +572,7 @@ export default async function Home() {
                     <div>
                       <h4 className="text-lg font-bold text-white mb-2">2. Reaalne huvi</h4>
                       <p className="text-lg text-gray-400 leading-relaxed">
-                        Meie videote statistika kinnitab, et 95-99% vaatajatest vaatab reklaamsegmendi täies mahus ära. See on drastiline erinevus võrreldes Meta reklaamidega, mida enamasti ignoreeritakse, või telekanalite pausidega, mille ajal haaratakse hoopis telefon. 
+                        Meie videote statistika kinnitab, et 95-99% vaatajatest vaatab reklaamsegmendi täies mahus ära. <RetentionLink images={retentionImages} /> See on drastiline erinevus võrreldes Meta reklaamidega, mida enamasti ignoreeritakse, või telekanalite pausidega, mille ajal haaratakse hoopis telefon. 
                       </p>
                     </div>
                   </div>

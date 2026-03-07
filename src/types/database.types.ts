@@ -353,6 +353,39 @@ export type Database = {
         }
         Relationships: []
       }
+      retention_images: {
+        Row: {
+          id: string
+          created_at: string
+          updated_at: string
+          title: string
+          description: string | null
+          image_url: string
+          is_active: boolean
+          display_order: number
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          title: string
+          description?: string | null
+          image_url: string
+          is_active?: boolean
+          display_order?: number
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          title?: string
+          description?: string | null
+          image_url?: string
+          is_active?: boolean
+          display_order?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

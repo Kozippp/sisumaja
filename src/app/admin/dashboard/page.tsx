@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Plus, Edit, Trash2, Eye, EyeOff, LogOut, Users, TrendingUp, Youtube, MessageSquare, Video } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, EyeOff, LogOut, Users, TrendingUp, Youtube, MessageSquare, Video, BarChart3 } from 'lucide-react';
 import { Database } from '@/types/database.types';
 
 type Project = Database['public']['Tables']['projects']['Row'];
@@ -118,6 +118,13 @@ export default function DashboardPage() {
             >
               <MessageSquare className="w-4 h-4 mr-2" />
               Tagasiside
+            </Link>
+            <Link 
+              href="/admin/retention-images" 
+              className="bg-neutral-800 text-gray-300 px-4 py-2 rounded-lg font-bold hover:bg-neutral-700 hover:text-white transition-colors flex items-center text-sm"
+            >
+              <BarChart3 className="w-4 h-4 mr-2" />
+              Retention Pildid
             </Link>
             <Link 
               href="/admin/new" 
