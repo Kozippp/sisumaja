@@ -429,7 +429,7 @@ export default async function Home() {
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-xs font-bold uppercase tracking-wider mb-6">
                   <Youtube className="w-4 h-4" /> YouTube
                 </div>
-                <h2 className="text-4xl md:text-5xl font-black mb-6">Reklaam YouTube'i videos</h2>
+                <h2 className="text-4xl md:text-5xl font-black mb-6">Reklaam <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-fuchsia-500">YouTube'i</span> videos</h2>
                 <p className="text-xl text-gray-400 mb-8 leading-relaxed">
                   YouTube'i videosse loodud reklaam on praegu üks maailma efektiivsemaid turundusmeetodeid.
                 </p>
@@ -613,14 +613,11 @@ export default async function Home() {
             {/* Header Area */}
             <div className="text-center mb-16 max-w-4xl mx-auto">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-500 text-xs font-bold uppercase tracking-wider mb-6">
-                <Smartphone className="w-4 h-4" /> Shorts & Reels & TikTok
+                <Smartphone className="w-4 h-4" /> TikTok & Reels & Shorts
               </div>
-              <h2 className="text-4xl md:text-5xl font-black mb-6">
-                94% Z-põlvkonnast usaldab <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-fuchsia-500">sisuloojaid</span> rohkem kui reklaame.
-              </h2>
+              <h2 className="text-4xl md:text-5xl font-black mb-6">Reklaam <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-fuchsia-500">TikToki</span> koostöövideos</h2>
               <p className="text-xl text-gray-400 leading-relaxed">
-                Koostöövideo on sild sinu toote ja fänni vahel, mida ei kerita edasi.
-              </p>
+              Koostöövideo on väga kiire ja tõhus viis tutvustada oma toodet ligi 100 000 potentsiaalsele kliendile. Kui bränd räägib iseendast, tajutakse seda reklaamina. Kui aga meie räägime brändist, on see usaldusväärne soovitus.              </p>
             </div>
 
             {/* Main Feature Grid */}
@@ -646,6 +643,13 @@ export default async function Home() {
 
               {/* Right: Why It Works (The "Expert" text) */}
               <div>
+                <div className="mb-8">
+                  <h3 className="text-2xl font-bold text-white mb-4">Mis see on?</h3>
+                  <p className="text-lg text-gray-400 leading-relaxed">
+                    Me loome vahva lühivideo (45-120 sekundit), mille siseselt tutvustame oma vaatajatele koostööpartneri toodet/teenust ning postitame selle 5 Kozipi platvormile, et maksimeerida ühe video nähtavus (TikTok, Reels, YouTube Shorts, Facebook ja Snapchat).
+                  </p>
+                </div>
+
                 <h3 className="text-2xl font-bold text-white mb-6">Miks see töötab?</h3>
                 
                 <div className="space-y-8">
@@ -655,9 +659,9 @@ export default async function Home() {
                         <Users className="w-5 h-5" />
                       </div>
                       <div>
-                        <h4 className="text-lg font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">Usaldus ja Sõbra Nõuanne</h4>
+                        <h4 className="text-lg font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">Aastaid ehitatud usaldus</h4>
                         <p className="text-gray-400 leading-relaxed">
-                          Sisulooja on ehitanud oma auditooriumiga suhet aastaid. Kui tema soovitab, on see sõbra nõuanne, mitte korporatiivne müügijutt.
+                          Oleme ehitanud oma auditooriumiga suhet aastaid.
                         </p>
                       </div>
                     </div>

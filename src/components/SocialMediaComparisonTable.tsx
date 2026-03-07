@@ -96,7 +96,7 @@ export function SocialMediaComparisonTable() {
               </td>
               <td className="py-6 px-6 text-gray-400">
                 Tavapärane ettevõtte tase. <br/>
-                <span className="text-sm opacity-70">Reach on sageli piiratud.</span>
+                <span className="text-sm opacity-70">Orgaaniline levik on sageli piiratud.</span>
               </td>
               <td className="py-6 px-6">
                 <span className="text-green-400 font-bold block mb-1">3-5x kõrgem kaasatus</span>
