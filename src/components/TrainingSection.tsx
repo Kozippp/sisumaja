@@ -1,9 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mic, Users, ArrowRight, Star, School } from "lucide-react";
+import { Mic, Users, ArrowRight, School, Calendar } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
+import { Database } from "@/types/database.types";
+
+type Project = Database['public']['Tables']['projects']['Row'];
 
 const SERVICES = [
   {
@@ -32,41 +34,13 @@ const SERVICES = [
   }
 ];
 
-// Placeholder for case studies - user should replace these
-const CASE_STUDIES = [
-  {
-    id: 1,
-    title: "Eesti Ettevõtlusgala 2024",
-    category: "Õhtujuhtimine",
-    color: "bg-blue-500"
-  },
-  {
-    id: 2,
-    title: "Noorte Investeerimiskonverents",
-    category: "Esinemine",
-    color: "bg-fuchsia-500"
-  },
-  {
-    id: 3,
-    title: "Swedbanki sotsiaalmeedia koolitus",
-    category: "Koolitus",
-    color: "bg-green-500"
-  },
-  {
-    id: 4,
-    title: "sTARTUp Day",
-    category: "Esinemine",
-    color: "bg-purple-500"
-  },
-   {
-    id: 5,
-    title: "Suvepäevade õhtujuhtimine",
-    category: "Õhtujuhtimine",
-    color: "bg-yellow-500"
-  }
-];
+interface TrainingSectionProps {
+  trainingProjects?: Project[];
+}
 
-export function TrainingSection() {
+export function TrainingSection({ trainingProjects = [] }: TrainingSectionProps) {
+  const hasProjects = trainingProjects.length > 0;
+
   return (
     <section id="training-service" className="py-32 border-b border-white/5 bg-neutral-950 relative overflow-hidden">
        {/* Background Glow */}
@@ -75,7 +49,6 @@ export function TrainingSection() {
        <div className="max-w-7xl mx-auto px-6 relative z-10">
           {/* Header */}
           <div className="text-center max-w-4xl mx-auto mb-20">
-             {/* Badge */}
              <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -102,7 +75,7 @@ export function TrainingSection() {
                 transition={{ delay: 0.2 }}
                 className="text-xl text-gray-400 leading-relaxed"
              >
-                Me aitame tuua sinu üritusele särtsu, juhtides meeleolukalt õhtut või jagades praktilisi teadmisi teemadel, milles ise igapäevaselt tegutseme. Oleme partneriks nii sündmuste korraldajatele, kes otsivad karismaatilist duot esinema, kui ka ettevõtetele, kes soovivad oma meeskonda meie eskpertiisivallas arendada.
+                Me aitame tuua sinu üritusele särtsu, juhtides meeleolukalt õhtut või jagades praktilisi teadmisi teemadel, milles ise igapäevaselt tegutseme. Oleme partneriks nii sündmuste korraldajatele, kes otsivad karismaatilist duot esinema, kui ka ettevõtetele, kes soovivad oma meeskonda meie eksptertiisivallas arendada.
              </motion.p>
           </div>
 
@@ -127,7 +100,6 @@ export function TrainingSection() {
                    transition={{ delay: 0.3 + idx * 0.1 }}
                    className="group relative bg-white/5 border border-white/10 p-8 rounded-3xl overflow-hidden hover:bg-white/10 transition-colors duration-500"
                 >
-                   {/* Hover Gradient */}
                    <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
                    
                    <div className="relative z-10">
@@ -141,48 +113,67 @@ export function TrainingSection() {
              ))}
           </div>
 
-          {/* Carousel Section */}
-          <motion.div 
-             initial={{ opacity: 0 }}
-             whileInView={{ opacity: 1 }}
-             viewport={{ once: true }}
-             className="mb-20"
-          >
-             {/* Horizontal Scroll Container with modern styling */}
-             <div className="relative group">
-                {/* Fade edges */}
-                <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-neutral-950 to-transparent z-10 pointer-events-none" />
-                <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-neutral-950 to-transparent z-10 pointer-events-none" />
+          {/* Case Studies Carousel */}
+          {hasProjects && (
+            <motion.div 
+               initial={{ opacity: 0 }}
+               whileInView={{ opacity: 1 }}
+               viewport={{ once: true }}
+               className="mb-20"
+            >
+               <div className="flex justify-between items-end mb-8">
+                 <h3 className="text-2xl font-bold text-white">Tehtud tööd</h3>
+                 <Link href="/tehtud-tood?filter=training" className="text-sm font-bold uppercase text-gray-400 hover:text-white flex items-center gap-2 transition-colors">
+                   Vaata kõiki <ArrowRight className="w-4 h-4" />
+                 </Link>
+               </div>
 
-                <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-12 pt-4 px-6 hide-scrollbar cursor-grab active:cursor-grabbing">
-                   {CASE_STUDIES.map((study, i) => (
-                      <div 
-                         key={study.id} 
-                         className="snap-center shrink-0 w-[85vw] md:w-[400px] aspect-[16/10] bg-neutral-900 rounded-3xl overflow-hidden border border-white/10 relative group/card hover:border-white/30 transition-all duration-300"
-                      >
-                         {/* Placeholder Image Div */}
-                         <div className="absolute inset-0 bg-neutral-800 flex items-center justify-center text-gray-600 group-hover/card:scale-105 transition-transform duration-700">
-                            <div className="text-center p-6">
-                               <p className="text-sm font-medium opacity-50 mb-2">Pilt puudub</p>
-                               <div className={`w-12 h-1 rounded-full ${study.color} mx-auto opacity-50`} />
-                            </div>
-                         </div>
-                         
-                         {/* Overlay Content */}
-                         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-8 flex flex-col justify-end">
-                            <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-white mb-3 w-fit ${study.color} bg-opacity-80 backdrop-blur-sm`}>
-                               {study.category}
-                            </span>
-                            <h4 className="text-2xl font-bold text-white leading-tight">{study.title}</h4>
-                         </div>
-                      </div>
-                   ))}
-                   
-                   {/* End spacer */}
-                   <div className="w-6 shrink-0" />
-                </div>
-             </div>
-          </motion.div>
+               <div className="relative group">
+                  <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-neutral-950 to-transparent z-10 pointer-events-none" />
+                  <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-neutral-950 to-transparent z-10 pointer-events-none" />
+
+                  <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-12 pt-4 px-6 hide-scrollbar cursor-grab active:cursor-grabbing">
+                     {trainingProjects.map((project) => (
+                        <Link
+                           key={project.id}
+                           href={`/tehtud-tood/${project.slug}`}
+                           className="snap-center shrink-0 w-[85vw] md:w-[400px] aspect-[16/10] bg-neutral-900 rounded-3xl overflow-hidden border border-white/10 relative group/card hover:border-white/30 transition-all duration-300 block"
+                        >
+                           {project.thumbnail_url ? (
+                              <img
+                                 src={project.thumbnail_url}
+                                 alt={project.title}
+                                 className="absolute inset-0 w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-700"
+                              />
+                           ) : (
+                              <div className="absolute inset-0 bg-neutral-800 flex items-center justify-center text-gray-600 group-hover/card:scale-105 transition-transform duration-700">
+                                 <div className="text-center p-6">
+                                    <p className="text-sm font-medium opacity-50 mb-2">Pilt puudub</p>
+                                    <div className="w-12 h-1 rounded-full bg-green-500 mx-auto opacity-50" />
+                                 </div>
+                              </div>
+                           )}
+                           
+                           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-8 flex flex-col justify-end">
+                              {project.collaboration_completed_at && (
+                                 <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-2">
+                                    <Calendar className="w-3 h-3" />
+                                    <span>{new Date(project.collaboration_completed_at).toLocaleDateString('et-EE', { year: 'numeric', month: 'short' })}</span>
+                                 </div>
+                              )}
+                              <h4 className="text-2xl font-bold text-white leading-tight">{project.title}</h4>
+                              {project.description && (
+                                 <p className="text-gray-300 text-sm mt-2 line-clamp-2">{project.description}</p>
+                              )}
+                           </div>
+                        </Link>
+                     ))}
+                     
+                     <div className="w-6 shrink-0" />
+                  </div>
+               </div>
+            </motion.div>
+          )}
 
           {/* CTA */}
           <motion.div 

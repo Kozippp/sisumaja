@@ -39,7 +39,30 @@ async function getYoutubeProjects(): Promise<Project[]> {
     .from("projects")
     .select("*")
     .eq("is_visible", true)
+    .eq("project_type", "youtube_ad")
     .eq("show_on_frontpage_youtube", true)
+    .order("published_at", { ascending: false });
+  return data || [];
+}
+
+async function getShortsProjects(): Promise<Project[]> {
+  const { data } = await supabase
+    .from("projects")
+    .select("*")
+    .eq("is_visible", true)
+    .eq("project_type", "shorts")
+    .eq("show_on_frontpage_shorts", true)
+    .order("published_at", { ascending: false })
+    .limit(4);
+  return data || [];
+}
+
+async function getTrainingProjects(): Promise<Project[]> {
+  const { data } = await supabase
+    .from("projects")
+    .select("*")
+    .eq("is_visible", true)
+    .eq("project_type", "training")
     .order("published_at", { ascending: false });
   return data || [];
 }
@@ -126,6 +149,8 @@ const SERVICES = [
 export default async function Home() {
   const recentProjects = await getRecentProjects();
   const youtubeProjects = await getYoutubeProjects();
+  const shortsProjects = await getShortsProjects();
+  const trainingProjects = await getTrainingProjects();
   const clientLogos = await getClientLogos();
   const socialStats = await getSocialStats();
   const featuredVideos = await getFeaturedVideos();
@@ -797,65 +822,50 @@ export default async function Home() {
               </div>
             </div>
 
-            {/* Comparison Section: Brand vs Creator */}
-            <div className="mb-24">
-              <h3 className="text-2xl font-bold text-white mb-8 text-center">Brändi sisu vs. Koostöö sisuloojaga</h3>
-              <SocialMediaComparisonTable />
-            </div>
 
             {/* Tehtud tööd (Shorts/Reels) */}
+            {shortsProjects.length > 0 && (
             <div className="relative">
               <div className="flex justify-between items-end mb-12">
                 <h3 className="text-2xl font-bold text-white">Tehtud tööd: Lühivideod</h3>
-                <Link href="/tehtud-tood" className="text-sm font-bold uppercase text-gray-400 hover:text-white flex items-center gap-2">
+                <Link href="/tehtud-tood?filter=shorts" className="text-sm font-bold uppercase text-gray-400 hover:text-white flex items-center gap-2">
                   Vaata kõiki <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {/* Placeholder items for Shorts portfolio - using recent projects or generic placeholders if none explicitly tagged as shorts */}
-                {recentProjects.length > 0 ? (
-                  // Showing first 4 items (or repeating if fewer) to fill the grid visually
-                  [...recentProjects, ...recentProjects].slice(0, 4).map((project, idx) => (
-                    <Link key={`${project.id}-${idx}`} href={`/tehtud-tood/${project.slug}`} className="group block relative aspect-[9/16] bg-neutral-900 rounded-2xl overflow-hidden border border-white/5 hover:border-fuchsia-500/50 transition-all duration-300">
-                      {project.thumbnail_url ? (
-                        <img src={project.thumbnail_url} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-700 bg-neutral-800">
-                           <Video className="w-12 h-12 opacity-20" />
-                        </div>
-                      )}
-                      
-                      {/* Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90 group-hover:opacity-100 transition-opacity" />
-                      
-                      <div className="absolute bottom-0 left-0 right-0 p-4">
-                        <div className="flex items-center gap-2 mb-2">
-                           <div className="p-1.5 bg-white/10 backdrop-blur-md rounded-full">
-                              <Play className="w-3 h-3 text-white fill-current" />
-                           </div>
-                           <span className="text-xs font-bold text-gray-300 uppercase tracking-wider">Reel / TikTok</span>
-                        </div>
-                        <h4 className="text-sm font-bold text-white line-clamp-2 leading-snug group-hover:text-fuchsia-400 transition-colors">{project.title}</h4>
+                {shortsProjects.map((project) => (
+                  <Link key={project.id} href={`/tehtud-tood/${project.slug}`} className="group block relative aspect-[9/16] bg-neutral-900 rounded-2xl overflow-hidden border border-white/5 hover:border-fuchsia-500/50 transition-all duration-300">
+                    {project.thumbnail_url ? (
+                      <img src={project.thumbnail_url} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-700 bg-neutral-800">
+                         <Video className="w-12 h-12 opacity-20" />
                       </div>
-                    </Link>
-                  ))
-                ) : (
-                   // Fallback if no projects
-                   [1, 2, 3, 4].map((i) => (
-                    <div key={i} className="aspect-[9/16] bg-neutral-900 rounded-2xl border border-white/5 flex items-center justify-center">
-                       <p className="text-gray-600 text-sm">Näidisvideo {i}</p>
+                    )}
+                    
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90 group-hover:opacity-100 transition-opacity" />
+                    
+                    <div className="absolute bottom-0 left-0 right-0 p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                         <div className="p-1.5 bg-white/10 backdrop-blur-md rounded-full">
+                            <Play className="w-3 h-3 text-white fill-current" />
+                         </div>
+                         <span className="text-xs font-bold text-gray-300 uppercase tracking-wider">Reel / TikTok</span>
+                      </div>
+                      <h4 className="text-sm font-bold text-white line-clamp-2 leading-snug group-hover:text-fuchsia-400 transition-colors">{project.title}</h4>
                     </div>
-                   ))
-                )}
+                  </Link>
+                ))}
               </div>
             </div>
+            )}
 
           </div>
         </section>
 
         {/* Service 3: Training */}
-        <TrainingSection />
+        <TrainingSection trainingProjects={trainingProjects} />
       </div>
 
       {/* 7. CONTACT FORM */}

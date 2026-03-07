@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import { Database } from '@/types/database.types';
-import { X, Plus, Image as ImageIcon, Loader2, Video, Type, GalleryHorizontal, ArrowUp, ArrowDown, Trash2, LayoutTemplate, Link as LinkIcon, Youtube, Instagram } from 'lucide-react';
+import { X, Plus, Image as ImageIcon, Loader2, Video, Type, GalleryHorizontal, ArrowUp, ArrowDown, Trash2, LayoutTemplate, Youtube, GraduationCap, Clapperboard } from 'lucide-react';
 
 type Project = Database['public']['Tables']['projects']['Row'];
 type ProjectInsert = Database['public']['Tables']['projects']['Insert'];
@@ -48,14 +48,17 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     slug: '',
     description: '',
     thumbnail_url: '',
-    media_gallery: [], // Legacy support
-    content: [], // New Content Blocks
-    links: [], // New Custom Links
+    media_gallery: [],
+    content: [],
+    links: [],
     youtube_url: '',
     tiktok_url: '',
     instagram_url: '',
     youtube_video_id: '',
     show_youtube_stats: false,
+    show_on_frontpage_youtube: false,
+    show_on_frontpage_shorts: false,
+    project_type: 'youtube_ad',
     stat_views: '',
     stat_likes: '',
     stat_comments: '',
@@ -355,6 +358,76 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
         </div>
       )}
 
+      {/* Project Type */}
+      <div className="bg-neutral-900 p-6 rounded-xl border border-neutral-800 space-y-4">
+        <h3 className="text-xl font-bold border-b border-neutral-800 pb-2 mb-4">Case Study tüüp</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {[
+            { value: 'youtube_ad', label: 'YouTube reklaam', icon: Youtube, color: 'red' },
+            { value: 'shorts', label: 'Lühivideo koostöö', icon: Clapperboard, color: 'fuchsia' },
+            { value: 'training', label: 'Koolitus / Üritus', icon: GraduationCap, color: 'green' },
+          ].map(({ value, label, icon: Icon, color }) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setFormData(prev => ({ ...prev, project_type: value as 'youtube_ad' | 'shorts' | 'training' }))}
+              className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all text-left ${
+                formData.project_type === value
+                  ? color === 'red' ? 'border-red-500 bg-red-500/10 text-white'
+                  : color === 'fuchsia' ? 'border-fuchsia-500 bg-fuchsia-500/10 text-white'
+                  : 'border-green-500 bg-green-500/10 text-white'
+                  : 'border-neutral-700 bg-black text-gray-400 hover:border-neutral-500'
+              }`}
+            >
+              <Icon className={`w-5 h-5 flex-shrink-0 ${
+                formData.project_type === value
+                  ? color === 'red' ? 'text-red-500' : color === 'fuchsia' ? 'text-fuchsia-500' : 'text-green-500'
+                  : 'text-gray-500'
+              }`} />
+              <span className="font-medium text-sm">{label}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Frontpage visibility toggles */}
+        <div className="pt-4 border-t border-neutral-800 space-y-3">
+          <p className="text-sm text-gray-500 font-medium uppercase tracking-wider">Avalehe nähtavus</p>
+          {formData.project_type === 'youtube_ad' && (
+            <label className="flex items-center gap-3 cursor-pointer">
+              <div className="relative">
+                <input
+                  type="checkbox"
+                  name="show_on_frontpage_youtube"
+                  checked={formData.show_on_frontpage_youtube || false}
+                  onChange={handleChange}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-gray-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+              </div>
+              <span className="text-sm text-gray-300">Kuva YouTube reklaami sektsioonis (avalehel)</span>
+            </label>
+          )}
+          {formData.project_type === 'shorts' && (
+            <label className="flex items-center gap-3 cursor-pointer">
+              <div className="relative">
+                <input
+                  type="checkbox"
+                  name="show_on_frontpage_shorts"
+                  checked={formData.show_on_frontpage_shorts || false}
+                  onChange={handleChange}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-gray-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-fuchsia-600"></div>
+              </div>
+              <span className="text-sm text-gray-300">Kuva lühivideote sektsioonis (avalehel)</span>
+            </label>
+          )}
+          {formData.project_type === 'training' && (
+            <p className="text-xs text-gray-500 italic">Koolitused kuvatakse automaatselt koolituste sektsioonis.</p>
+          )}
+        </div>
+      </div>
+
       {/* Main Info */}
       <div className="bg-neutral-900 p-6 rounded-xl border border-neutral-800 space-y-4">
         <h3 className="text-xl font-bold border-b border-neutral-800 pb-2 mb-4">Põhiinfo</h3>
@@ -620,7 +693,8 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
       </div>
       {/* ----------------------- */}
 
-      {/* Stats */}
+      {/* Stats - hidden for training type */}
+      {formData.project_type !== 'training' && (
       <div className="bg-neutral-900 p-6 rounded-xl border border-neutral-800 space-y-4">
         <h3 className="text-xl font-bold border-b border-neutral-800 pb-2 mb-4">Statistika</h3>
         
@@ -696,6 +770,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
             </div>
         </div>
       </div>
+      )}
 
       {/* Social Links Builder (NEW) */}
       <div className="bg-neutral-900 p-6 rounded-xl border border-neutral-800 space-y-4">

@@ -175,9 +175,11 @@ export type Database = {
           is_visible: boolean | null
           links: Json | null
           media_gallery: Json | null
+          project_type: 'youtube_ad' | 'shorts' | 'training'
           published_at: string | null
           show_youtube_stats: boolean | null
           show_on_frontpage_youtube: boolean | null
+          show_on_frontpage_shorts: boolean | null
           slug: string
           stat_comments: string | null
           stat_likes: string | null
@@ -206,9 +208,11 @@ export type Database = {
           is_visible?: boolean | null
           links?: Json | null
           media_gallery?: Json | null
+          project_type?: 'youtube_ad' | 'shorts' | 'training'
           published_at?: string | null
           show_youtube_stats?: boolean | null
           show_on_frontpage_youtube?: boolean | null
+          show_on_frontpage_shorts?: boolean | null
           slug: string
           stat_comments?: string | null
           stat_likes?: string | null
@@ -237,9 +241,11 @@ export type Database = {
           is_visible?: boolean | null
           links?: Json | null
           media_gallery?: Json | null
+          project_type?: 'youtube_ad' | 'shorts' | 'training'
           published_at?: string | null
           show_youtube_stats?: boolean | null
           show_on_frontpage_youtube?: boolean | null
+          show_on_frontpage_shorts?: boolean | null
           slug?: string
           stat_comments?: string | null
           stat_likes?: string | null
