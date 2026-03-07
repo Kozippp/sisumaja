@@ -48,9 +48,9 @@ export default function ContactPage() {
       if (error.message === 'missing_fields') {
         setErrorMessage('Palun veendu, et oled täitnud kõik vajalikud väljad (nimi, e-mail ja sõnum).');
       } else if (error.message === 'email_failed') {
-        setErrorMessage('Kahjuks tekkis sõnumi saatmisel tehniline tõrge. Palun proovi hiljem uuesti või kirjuta meile otse aadressil info@sisumaja.ee.');
+        setErrorMessage('Kahjuks tekkis sõnumi saatmisel tehniline tõrge. Palun proovi hiljem uuesti või kirjuta meile otse aadressil info@kozip.ee.');
       } else {
-        setErrorMessage('Midagi läks valesti. Palun proovi uuesti või võta meiega ühendust aadressil info@sisumaja.ee.');
+        setErrorMessage('Midagi läks valesti. Palun proovi uuesti või võta meiega ühendust aadressil info@kozip.ee.');
       }
     } finally {
       setIsSubmitting(false);
@@ -71,7 +71,7 @@ export default function ContactPage() {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-purple-600">ühendust</span>
             </h1>
             <p className="text-xl text-gray-400 mb-12 leading-relaxed max-w-lg">
-              Sul on idee koostööks? Kirjuta meile ja kui teie Bränd Sisumaja väärtustega klapib, siis ehk saame midagi väga vinget ellu viia!
+              Sul on idee koostööks? Kirjuta meile ja kui teie Bränd Kozipi väärtustega klapib, siis ehk saame midagi väga vinget ellu viia!
             </p>
 
             <div className="space-y-8 mb-16">
@@ -81,7 +81,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-white mb-1">Kirjuta meile</h3>
-                  <a href="mailto:info@sisumaja.ee" className="text-gray-400 hover:text-white transition-colors text-lg">info@sisumaja.ee</a>
+                  <a href="mailto:info@kozip.ee" className="text-gray-400 hover:text-white transition-colors text-lg">info@kozip.ee</a>
                 </div>
               </div>
 
