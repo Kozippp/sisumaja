@@ -8,6 +8,7 @@ import LiveYouTubeCarousel from "@/components/LiveYouTubeCarousel";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { YouTubeComparisonTable } from "@/components/YouTubeComparisonTable";
 import { VideoPlayer } from "@/components/VideoPlayer";
+import { StandardVideoPlayer } from "@/components/StandardVideoPlayer";
 import { SocialMediaComparisonTable } from "@/components/SocialMediaComparisonTable";
 import { TrainingSection } from "@/components/TrainingSection";
 
@@ -18,6 +19,7 @@ type ClientLogo = Database['public']['Tables']['client_logos']['Row'];
 type SocialStats = Database['public']['Tables']['social_stats']['Row'];
 type FeaturedVideo = Database['public']['Tables']['featured_videos']['Row'];
 type ShortsVideo = Database['public']['Tables']['shorts_videos']['Row'];
+type YoutubeAdVideo = Database['public']['Tables']['youtube_ad_videos']['Row'];
 
 async function getRecentProjects(): Promise<Project[]> {
   const { data } = await supabase
@@ -75,6 +77,16 @@ async function getShortsVideos(): Promise<ShortsVideo[]> {
   return data || [];
 }
 
+async function getYoutubeAdVideos(): Promise<YoutubeAdVideo[]> {
+  const { data } = await supabase
+    .from("youtube_ad_videos")
+    .select("*")
+    .eq("is_active", true)
+    .order("created_at", { ascending: false })
+    .limit(1);
+  return data || [];
+}
+
 const SERVICES = [
   {
     id: "youtube",
@@ -106,6 +118,7 @@ export default async function Home() {
   const socialStats = await getSocialStats();
   const featuredVideos = await getFeaturedVideos();
   const shortsVideos = await getShortsVideos();
+  const youtubeAdVideos = await getYoutubeAdVideos();
 
   return (
     <div className="flex flex-col min-h-screen bg-black overflow-x-hidden text-white font-sans selection:bg-fuchsia-500/30">
@@ -448,16 +461,79 @@ export default async function Home() {
                   YouTube'i videosse loodud reklaam on praegu üks maailma efektiivsemaid turundusmeetodeid.
                 </p>
                 
-                <div>
+                <div className="mb-8">
                   <h3 className="text-2xl font-bold text-white mb-4">Mida tähendab YouTube'i videosse integreeritud reklaam?</h3>
                   <p className="text-lg text-gray-400 leading-relaxed">
                     Me loome YouTube'i platformile saateid ning me põimime nende saadete stsenaariumitesse reklaami, mida seda esitleb saatejuht oma sõnadega. Seega brändi integratsioon ei ole segav faktor, vaid loomulik osa meelelahutusest, mida fännid usaldavad.
                   </p>
                 </div>
+
+                {/* Mobile: Video under "Mida tähendab..." */}
+                <div className="lg:hidden mb-8">
+                   {youtubeAdVideos.length > 0 ? (
+                      <StandardVideoPlayer 
+                        videoUrl={youtubeAdVideos[0].video_url}
+                        thumbnailUrl={youtubeAdVideos[0].thumbnail_url}
+                        title={youtubeAdVideos[0].title}
+                      />
+                   ) : (
+                      <div className="aspect-video bg-neutral-900 rounded-2xl border border-white/10 flex items-center justify-center text-gray-500">
+                        <p>Video puudub</p>
+                      </div>
+                   )}
+                </div>
+
+                {/* Mobile: Stats Card */}
+                <div className="lg:hidden">
+                    <div className="bg-neutral-900/50 border border-white/10 rounded-3xl p-8 backdrop-blur-sm">
+                      <h3 className="text-xl font-bold text-white mb-6">Kes meie videoid vaatab?</h3>
+                      
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div className="bg-black/40 rounded-xl p-4">
+                          <div className="text-sm text-white-400 mb-1">Vaatamisi</div>
+                          <div className="text-3xl font-black text-blue-500 mb-1">60 000</div>
+                          <div className="text-sm text-gray-400">keskmiselt ühe video kohta</div>
+                        </div>
+                        <div className="bg-black/40 rounded-xl p-4">
+                          <div className="text-sm text-white-400 mb-1">1 vaatamine =</div>
+                          <div className="text-3xl font-black text-green-500 mb-1">15 min</div>
+                          <div className="text-sm text-gray-400">keskmiselt vaatamisaega</div>
+                        </div>
+                        <div className="bg-black/40 rounded-xl p-4">
+                          <div className="text-sm text-white-400 mb-1">Peamine seade:</div>
+                          <div className="text-3xl font-black text-fuchsia-500 mb-1">Telekas</div>
+                          <div className="text-sm text-gray-400">51% vaatab meie videoid TV-lt</div>
+                        </div>
+                        <div className="bg-black/40 rounded-xl p-4">
+                          <div className="text-sm text-white-400 mb-1">Sihtrühm</div>
+                          <div className="text-3xl font-black text-yellow-500 mb-1">16-28.a</div>
+                          <div className="text-sm text-gray-400">Tihti vaatab terve pere koos</div>
+                        </div>
+                      </div>
+                      
+                      <p className="text-gray-400 text-sm mt-6">
+                        Sageli 1 vaatamine = sõbrad, noorpaar või pere koos diivanil vaatamas.
+                      </p>
+                    </div>
+                </div>
               </div>
 
-              {/* Right Column: Stats Card */}
-              <div>
+              {/* Right Column: Desktop Video + Stats */}
+              <div className="hidden lg:block sticky top-24">
+                <div className="mb-8">
+                  {youtubeAdVideos.length > 0 ? (
+                    <StandardVideoPlayer 
+                      videoUrl={youtubeAdVideos[0].video_url}
+                      thumbnailUrl={youtubeAdVideos[0].thumbnail_url}
+                      title={youtubeAdVideos[0].title}
+                    />
+                  ) : (
+                    <div className="aspect-video bg-neutral-900 rounded-2xl border border-white/10 flex items-center justify-center text-gray-500">
+                      <p>Video puudub</p>
+                    </div>
+                  )}
+                </div>
+
                 <div className="bg-neutral-900/50 border border-white/10 rounded-3xl p-8 backdrop-blur-sm">
                   <h3 className="text-xl font-bold text-white mb-6">Kes meie videoid vaatab?</h3>
                   

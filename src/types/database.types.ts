@@ -320,6 +320,39 @@ export type Database = {
         }
         Relationships: []
       }
+      youtube_ad_videos: {
+        Row: {
+          id: string
+          title: string
+          description: string | null
+          video_url: string
+          thumbnail_url: string | null
+          is_active: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          description?: string | null
+          video_url: string
+          thumbnail_url?: string | null
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          description?: string | null
+          video_url?: string
+          thumbnail_url?: string | null
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

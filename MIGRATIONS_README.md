@@ -9,22 +9,22 @@ Migratsioonid asuvad kaustas `supabase/migrations/`.
 3. Ava fail ja kopeeri selle sisu:
    - `supabase/migrations/create_shorts_videos_table.sql`
    - `supabase/migrations/create_shorts_videos_storage.sql`
+   - `supabase/migrations/create_youtube_ad_videos_table.sql` (UUS)
+   - `supabase/migrations/create_youtube_ad_videos_storage.sql` (UUS)
 4. Klõpsa "Run"
 
 ## Uued migratsioonid
 
-### 1. create_shorts_videos_table.sql
-Loob tabeli `shorts_videos`, mis hoiab lühivideote informatsiooni.
+### 3. create_youtube_ad_videos_table.sql
+Loob tabeli `youtube_ad_videos`, mis hoiab YouTube'i reklaamvideote näidiseid.
 
-### 2. create_shorts_videos_storage.sql
-Loob Supabase Storage'is bucketi `shorts-videos`, kuhu saab üles laadida video faile ja pisipilte.
+### 4. create_youtube_ad_videos_storage.sql
+Loob Supabase Storage'is bucketi `youtube-ad-videos`, kuhu saab üles laadida videoid ja pisipilte.
 
 ## Peale migratsioonide käivitamist
 
-Uus admin leht on saadaval aadressil: `/admin/shorts-videos`
+Uus admin leht on saadaval aadressil: `/admin/youtube-ad-videos`
 
 Sealt saad:
-- Üles laadida uusi videoid
-- Hallata olemasolevaid videoid
-- Muuta videote järjekorda
-- Peita/näidata videoid avalikul lehel
+- Üles laadida uue video "Reklaam YouTube'i videos" sektsiooni jaoks
+- See video ilmub avalehel vastavasse sektsiooni

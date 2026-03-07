@@ -74,54 +74,61 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-black pt-32 pb-12 px-4">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-12">
+        <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-12 gap-6">
           <h1 className="text-3xl font-bold text-white uppercase">Admin Dashboard</h1>
-          <div className="flex gap-4">
+          <div className="flex gap-2 flex-wrap">
             <Link 
               href="/admin/social-stats" 
-              className="bg-neutral-800 text-gray-300 px-6 py-2 rounded-lg font-bold hover:bg-neutral-700 hover:text-white transition-colors flex items-center"
+              className="bg-neutral-800 text-gray-300 px-4 py-2 rounded-lg font-bold hover:bg-neutral-700 hover:text-white transition-colors flex items-center text-sm"
             >
               <TrendingUp className="w-4 h-4 mr-2" />
               Statistika
             </Link>
             <Link 
               href="/admin/clients" 
-              className="bg-neutral-800 text-gray-300 px-6 py-2 rounded-lg font-bold hover:bg-neutral-700 hover:text-white transition-colors flex items-center"
+              className="bg-neutral-800 text-gray-300 px-4 py-2 rounded-lg font-bold hover:bg-neutral-700 hover:text-white transition-colors flex items-center text-sm"
             >
               <Users className="w-4 h-4 mr-2" />
               Klientide logod
             </Link>
             <Link 
               href="/admin/featured-videos" 
-              className="bg-neutral-800 text-gray-300 px-6 py-2 rounded-lg font-bold hover:bg-neutral-700 hover:text-white transition-colors flex items-center"
+              className="bg-neutral-800 text-gray-300 px-4 py-2 rounded-lg font-bold hover:bg-neutral-700 hover:text-white transition-colors flex items-center text-sm"
             >
               <Youtube className="w-4 h-4 mr-2" />
               YouTube Videod
             </Link>
             <Link 
               href="/admin/shorts-videos" 
-              className="bg-neutral-800 text-gray-300 px-6 py-2 rounded-lg font-bold hover:bg-neutral-700 hover:text-white transition-colors flex items-center"
+              className="bg-neutral-800 text-gray-300 px-4 py-2 rounded-lg font-bold hover:bg-neutral-700 hover:text-white transition-colors flex items-center text-sm"
             >
               <Video className="w-4 h-4 mr-2" />
               Lühivideod
             </Link>
             <Link 
+              href="/admin/youtube-ad-videos" 
+              className="bg-neutral-800 text-gray-300 px-4 py-2 rounded-lg font-bold hover:bg-neutral-700 hover:text-white transition-colors flex items-center text-sm"
+            >
+              <Video className="w-4 h-4 mr-2" />
+              YouTube Reklaam
+            </Link>
+            <Link 
               href="/admin/testimonials" 
-              className="bg-neutral-800 text-gray-300 px-6 py-2 rounded-lg font-bold hover:bg-neutral-700 hover:text-white transition-colors flex items-center"
+              className="bg-neutral-800 text-gray-300 px-4 py-2 rounded-lg font-bold hover:bg-neutral-700 hover:text-white transition-colors flex items-center text-sm"
             >
               <MessageSquare className="w-4 h-4 mr-2" />
               Tagasiside
             </Link>
             <Link 
               href="/admin/new" 
-              className="bg-primary text-white px-6 py-2 rounded-lg font-bold hover:bg-fuchsia-700 transition-colors flex items-center"
+              className="bg-primary text-white px-4 py-2 rounded-lg font-bold hover:bg-fuchsia-700 transition-colors flex items-center text-sm"
             >
               <Plus className="w-4 h-4 mr-2" />
               Lisa uus töö
             </Link>
             <button 
               onClick={handleLogout}
-              className="bg-neutral-900 text-gray-400 px-4 py-2 rounded-lg hover:text-white hover:bg-neutral-800 transition-colors flex items-center"
+              className="bg-neutral-900 text-gray-400 px-4 py-2 rounded-lg hover:text-white hover:bg-neutral-800 transition-colors flex items-center text-sm"
             >
               <LogOut className="w-4 h-4 mr-2" />
               Logi välja
