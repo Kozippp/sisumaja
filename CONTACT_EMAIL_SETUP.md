@@ -1,5 +1,7 @@
 # Kontaktivormi e-kirja seadistus (info@kozip.ee)
 
+**Turvalisus:** Salasõnu ja API võtmeid lisa ainult faili `.env.local` (kohalikult) või Verceli keskkonnamuutujatesse. Ära kunagi commiti `.env.local` ega kirjuta paroole siia dokumentatsiooni – repositooriumis tohib olla ainult `.env.example` placeholderitega.
+
 Kontaktivorm saadab kaks e-kirja:
 1. **Sulle (info@kozip.ee)** – sõnumiga vormist (nimi, e-mail, telefon, sõnum).
 2. **Kirjutajale** – kinnitus, et sõnum jõudis meieni.
@@ -23,30 +25,19 @@ Kui App Passwords ei ole näha, kasuta tavalist Zoho kontoparooli (vähem turval
 
 ### 2. Keskkonnamuutujad projekti juures
 
-Projekti **juurkaustas** (kõrvuti `package.json`-iga) loo fail **`.env.local`** (kui seda pole) ja lisa või täienda:
+- Kopeeri **`.env.example`** → **`.env.local`** (projekti juurkaustas).
+- Täida `.env.local` reaalsete väärtustega. **Ära kunagi commiti `.env.local` ega lisa paroole/võtmeid Git'i – need jäävad ainult kohalikult ja Verceli keskkonnamuutujatesse.**
 
-```env
-# Zoho SMTP – kontaktvormi saatmine info@kozip.ee ja kinnitus kirjutajale
-SMTP_HOST=smtp.zoho.com
-SMTP_PORT=465
-SMTP_USER=info@kozip.ee
-SMTP_PASS=sinu_zoho_app_parool
-SMTP_FROM=Kozip <info@kozip.ee>
+Vajalikud muutujad (Zoho puhul):
 
-# Valikuline: kuhu vormi sõnumid saadavad (vaikimisi info@kozip.ee)
-CONTACT_EMAIL_TO=info@kozip.ee
-```
+- **SMTP_HOST** – `smtp.zoho.com` (EU konto: `smtp.zoho.eu`).
+- **SMTP_PORT** – `465` (või `587` STARTTLS jaoks).
+- **SMTP_USER** – täielik e-mail (nt info@kozip.ee).
+- **SMTP_PASS** – Zoho app password (või kontoparool). Lisa ainult `.env.local` faili, mitte kunagi repositooriumi.
+- **SMTP_FROM** – saatja nimi ja aadress, nt `Kozip <info@kozip.ee>`.
+- **CONTACT_EMAIL_TO** (valikuline) – kuhu vormi sõnumid saadavad; vaikimisi info@kozip.ee.
 
-- **SMTP_USER** – täielik e-mail (info@kozip.ee).
-- **SMTP_PASS** – Zoho app password või Zoho kontoparool.
-- **SMTP_FROM** – see, kelle nime all kirjad väljuvad (soovitatav jätta `Kozip <info@kozip.ee>`).
-
-Zoho EU (euroopa) kontode puhul võib host olla `smtp.zoho.eu`; port 465 (SSL) või 587 (STARTTLS). Kui 465 ei tööta, proovi:
-
-```env
-SMTP_HOST=smtp.zoho.eu
-SMTP_PORT=587
-```
+Zoho EU kontode puhul võid kasutada `SMTP_HOST=smtp.zoho.eu` ja porti `587`.
 
 ### 3. Taaskäivita dev server
 
