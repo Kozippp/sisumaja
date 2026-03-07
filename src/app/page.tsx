@@ -617,7 +617,7 @@ export default async function Home() {
               </div>
               <h2 className="text-4xl md:text-5xl font-black mb-6">Reklaam <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-fuchsia-500">TikToki</span> koostöövideos</h2>
               <p className="text-xl text-gray-400 leading-relaxed">
-              Koostöövideo on väga kiire ja tõhus viis tutvustada oma toodet ligi 100 000 potentsiaalsele kliendile. Kui bränd räägib iseendast, tajutakse seda reklaamina. Kui aga meie räägime brändist, on see usaldusväärne soovitus.              </p>
+              Koostöövideo on väga kiire ja tõhus viis tutvustada oma toodet ligi 100 000 potentsiaalsele kliendile.               </p>
             </div>
 
             {/* Main Feature Grid */}
@@ -644,13 +644,13 @@ export default async function Home() {
               {/* Right: Why It Works (The "Expert" text) */}
               <div>
                 <div className="mb-8">
-                  <h3 className="text-2xl font-bold text-white mb-4">Mis see on?</h3>
+                  <h3 className="text-2xl font-bold text-white mb-4">Mis on koostöövideo?</h3>
                   <p className="text-lg text-gray-400 leading-relaxed">
                     Me loome vahva lühivideo (45-120 sekundit), mille siseselt tutvustame oma vaatajatele koostööpartneri toodet/teenust ning postitame selle 5 Kozipi platvormile, et maksimeerida ühe video nähtavus (TikTok, Reels, YouTube Shorts, Facebook ja Snapchat).
                   </p>
                 </div>
 
-                <h3 className="text-2xl font-bold text-white mb-6">Miks see töötab?</h3>
+                <h3 className="text-2xl font-bold text-white mb-6">Miks see on nii tõhus?</h3>
                 
                 <div className="space-y-8">
                   <div className="group">
@@ -661,7 +661,7 @@ export default async function Home() {
                       <div>
                         <h4 className="text-lg font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">Aastaid ehitatud usaldus</h4>
                         <p className="text-gray-400 leading-relaxed">
-                          Oleme ehitanud oma auditooriumiga suhet aastaid.
+                          Oleme ehitanud oma jälgijaskonnaga suhet aastaid, seega meid ja meie arvamusi päriselt usaldatakse ja kuulatakse.
                         </p>
                       </div>
                     </div>
@@ -690,6 +690,20 @@ export default async function Home() {
                         <h4 className="text-lg font-bold text-white mb-2 group-hover:text-green-400 transition-colors">Kõrge ROI (Tasuvus)</h4>
                         <p className="text-gray-400 leading-relaxed">
                           Koostöövideote engagement rate on keskmiselt 3-5 korda kõrgem kui brändi enda postitustel. See on kindel viis jõuda kiirelt ja usaldatult inimesteni.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="group">
+                    <div className="flex items-start gap-4">
+                      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center text-yellow-500 mt-1 group-hover:bg-yellow-500 group-hover:text-white transition-colors">
+                        <ThumbsUp className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-lg font-bold text-white mb-2 group-hover:text-yellow-400 transition-colors">Soovitus, mitte reklaam</h4>
+                        <p className="text-gray-400 leading-relaxed">
+                          Kui bränd räägib iseendast, tajutakse seda reklaamina. Kui aga meie räägime brändist, on see vaataja jaoks autentne ja isiklik soovitus.
                         </p>
                       </div>
                     </div>
