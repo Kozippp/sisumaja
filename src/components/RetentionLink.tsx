@@ -21,15 +21,20 @@ interface RetentionLinkProps {
 export function RetentionLink({ images }: RetentionLinkProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Kui pole pilte, näita linki aga ei ava modaalakent
   if (!images || images.length === 0) {
-    return null;
+    return (
+      <span className="text-blue-400 font-medium">
+        vaata tõestust siit
+      </span>
+    );
   }
 
   return (
     <>
       <button
         onClick={() => setIsModalOpen(true)}
-        className="text-blue-400 hover:text-blue-300 underline underline-offset-2 transition-colors font-medium"
+        className="text-blue-400 hover:text-blue-300 underline underline-offset-2 transition-colors font-medium cursor-pointer"
       >
         vaata tõestust siit
       </button>
