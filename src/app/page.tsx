@@ -252,8 +252,8 @@ export default async function Home() {
 
           </div>
 
-            {/* Service Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+            {/* Service Cards - compact horizontal layout on mobile, full cards on desktop */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6 mt-4">
               {SERVICES.map((service, index) => {
                 const colors = {
                   youtube: {
@@ -288,18 +288,24 @@ export default async function Home() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.1 + 0.5 }}
-                    className="group relative p-8 rounded-2xl hover:bg-white/5 hover:border hover:border-white/10 transition-all duration-300 backdrop-blur-sm overflow-hidden flex flex-col items-center text-center"
+                    className="group relative p-4 md:p-8 rounded-2xl hover:bg-white/5 hover:border hover:border-white/10 transition-all duration-300 backdrop-blur-sm overflow-hidden flex flex-row md:flex-col items-center md:items-center text-left md:text-center gap-4 md:gap-0"
                   >
                     <div className={`absolute inset-0 bg-gradient-to-br ${serviceColors.hoverGradient} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
                     
-                    <div className={`relative z-10 p-4 rounded-full bg-black/50 mb-4 ${serviceColors.icon} ${serviceColors.hoverIcon} group-hover:scale-110 transition-all duration-300`}>
+                    {/* Icon - left on mobile, centered on desktop */}
+                    <div className={`relative z-10 flex-shrink-0 p-2.5 md:p-4 rounded-full bg-black/50 md:mb-4 [&>svg]:w-6 [&>svg]:h-6 md:[&>svg]:w-8 md:[&>svg]:h-8 ${serviceColors.icon} ${serviceColors.hoverIcon} group-hover:scale-110 transition-all duration-300`}>
                       {service.icon}
                     </div>
-                    <h3 className={`relative z-10 text-xl font-bold mb-2 ${serviceColors.hoverTitle} transition-colors`}>{service.title}</h3>
-                    <p className="relative z-10 text-sm text-gray-400 group-hover:text-gray-200 transition-colors">{service.description}</p>
                     
-                    <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0 duration-300">
-                      <ArrowRight className={`w-5 h-5 ${serviceColors.arrow}`} />
+                    {/* Text - right on mobile, add padding for arrow */}
+                    <div className="relative z-10 flex-1 min-w-0 pr-8 md:pr-0 md:contents">
+                      <h3 className={`text-base md:text-xl font-bold md:mb-2 ${serviceColors.hoverTitle} transition-colors`}>{service.title}</h3>
+                      <p className="text-xs md:text-sm text-gray-400 group-hover:text-gray-200 transition-colors line-clamp-2 md:line-clamp-none">{service.description}</p>
+                    </div>
+                    
+                    {/* Arrow - always visible on mobile (right edge), hover-reveal on desktop */}
+                    <div className={`absolute right-4 top-1/2 -translate-y-1/2 md:top-auto md:translate-y-0 md:bottom-4 md:right-4 flex-shrink-0 w-5 h-5 md:opacity-0 md:group-hover:opacity-100 transition-opacity md:transform md:translate-y-2 md:group-hover:translate-y-0 duration-300 ${serviceColors.arrow}`}>
+                      <ArrowRight className="w-5 h-5" />
                     </div>
                   </motion.a>
                 );
@@ -325,11 +331,11 @@ export default async function Home() {
                     {[...clientLogos, ...clientLogos, ...clientLogos].map((client, idx) => (
                       <div key={idx} className="flex items-center">
                         {client.is_mock || !client.logo_url ? (
-                          <div className="text-xl font-bold text-gray-700 uppercase hover:text-white transition-colors cursor-default">
+                          <div className="text-xl font-bold text-white uppercase cursor-default">
                             {client.name}
                           </div>
                         ) : (
-                          <div className="relative h-10 w-28 grayscale hover:grayscale-0 transition-all opacity-70 hover:opacity-100 overflow-hidden">
+                          <div className="relative h-10 w-28 overflow-hidden">
                             <div 
                               style={{
                                 transform: `scale(${(client.logo_scale || 100) / 100})`,
@@ -374,11 +380,11 @@ export default async function Home() {
               {[...clientLogos, ...clientLogos, ...clientLogos].map((client, idx) => (
                 <div key={idx} className="flex items-center shrink-0">
                   {client.is_mock || !client.logo_url ? (
-                    <div className="text-xl md:text-2xl font-bold text-gray-700 uppercase hover:text-white transition-colors cursor-default">
+                    <div className="text-xl md:text-2xl font-bold text-white uppercase cursor-default">
                       {client.name}
                     </div>
                   ) : (
-                    <div className="relative h-10 w-24 md:h-12 md:w-32 grayscale hover:grayscale-0 transition-all opacity-70 hover:opacity-100 overflow-hidden shrink-0">
+                    <div className="relative h-10 w-24 md:h-12 md:w-32 overflow-hidden shrink-0">
                       <div 
                         style={{
                           transform: `scale(${(client.logo_scale || 100) / 100})`,
