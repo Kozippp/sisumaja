@@ -165,6 +165,7 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
           "Reisimine",
           "Odav vs. Kallis",
           "Väljakutsed",
+          "Investeerimine",
           "Toitumine",
           "Trenn"
         ].map((tag, i) => (
