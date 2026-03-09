@@ -190,20 +190,26 @@ export default async function Home() {
             {/* Oval Glow Effect Behind Both Elements */}
             <div className="absolute inset-0 -inset-x-20 bg-fuchsia-500/20 rounded-full blur-[100px] opacity-50 animate-pulse"></div>
             
+            {/* Two Column Layout: Instagram Profile (Left) + Text (Right) */}
+            <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-6">
+            
+            {/* Oval Glow Effect Behind Both Elements */}
+            <div className="absolute inset-0 -inset-x-20 bg-fuchsia-500/20 rounded-full blur-[100px] opacity-50 animate-pulse"></div>
+            
             {/* Left: Instagram Profile Card */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
-              className="relative flex justify-center lg:justify-end z-10 order-2 lg:order-1"
+              className="relative flex justify-center lg:justify-end z-10"
             >
               <div className="relative group cursor-default">
                 {/* Instagram-style Card */}
-                <Link href="#about" className="relative bg-black/40 backdrop-blur-xl border border-white/10 p-5 pr-6 md:p-8 md:pr-12 rounded-3xl flex items-center gap-4 md:gap-8 transform hover:scale-[1.02] transition-transform duration-500 cursor-pointer">
+                <Link href="#about" className="relative bg-black/40 backdrop-blur-xl border border-white/10 p-8 pr-12 rounded-3xl flex items-center gap-8 transform hover:scale-[1.02] transition-transform duration-500 cursor-pointer">
                   {/* Profile Picture with Story Ring */}
                   <div className="relative">
                      <div className="absolute -inset-[5px] bg-gradient-to-tr from-yellow-500 via-fuchsia-500 to-purple-600 rounded-full opacity-100"></div>
-                     <div className="relative w-24 h-24 md:w-40 md:h-40 rounded-full overflow-hidden border-[5px] border-black">
+                     <div className="relative w-40 h-40 rounded-full overflow-hidden border-[5px] border-black">
                         <Image 
                           src="/kozip-profile.png"
                           alt="Kozip"
@@ -217,20 +223,20 @@ export default async function Home() {
                   {/* Profile Info */}
                   <div className="text-left">
                     <div className="flex items-center gap-2 mb-1">
-                      <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">@Kozip_Eesti</h2>
-                      <BadgeCheck className="w-5 h-5 md:w-7 md:h-7 text-blue-500 fill-blue-500/10" />
+                      <h2 className="text-2xl font-bold text-white tracking-tight">@Kozip_Eesti</h2>
+                      <BadgeCheck className="w-7 h-7 text-blue-500 fill-blue-500/10" />
                     </div>
-                    <p className="text-gray-400 text-sm md:text-base font-medium mb-2 md:mb-4">Digital Creator</p>
+                    <p className="text-gray-400 text-base font-medium mb-4">Digital Creator</p>
                     
                     {/* Stats */}
-                    <div className="flex items-center gap-4 md:gap-8 text-sm md:text-base">
+                    <div className="flex items-center gap-8 text-base">
                       <div className="flex flex-col">
-                        <span className="font-bold text-white text-lg md:text-2xl">{socialStats.followers}</span>
-                        <span className="text-gray-500 text-[10px] md:text-xs">Jälgijaid</span>
+                        <span className="font-bold text-white text-2xl">{socialStats.followers}</span>
+                        <span className="text-gray-500 text-xs">Jälgijaid</span>
                       </div>
                       <div className="flex flex-col">
-                        <span className="font-bold text-white text-lg md:text-2xl">{socialStats.views}</span>
-                        <span className="text-gray-500 text-[10px] md:text-xs">Vaatamisi</span>
+                        <span className="font-bold text-white text-2xl">{socialStats.views}</span>
+                        <span className="text-gray-500 text-xs">Vaatamisi</span>
                       </div>
                     </div>
                   </div>
@@ -243,9 +249,9 @@ export default async function Home() {
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative text-center lg:text-left z-10 order-1 lg:order-2 flex flex-col items-center lg:items-start"
+              className="relative text-center lg:text-left z-10"
             >
-              <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black leading-tight mb-6 text-center lg:text-left">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-black leading-tight mb-6">
                 Reklaami oma brändi<br />Eesti <span className="text-fuchsia-500">ägedaimates</span><br />kogupere videotes.
               </h1>
             </motion.div>
