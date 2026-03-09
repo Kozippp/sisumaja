@@ -243,9 +243,9 @@ export default async function Home() {
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative text-center lg:text-left z-10 order-1 lg:order-2"
+              className="relative text-center lg:text-left z-10 order-1 lg:order-2 flex flex-col items-center lg:items-start"
             >
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-black leading-tight mb-6">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black leading-tight mb-6 text-center lg:text-left">
                 Reklaami oma brändi<br />Eesti <span className="text-fuchsia-500">ägedaimates</span><br />kogupere videotes.
               </h1>
             </motion.div>
