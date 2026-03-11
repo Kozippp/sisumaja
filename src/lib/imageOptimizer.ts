@@ -33,6 +33,7 @@ export type ImageEntry = {
   path: string;
   sources: ImageSource[];
   isOptimized: boolean; // .webp in path or already webp
+  originalUrl?: string; // Set when optimized - allows revert
 };
 
 function addImage(
@@ -124,4 +125,25 @@ export async function collectAllImages(sb: any): Promise<ImageEntry[]> {
   }
 
   return Array.from(entries.values());
+}
+
+const MAPPINGS_PATH = '_meta/optimization-mappings.json';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function loadOptimizationMappings(sb: any): Promise<Record<string, string>> {
+  try {
+    const { data, error } = await sb.storage.from('project-media').download(MAPPINGS_PATH);
+    if (error || !data) return {};
+    const text = await data.text();
+    const parsed = JSON.parse(text) as Record<string, string>;
+    return typeof parsed === 'object' && parsed !== null ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function saveOptimizationMappings(sb: any, mappings: Record<string, string>): Promise<void> {
+  const blob = new Blob([JSON.stringify(mappings, null, 2)], { type: 'application/json' });
+  await sb.storage.from('project-media').upload(MAPPINGS_PATH, blob, { upsert: true });
 }

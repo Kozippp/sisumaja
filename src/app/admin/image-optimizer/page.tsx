@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Zap, Loader2, Check, X, ImageIcon } from 'lucide-react';
-import { collectAllImages, type ImageEntry } from '@/lib/imageOptimizer';
+import { ArrowLeft, Zap, Loader2, Check, X, ImageIcon, Undo2 } from 'lucide-react';
+import { collectAllImages, loadOptimizationMappings, saveOptimizationMappings, parseSupabaseStorageUrl, type ImageEntry } from '@/lib/imageOptimizer';
 import { optimizeImage } from '@/lib/optimizeImage';
 
 export default function AdminImageOptimizer() {
@@ -26,8 +26,15 @@ export default function AdminImageOptimizer() {
         router.push('/admin/login');
         return;
       }
-      const list = await collectAllImages(supabase);
-      setImages(list);
+      const [list, mappings] = await Promise.all([
+        collectAllImages(supabase),
+        loadOptimizationMappings(supabase),
+      ]);
+      const merged = list.map(img => ({
+        ...img,
+        originalUrl: mappings[img.url] || img.originalUrl,
+      }));
+      setImages(merged);
       setLoading(false);
     };
     run();
@@ -124,15 +131,91 @@ export default function AdminImageOptimizer() {
         }
       }
 
+      const mappings = await loadOptimizationMappings(supabase);
+      mappings[newUrl] = entry.url;
+      await saveOptimizationMappings(supabase, mappings);
+
       setImages(prev => prev.map(img =>
         img.url === entry.url
-          ? { ...img, url: newUrl, path: newPath, isOptimized: true }
+          ? { ...img, url: newUrl, path: newPath, isOptimized: true, originalUrl: entry.url }
           : img
       ));
       setPreviewEntry(null);
     } catch (err) {
       console.error(err);
       alert('Failed to save: ' + (err instanceof Error ? err.message : 'Unknown error'));
+    } finally {
+      setOptimizingId(null);
+    }
+  }
+
+  async function handleRevertToOriginal(entry: ImageEntry) {
+    if (!entry.originalUrl) return;
+    if (!confirm('Revert to original image? The optimized WebP will no longer be used.')) return;
+
+    setOptimizingId(entry.url);
+    try {
+      const oldUrl = entry.url; // current optimized
+      const newUrl = entry.originalUrl!; // original to restore
+
+      const updatedRows = new Set<string>();
+      for (const src of entry.sources) {
+        const rowKey = `${src.table}:${src.rowId}`;
+        if (updatedRows.has(rowKey)) continue;
+
+        if (src.table === 'projects') {
+          const { data: project } = await supabase
+            .from('projects')
+            .select('thumbnail_url, client_avatar_url, media_gallery, content')
+            .eq('id', src.rowId)
+            .single();
+
+          if (!project) continue;
+
+          const updates: Record<string, unknown> = {};
+          if (project.thumbnail_url === oldUrl) updates.thumbnail_url = newUrl;
+          if (project.client_avatar_url === oldUrl) updates.client_avatar_url = newUrl;
+          if (Array.isArray(project.media_gallery) && project.media_gallery.includes(oldUrl)) {
+            updates.media_gallery = (project.media_gallery as string[]).map((u) => u === oldUrl ? newUrl : u);
+          }
+          if (Array.isArray(project.content) && JSON.stringify(project.content).includes(oldUrl)) {
+            updates.content = replaceUrlInContent(project.content, oldUrl, newUrl);
+          }
+
+          if (Object.keys(updates).length > 0) {
+            await supabase.from('projects').update(updates).eq('id', src.rowId);
+            updatedRows.add(rowKey);
+          }
+        } else {
+          const { error } = await (supabase as any)
+            .from(src.table)
+            .update({ [src.column]: newUrl })
+            .eq('id', src.rowId);
+
+          if (!error) updatedRows.add(rowKey);
+        }
+      }
+
+      const mappings = await loadOptimizationMappings(supabase);
+      delete mappings[entry.url];
+      await saveOptimizationMappings(supabase, mappings);
+
+      const parsed = parseSupabaseStorageUrl(newUrl);
+      setImages(prev => prev.map(img =>
+        img.url === entry.url
+          ? {
+              ...img,
+              url: newUrl,
+              path: parsed?.path ?? img.path,
+              bucket: parsed?.bucket ?? img.bucket,
+              isOptimized: false,
+              originalUrl: undefined,
+            }
+          : img
+      ));
+    } catch (err) {
+      console.error(err);
+      alert('Failed to revert: ' + (err instanceof Error ? err.message : 'Unknown error'));
     } finally {
       setOptimizingId(null);
     }
@@ -208,19 +291,37 @@ export default function AdminImageOptimizer() {
                   <p className="text-xs text-gray-500 truncate mb-2" title={entry.sources.map(s => s.label).join(', ')}>
                     {entry.sources[0]?.label ?? 'Unknown'}
                   </p>
-                  <button
-                    type="button"
-                    onClick={() => handleOptimizeClick(entry)}
-                    disabled={entry.isOptimized || optimizingId === entry.url}
-                    className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium transition-colors"
-                  >
-                    {optimizingId === entry.url ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <Zap className="w-4 h-4" />
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleOptimizeClick(entry)}
+                      disabled={entry.isOptimized || optimizingId === entry.url}
+                      className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium transition-colors"
+                    >
+                      {optimizingId === entry.url ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Zap className="w-4 h-4" />
+                      )}
+                      {entry.isOptimized ? 'Optimized' : 'Optimize'}
+                    </button>
+                    {entry.originalUrl && (
+                      <button
+                        type="button"
+                        onClick={() => handleRevertToOriginal(entry)}
+                        disabled={optimizingId === entry.url}
+                        className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-neutral-700 text-gray-300 hover:bg-neutral-600 disabled:opacity-50 text-sm font-medium transition-colors"
+                        title="Revert to original"
+                      >
+                        {optimizingId === entry.url ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Undo2 className="w-4 h-4" />
+                        )}
+                        Revert
+                      </button>
                     )}
-                    {entry.isOptimized ? 'Already optimized' : 'Optimize'}
-                  </button>
+                  </div>
                 </div>
               </div>
             ))}
