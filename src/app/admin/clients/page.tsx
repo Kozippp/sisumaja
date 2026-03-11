@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Plus, Edit, Trash2, Image as ImageIcon, Type, Upload, Check } from 'lucide-react';
+import { ArrowLeft, Plus, Edit, Trash2, Image as ImageIcon, Type, Upload, Check, Zap } from 'lucide-react';
+import { optimizeImage } from '@/lib/optimizeImage';
 import { Database } from '@/types/database.types';
 import Image from 'next/image';
 
@@ -27,6 +28,7 @@ export default function ClientLogosPage() {
   const [uploading, setUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>('');
+  const [optimizeImages, setOptimizeImages] = useState(false);
   const router = useRouter();
 
   const fetchLogos = async () => {
@@ -69,13 +71,17 @@ export default function ClientLogosPage() {
     try {
       setUploading(true);
       
-      const fileExt = file.name.split('.').pop();
+      let fileToUpload = file;
+      if (optimizeImages) {
+        fileToUpload = await optimizeImage(file);
+      }
+      const fileExt = fileToUpload.name.split('.').pop();
       const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
       const filePath = `client-logos/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
         .from('client-logos')
-        .upload(filePath, file, {
+        .upload(filePath, fileToUpload, {
           cacheControl: '3600',
           upsert: false
         });
@@ -258,7 +264,18 @@ export default function ClientLogosPage() {
                   <label className="block text-sm font-medium text-gray-400 mb-2">
                     Logo pilt
                   </label>
-                  
+                  <label className="flex items-center gap-2 mb-2 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={optimizeImages}
+                      onChange={(e) => setOptimizeImages(e.target.checked)}
+                      className="w-4 h-4 rounded border-neutral-600 bg-neutral-800 text-fuchsia-500 focus:ring-fuchsia-500"
+                    />
+                    <span className="flex items-center gap-2 text-sm text-gray-400">
+                      <Zap className="w-4 h-4 text-amber-500" />
+                      Optimize image (WebP, smaller file)
+                    </span>
+                  </label>
                   <div className="space-y-4">
                     <div className="border-2 border-dashed border-white/10 rounded-lg p-6 hover:border-fuchsia-500/50 transition-colors">
                       <input

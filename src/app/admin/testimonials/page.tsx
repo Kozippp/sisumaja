@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { ArrowLeft, Plus, Trash2, Edit2, Eye, EyeOff, Save, X, Upload, MessageSquare, Image as ImageIcon, Smartphone, GripVertical } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Edit2, Eye, EyeOff, Save, X, Upload, MessageSquare, Image as ImageIcon, Smartphone, GripVertical, Zap } from "lucide-react";
+import { optimizeImage } from "@/lib/optimizeImage";
 import Link from "next/link";
 import Image from "next/image";
 import { Testimonial, TestimonialFormData, TestimonialType } from "@/types/testimonials";
@@ -27,6 +28,7 @@ export default function AdminTestimonials() {
   };
 
   const [formData, setFormData] = useState<TestimonialFormData>(initialFormState);
+  const [optimizeImages, setOptimizeImages] = useState(false);
 
   useEffect(() => {
     fetchTestimonials();
@@ -54,7 +56,10 @@ export default function AdminTestimonials() {
     }
 
     setUploading(true);
-    const file = e.target.files[0];
+    let file = e.target.files[0];
+    if (optimizeImages) {
+      file = await optimizeImage(file);
+    }
     const fileExt = file.name.split('.').pop();
     const fileName = `${Math.random()}.${fileExt}`;
     const filePath = `${fileName}`;
@@ -375,7 +380,18 @@ export default function AdminTestimonials() {
                   <label className="block text-sm font-medium text-gray-400 mb-1">
                     {formData.type === 'text' ? 'Autori pilt (Valikuline)' : 'Kuvatõmmis (Kohustuslik)'}
                   </label>
-                  
+                  <label className="flex items-center gap-2 mb-2 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={optimizeImages}
+                      onChange={(e) => setOptimizeImages(e.target.checked)}
+                      className="w-4 h-4 rounded border-neutral-600 bg-neutral-800 text-fuchsia-500 focus:ring-fuchsia-500"
+                    />
+                    <span className="flex items-center gap-2 text-sm text-gray-400">
+                      <Zap className="w-4 h-4 text-amber-500" />
+                      Optimize image (WebP, smaller file)
+                    </span>
+                  </label>
                   <div className="border-2 border-dashed border-white/10 rounded-xl p-8 flex flex-col items-center justify-center bg-black/20 hover:bg-black/40 transition-colors relative group">
                     {formData.image_url ? (
                       <div className="relative w-full aspect-video">

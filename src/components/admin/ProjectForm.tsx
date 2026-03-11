@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import { Database } from '@/types/database.types';
-import { X, Plus, Image as ImageIcon, Loader2, Video, Type, GalleryHorizontal, ArrowUp, ArrowDown, Trash2, LayoutTemplate, Youtube, GraduationCap, Clapperboard } from 'lucide-react';
+import { X, Plus, Image as ImageIcon, Loader2, Video, Type, GalleryHorizontal, ArrowUp, ArrowDown, Trash2, LayoutTemplate, Youtube, GraduationCap, Clapperboard, Zap } from 'lucide-react';
+import { optimizeImage } from '@/lib/optimizeImage';
 
 type Project = Database['public']['Tables']['projects']['Row'];
 type ProjectInsert = Database['public']['Tables']['projects']['Insert'];
@@ -96,6 +97,8 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     Array.isArray(initialData?.media_gallery) ? (initialData?.media_gallery as string[]) : []
   );
 
+  const [optimizeImages, setOptimizeImages] = useState(false);
+
   useEffect(() => {
     if (initialData) {
         setMediaItems(Array.isArray(initialData.media_gallery) ? (initialData.media_gallery as string[]) : []);
@@ -126,14 +129,18 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     }
   };
 
-  const uploadFile = async (file: File) => {
-    const fileExt = file.name.split('.').pop();
+  const uploadFile = async (file: File, optimize = false) => {
+    let fileToUpload = file;
+    if (optimize) {
+      fileToUpload = await optimizeImage(file);
+    }
+    const fileExt = fileToUpload.name.split('.').pop();
     const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
     const filePath = `${fileName}`;
 
     const { error: uploadError } = await supabase.storage
       .from('project-media')
-      .upload(filePath, file);
+      .upload(filePath, fileToUpload);
 
     if (uploadError) {
       throw uploadError;
@@ -147,7 +154,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     if (!e.target.files || e.target.files.length === 0) return;
     setUploading(true);
     try {
-      const url = await uploadFile(e.target.files[0]);
+      const url = await uploadFile(e.target.files[0], optimizeImages);
       setFormData(prev => ({ ...prev, thumbnail_url: url }));
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
@@ -161,7 +168,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     if (!e.target.files || e.target.files.length === 0) return;
     setUploading(true);
     try {
-      const url = await uploadFile(e.target.files[0]);
+      const url = await uploadFile(e.target.files[0], optimizeImages);
       setFormData(prev => ({ ...prev, client_avatar_url: url }));
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
@@ -177,7 +184,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     try {
       const newUrls: string[] = [];
       for (let i = 0; i < e.target.files.length; i++) {
-         const url = await uploadFile(e.target.files[i]);
+         const url = await uploadFile(e.target.files[i], optimizeImages);
          newUrls.push(url);
       }
       setMediaItems(prev => [...prev, ...newUrls]);
@@ -232,7 +239,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
   const handleBlockMediaUpload = async (file: File, blockId: string, field: 'mediaUrl' | 'thumbnailUrl') => {
     setUploading(true);
     try {
-        const url = await uploadFile(file);
+        const url = await uploadFile(file, optimizeImages);
         updateBlock(blockId, { [field]: url });
     } catch (err: unknown) {
         const errorMessage = err instanceof Error ? err.message : 'Unknown error';
@@ -247,7 +254,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     try {
         const newUrls: string[] = [];
         for (let i = 0; i < files.length; i++) {
-            const url = await uploadFile(files[i]);
+            const url = await uploadFile(files[i], optimizeImages);
             newUrls.push(url);
         }
         const block = contentBlocks.find(b => b.id === blockId);
@@ -492,6 +499,20 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
              <p className="text-xs text-gray-500 mt-1">See tekst on nähtav Google otsingus ja tehtud tööde nimekirjas. Projekti detailvaates seda EI kuvata.</p>
         </div>
         
+        {/* Image optimization toggle */}
+        <label className="flex items-center gap-3 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={optimizeImages}
+            onChange={(e) => setOptimizeImages(e.target.checked)}
+            className="w-4 h-4 rounded border-neutral-600 bg-neutral-800 text-primary focus:ring-primary"
+          />
+          <span className="flex items-center gap-2 text-sm text-gray-300">
+            <Zap className="w-4 h-4 text-amber-500" />
+            Optimize images before upload (WebP, smaller file size)
+          </span>
+        </label>
+
         {/* Thumbnail */}
         <div>
             <label className="block text-sm font-medium text-gray-400 mb-1">Thumbnail Pilt</label>

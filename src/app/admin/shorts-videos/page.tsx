@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Database } from "@/types/database.types";
-import { ArrowLeft, Plus, Trash2, Eye, EyeOff, GripVertical, Upload, X } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Eye, EyeOff, GripVertical, Upload, X, Zap } from "lucide-react";
+import { optimizeImage } from "@/lib/optimizeImage";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -26,6 +27,7 @@ export default function AdminShortsVideos() {
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [videoUrl, setVideoUrl] = useState("");
   const [thumbnailUrl, setThumbnailUrl] = useState("");
+  const [optimizeImages, setOptimizeImages] = useState(false);
 
   useEffect(() => {
     fetchVideos();
@@ -98,11 +100,15 @@ export default function AdminShortsVideos() {
         // Upload thumbnail if provided
         if (thumbnailFile) {
           setUploadStage('thumbnail');
-          const thumbExt = thumbnailFile.name.split('.').pop();
+          let thumbToUpload = thumbnailFile;
+          if (optimizeImages) {
+            thumbToUpload = await optimizeImage(thumbnailFile);
+          }
+          const thumbExt = thumbToUpload.name.split('.').pop();
           const thumbFileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${thumbExt}`;
           const { error: thumbUploadError } = await supabase.storage
             .from('shorts-videos')
-            .upload(`thumbnails/${thumbFileName}`, thumbnailFile, {
+            .upload(`thumbnails/${thumbFileName}`, thumbToUpload, {
               cacheControl: '3600',
               upsert: false
             });
@@ -328,6 +334,18 @@ export default function AdminShortsVideos() {
 
                   <div>
                     <label className="block text-sm font-semibold mb-2">Thumbnail (Optional)</label>
+                    <label className="flex items-center gap-2 mb-2 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        checked={optimizeImages}
+                        onChange={(e) => setOptimizeImages(e.target.checked)}
+                        className="w-4 h-4 rounded border-neutral-600 bg-neutral-800 text-fuchsia-500 focus:ring-fuchsia-500"
+                      />
+                      <span className="flex items-center gap-2 text-sm text-gray-400">
+                        <Zap className="w-4 h-4 text-amber-500" />
+                        Optimize thumbnail (WebP, smaller file)
+                      </span>
+                    </label>
                     <input
                       type="file"
                       accept="image/*"
