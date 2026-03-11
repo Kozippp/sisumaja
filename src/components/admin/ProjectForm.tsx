@@ -261,6 +261,19 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     }
   };
 
+  const moveCarouselImage = (blockId: string, imageIndex: number, direction: 'up' | 'down') => {
+    const block = contentBlocks.find(b => b.id === blockId);
+    const items = block?.mediaItems || [];
+    if (
+      (direction === 'up' && imageIndex === 0) ||
+      (direction === 'down' && imageIndex === items.length - 1)
+    ) return;
+    const newItems = [...items];
+    const targetIndex = direction === 'up' ? imageIndex - 1 : imageIndex + 1;
+    [newItems[imageIndex], newItems[targetIndex]] = [newItems[targetIndex], newItems[imageIndex]];
+    updateBlock(blockId, { mediaItems: newItems });
+  };
+
   // --- LINKS BUILDER FUNCTIONS ---
   const addLink = () => {
     const newLink: CustomLink = {
@@ -663,10 +676,31 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                         {block.type === 'carousel' && (
                             <div>
                                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Galerii Pildid</label>
+                                <p className="text-xs text-gray-500 mb-2">Kasuta nooli piltide järjekorra muutmiseks</p>
                                 <div className="grid grid-cols-4 gap-2 mb-2">
                                     {block.mediaItems?.map((url, i) => (
                                         <div key={i} className="aspect-square bg-black rounded border border-neutral-700 relative group overflow-hidden">
                                             <img src={url} alt="" className="w-full h-full object-cover" />
+                                            <div className="absolute top-1 left-1 flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => moveCarouselImage(block.id, i, 'up')}
+                                                    disabled={i === 0}
+                                                    className="p-1 bg-neutral-800/90 text-white rounded disabled:opacity-30 disabled:cursor-not-allowed hover:bg-neutral-700"
+                                                    title="Liiguta üles"
+                                                >
+                                                    <ArrowUp className="w-3 h-3" />
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => moveCarouselImage(block.id, i, 'down')}
+                                                    disabled={i === (block.mediaItems?.length ?? 1) - 1}
+                                                    className="p-1 bg-neutral-800/90 text-white rounded disabled:opacity-30 disabled:cursor-not-allowed hover:bg-neutral-700"
+                                                    title="Liiguta alla"
+                                                >
+                                                    <ArrowDown className="w-3 h-3" />
+                                                </button>
+                                            </div>
                                             <button 
                                                 type="button"
                                                 onClick={() => {
