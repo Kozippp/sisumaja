@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { Eye, Heart, MessageCircle } from 'lucide-react';
+import { Eye, Heart, MessageCircle, Share2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface LiveStatsProps {
@@ -25,6 +25,7 @@ export default function LiveStats({
     views: showYoutubeStats ? null : initialViews,
     likes: showYoutubeStats ? null : initialLikes,
     comments: showYoutubeStats ? null : initialComments,
+    shares: initialShares, // Shares come from manual input only (YouTube API doesn't provide this)
   });
 
   // If showing YT stats, start loading. Otherwise considered loaded.
@@ -49,11 +50,12 @@ export default function LiveStats({
         if (res.ok && isMounted) {
           const data = await res.json();
           if (data.success && data.data) {
-             setStats({
+             setStats(prev => ({
+                ...prev,
                 views: data.data.stat_views,
                 likes: data.data.stat_likes,
                 comments: data.data.stat_comments,
-             });
+             }));
              setIsLoaded(true);
              if (fallbackTimer) clearTimeout(fallbackTimer);
           }
@@ -71,6 +73,7 @@ export default function LiveStats({
                 views: initialViews,
                 likes: initialLikes,
                 comments: initialComments,
+                shares: initialShares,
             });
             setIsLoaded(true);
         }
@@ -84,10 +87,10 @@ export default function LiveStats({
         clearInterval(interval);
         clearTimeout(fallbackTimer);
     };
-  }, [projectId, showYoutubeStats, initialViews, initialLikes, initialComments, isLoaded]);
+  }, [projectId, showYoutubeStats, initialViews, initialLikes, initialComments, initialShares, isLoaded]);
 
-  // Don't render empty block if everything is null and loaded
-  const hasData = stats.views || stats.likes || stats.comments;
+  // Don't render empty block if everything is null and loaded - show stats that are filled in admin
+  const hasData = stats.views || stats.likes || stats.comments || stats.shares;
   if (!hasData && isLoaded) return null;
 
   return (
@@ -109,6 +112,12 @@ export default function LiveStats({
             value={stats.comments} 
             label="Kommentaari" 
             isLoading={!isLoaded && !!showYoutubeStats && !stats.comments}
+        />
+        <StatItem 
+            icon={Share2}
+            value={stats.shares} 
+            label="Jagamist" 
+            isLoading={false}
         />
     </div>
   );

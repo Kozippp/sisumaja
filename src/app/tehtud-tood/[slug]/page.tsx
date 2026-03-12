@@ -40,15 +40,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export const revalidate = 60;
 
-// Helper to extract YouTube ID and params
+// Helper to extract YouTube ID and params (supports regular videos and Shorts)
 const getYoutubeEmbedUrl = (url: string) => {
   if (!url) return null;
   
   let videoId = null;
   let timeParam = '';
 
-  // Handle standard watch URLs
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  // Handle standard watch URLs and YouTube Shorts (youtube.com/shorts/VIDEO_ID)
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?/]*).*/;
   const match = url.match(regExp);
   if (match && match[2].length === 11) {
     videoId = match[2];
