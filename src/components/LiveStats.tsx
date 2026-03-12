@@ -102,48 +102,47 @@ export default function LiveStats({
   const hasData = hasStatValue(stats.views) || hasStatValue(stats.likes) || hasStatValue(stats.comments) || hasStatValue(stats.shares) || hasStatValue(stats.saves);
   if (!hasData && isLoaded) return null;
 
+  // Build array of visible stat items for responsive layout
+  const statItems: { icon: typeof Eye; value: string | null | number; label: string; isLoading: boolean }[] = [];
+  if (hasStatValue(stats.views)) statItems.push({ icon: Eye, value: stats.views, label: "Vaatamist", isLoading: !isLoaded && !!showYoutubeStats && !stats.views });
+  if (hasStatValue(stats.likes)) statItems.push({ icon: Heart, value: stats.likes, label: "Like'i", isLoading: !isLoaded && !!showYoutubeStats && !stats.likes });
+  if (hasStatValue(stats.comments)) statItems.push({ icon: MessageCircle, value: stats.comments, label: "Kommentaari", isLoading: !isLoaded && !!showYoutubeStats && !stats.comments });
+  if (hasStatValue(stats.shares)) statItems.push({ icon: Share2, value: stats.shares, label: "Jagamist", isLoading: false });
+  if (hasStatValue(stats.saves)) statItems.push({ icon: Bookmark, value: stats.saves, label: "Salvestamist", isLoading: false });
+
+  const count = statItems.length;
+
+  // Mobile layout: 1-3 = one row, 4 = 2x2, 5 = 2 top + 3 bottom
+  const mobileLayoutClass =
+    count <= 3
+      ? "flex flex-row flex-wrap justify-center gap-4"
+      : count === 4
+        ? "grid grid-cols-2 gap-4"
+        : "grid grid-cols-6 gap-4";
+
   return (
-    <div className="inline-flex w-full max-w-md md:max-w-none flex-nowrap justify-between md:justify-center gap-4 md:gap-16 pb-8 border-b-2 border-pink-500 px-2 sm:px-4 md:px-12 min-h-[120px]">
-        {hasStatValue(stats.views) && (
-        <StatItem 
-            icon={Eye}
-            value={stats.views} 
-            label="Vaatamist" 
-            isLoading={!isLoaded && !!showYoutubeStats && !stats.views}
-        />
-        )}
-        {hasStatValue(stats.likes) && (
-        <StatItem 
-            icon={Heart}
-            value={stats.likes} 
-            label="Like'i" 
-            isLoading={!isLoaded && !!showYoutubeStats && !stats.likes}
-        />
-        )}
-        {hasStatValue(stats.comments) && (
-        <StatItem 
-            icon={MessageCircle}
-            value={stats.comments} 
-            label="Kommentaari" 
-            isLoading={!isLoaded && !!showYoutubeStats && !stats.comments}
-        />
-        )}
-        {hasStatValue(stats.shares) && (
-        <StatItem 
-            icon={Share2}
-            value={stats.shares} 
-            label="Jagamist" 
-            isLoading={false}
-        />
-        )}
-        {hasStatValue(stats.saves) && (
-        <StatItem 
-            icon={Bookmark}
-            value={stats.saves} 
-            label="Salvestamist" 
-            isLoading={false}
-        />
-        )}
+    <div className={`w-full max-w-md md:max-w-none ${mobileLayoutClass} md:flex md:flex-row md:flex-nowrap md:justify-center md:gap-16 pb-8 border-b-2 border-pink-500 px-2 sm:px-4 md:px-12 min-h-[120px]`}>
+        {statItems.map((item, i) => (
+          <div
+            key={item.label}
+            className={
+              count <= 3
+                ? "flex-1 min-w-0 md:flex-none md:min-w-[120px]"
+                : count === 5 && i < 2
+                  ? "md:flex-none md:min-w-[120px] col-span-3"
+                  : count === 5 && i >= 2
+                    ? "md:flex-none md:min-w-[120px] col-span-2"
+                    : "md:flex-none md:min-w-[120px]"
+            }
+          >
+            <StatItem
+              icon={item.icon}
+              value={item.value}
+              label={item.label}
+              isLoading={item.isLoading}
+            />
+          </div>
+        ))}
     </div>
   );
 }
