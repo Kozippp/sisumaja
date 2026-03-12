@@ -14,6 +14,12 @@ export default function MediaGallery({ media }: MediaGalleryProps) {
   const [direction, setDirection] = useState(0);
   const thumbnailsRef = useRef<HTMLDivElement>(null);
 
+  // Drag to scroll state for thumbnails
+  const [isDraggingThumb, setIsDraggingThumb] = useState(false);
+  const dragStartX = useRef(0);
+  const dragStartScrollLeft = useRef(0);
+  const hasDragged = useRef(false);
+
   if (!media || media.length === 0) {
     return (
         <div className="aspect-video w-full bg-neutral-900 rounded-2xl flex items-center justify-center border border-neutral-800 text-gray-600">
@@ -44,8 +50,44 @@ export default function MediaGallery({ media }: MediaGalleryProps) {
     }
   };
 
-  useEffect(() => {
+  const handleThumbMouseDown = (e: React.MouseEvent) => {
+    setIsDraggingThumb(true);
+    hasDragged.current = false;
+    dragStartX.current = e.pageX - (thumbnailsRef.current?.offsetLeft || 0);
+    dragStartScrollLeft.current = thumbnailsRef.current?.scrollLeft || 0;
+  };
+
+  const handleThumbMouseLeave = () => {
+    setIsDraggingThumb(false);
+  };
+
+  const handleThumbMouseUp = () => {
+    setIsDraggingThumb(false);
+  };
+
+  const handleThumbMouseMove = (e: React.MouseEvent) => {
+    if (!isDraggingThumb) return;
+    e.preventDefault();
+    const x = e.pageX - (thumbnailsRef.current?.offsetLeft || 0);
+    const walk = (x - dragStartX.current) * 2; // scroll-fast multiplier
+    
+    if (Math.abs(walk) > 5) {
+        hasDragged.current = true;
+    }
+
     if (thumbnailsRef.current) {
+        thumbnailsRef.current.scrollLeft = dragStartScrollLeft.current - walk;
+    }
+  };
+
+  const onThumbClick = (idx: number) => {
+      if (hasDragged.current) return;
+      setDirection(idx > currentIndex ? 1 : -1);
+      setCurrentIndex(idx);
+  };
+
+  useEffect(() => {
+    if (thumbnailsRef.current && !isDraggingThumb) {
         const activeThumbnail = thumbnailsRef.current.children[currentIndex] as HTMLElement;
         if (activeThumbnail) {
             activeThumbnail.scrollIntoView({
@@ -55,7 +97,7 @@ export default function MediaGallery({ media }: MediaGalleryProps) {
             });
         }
     }
-  }, [currentIndex]);
+  }, [currentIndex, isDraggingThumb]);
 
 
   const isVideo = (url: string) => {
@@ -167,26 +209,31 @@ export default function MediaGallery({ media }: MediaGalleryProps) {
       {media.length > 1 && (
         <div 
             ref={thumbnailsRef}
-            className="flex gap-2 overflow-x-auto p-2 scrollbar-hide justify-start md:justify-center"
+            className={cn(
+                "flex gap-2 overflow-x-auto p-2 scrollbar-hide justify-start cursor-grab active:cursor-grabbing",
+                isDraggingThumb && "cursor-grabbing"
+            )}
+            onMouseDown={handleThumbMouseDown}
+            onMouseLeave={handleThumbMouseLeave}
+            onMouseUp={handleThumbMouseUp}
+            onMouseMove={handleThumbMouseMove}
         >
             {media.map((item, idx) => (
                 <button
                     key={idx}
-                    onClick={() => {
-                        setDirection(idx > currentIndex ? 1 : -1);
-                        setCurrentIndex(idx);
-                    }}
+                    onClick={() => onThumbClick(idx)}
                     className={cn(
-                        "relative flex-shrink-0 w-24 h-16 rounded-lg overflow-hidden transition-all duration-300 border-2",
+                        "relative flex-shrink-0 w-24 h-16 rounded-lg overflow-hidden transition-all duration-300 border-2 select-none",
                         currentIndex === idx 
                             ? "border-primary opacity-100 scale-105" 
                             : "border-transparent opacity-60 hover:opacity-100" 
                     )}
+                    draggable={false}
                 >
                      {isVideo(item) ? (
-                        <video src={item} className="w-full h-full object-cover" muted playsInline />
+                        <video src={item} className="w-full h-full object-cover pointer-events-none" muted playsInline />
                     ) : (
-                        <img src={item} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                        <img src={item} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover pointer-events-none" draggable={false} />
                     )}
                 </button>
             ))}
