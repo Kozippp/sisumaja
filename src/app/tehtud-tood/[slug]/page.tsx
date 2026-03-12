@@ -253,7 +253,7 @@ export default async function ProjectPage({ params }: PageProps) {
             </MotionItem>
             
             <MotionItem>
-            <h1 className="text-4xl md:text-6xl font-black text-white mb-8 uppercase leading-tight tracking-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-black text-white mb-8 uppercase leading-tight tracking-tight break-words hyphens-auto">
                 {project.title}
             </h1>
             </MotionItem>
