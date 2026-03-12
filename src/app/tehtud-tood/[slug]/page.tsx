@@ -223,14 +223,27 @@ export default async function ProjectPage({ params }: PageProps) {
       if (project.tiktok_url) links.push({ id: 'tt', type: 'tiktok', label: 'Vaata TikTokis', url: project.tiktok_url });
   }
 
-  // Check if we have any stats to show
-  const hasStats = project.stat_views || project.stat_likes || project.stat_comments || project.stat_shares || project.stat_saves;
+  // Helper to check if stat has value
+  const hasStatValue = (v: string | null | undefined | number) => {
+    if (!v) return false;
+    const raw = String(v).replace(/\s/g, '').replace(/k/i, '000').replace(/\D/g, '');
+    return (parseInt(raw) || 0) > 0;
+  };
+
+  // Check if we have any stats to show (including YouTube auto-stats)
+  const hasStats = 
+    project.show_youtube_stats || 
+    hasStatValue(project.stat_views) || 
+    hasStatValue(project.stat_likes) || 
+    hasStatValue(project.stat_comments) || 
+    hasStatValue(project.stat_shares) || 
+    hasStatValue(project.stat_saves);
 
   return (
     <div className="min-h-screen bg-black text-white">
       
       {/* Header Section */}
-      <div className="relative pt-32 pb-16 px-4 sm:px-6 lg:px-8 border-b border-neutral-900 bg-neutral-950">
+      <div className={`relative pt-32 px-4 sm:px-6 lg:px-8 border-b border-neutral-900 bg-neutral-950 ${hasStats ? 'pb-16' : 'pb-8'}`}>
         <MotionWrapper className="max-w-5xl mx-auto text-center">
             <MotionItem>
             <Link href="/tehtud-tood" className="inline-flex items-center text-gray-400 hover:text-white mb-8 transition-colors">
@@ -247,7 +260,7 @@ export default async function ProjectPage({ params }: PageProps) {
 
             {/* Dates Row */}
             <MotionItem>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-sm text-gray-400 mb-10">
+            <div className={`flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-sm text-gray-400 ${hasStats ? 'mb-10' : 'mb-0'}`}>
                 {project.collaboration_completed_at && (
                     <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4 text-white" />
@@ -274,6 +287,7 @@ export default async function ProjectPage({ params }: PageProps) {
             </MotionItem>
 
             {/* Stats Bar (Modern) - Live Component */}
+            {hasStats && (
             <MotionItem>
             <div className="relative mt-16 mb-12 w-full flex justify-center px-4">
                <div className="w-full max-w-5xl">
@@ -289,6 +303,7 @@ export default async function ProjectPage({ params }: PageProps) {
                </div>
             </div>
             </MotionItem>
+            )}
         </MotionWrapper>
       </div>
 
