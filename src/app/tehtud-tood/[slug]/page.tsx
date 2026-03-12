@@ -63,6 +63,9 @@ const getYoutubeEmbedUrl = (url: string) => {
   return videoId ? `https://www.youtube.com/embed/${videoId}${timeParam}` : null;
 };
 
+// Detect YouTube Shorts URL for vertical display (like homepage)
+const isYoutubeShortsUrl = (url: string) => url && url.includes('/shorts/');
+
 // Renderers for different block types
 const TextBlock = ({ block }: { block: ContentBlock }) => (
   <div className="max-w-3xl mx-auto w-full px-4 mb-16 text-center">
@@ -87,8 +90,9 @@ const MediaBlock = ({ block }: { block: ContentBlock }) => {
   const renderMedia = () => {
     if (block.type === 'video' && block.mediaUrl) {
       const embedUrl = getYoutubeEmbedUrl(block.mediaUrl);
+      const isShorts = isYoutubeShortsUrl(block.mediaUrl);
       return (
-        <div className="relative aspect-video bg-black rounded-xl overflow-hidden shadow-2xl">
+        <div className={`relative bg-black overflow-hidden shadow-2xl border border-white/10 ${isShorts ? 'aspect-[9/16] rounded-[2.5rem] max-w-[340px] mx-auto' : 'aspect-video rounded-xl'}`}>
             {embedUrl ? (
                 <iframe 
                     src={embedUrl} 

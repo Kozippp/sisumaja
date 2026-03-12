@@ -89,36 +89,49 @@ export default function LiveStats({
     };
   }, [projectId, showYoutubeStats, initialViews, initialLikes, initialComments, initialShares, isLoaded]);
 
-  // Don't render empty block if everything is null and loaded - show stats that are filled in admin
-  const hasData = stats.views || stats.likes || stats.comments || stats.shares;
+  // Don't render empty block if everything is null/zero and loaded - show only stats that are filled in admin
+  const hasStatValue = (v: string | null | number) => {
+    if (v == null || v === '') return false;
+    const raw = String(v).replace(/\s/g, '').replace(/k/i, '000').replace(/\D/g, '');
+    return (parseInt(raw) || 0) > 0;
+  };
+  const hasData = hasStatValue(stats.views) || hasStatValue(stats.likes) || hasStatValue(stats.comments) || hasStatValue(stats.shares);
   if (!hasData && isLoaded) return null;
 
   return (
     <div className="inline-flex w-full max-w-md md:max-w-none flex-nowrap justify-between md:justify-center gap-4 md:gap-16 pb-8 border-b-2 border-pink-500 px-2 sm:px-4 md:px-12 min-h-[120px]">
+        {hasStatValue(stats.views) && (
         <StatItem 
             icon={Eye}
             value={stats.views} 
             label="Vaatamist" 
-            isLoading={!isLoaded && !!showYoutubeStats && !stats.views} // Show loading until we have a value OR fallback triggers
+            isLoading={!isLoaded && !!showYoutubeStats && !stats.views}
         />
+        )}
+        {hasStatValue(stats.likes) && (
         <StatItem 
             icon={Heart}
             value={stats.likes} 
             label="Like'i" 
             isLoading={!isLoaded && !!showYoutubeStats && !stats.likes}
         />
+        )}
+        {hasStatValue(stats.comments) && (
         <StatItem 
             icon={MessageCircle}
             value={stats.comments} 
             label="Kommentaari" 
             isLoading={!isLoaded && !!showYoutubeStats && !stats.comments}
         />
+        )}
+        {hasStatValue(stats.shares) && (
         <StatItem 
             icon={Share2}
             value={stats.shares} 
             label="Jagamist" 
             isLoading={false}
         />
+        )}
     </div>
   );
 }
