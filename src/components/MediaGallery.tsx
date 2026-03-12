@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ImageIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 
 interface MediaGalleryProps {
   media: string[];
@@ -10,6 +11,8 @@ interface MediaGalleryProps {
 
 export default function MediaGallery({ media }: MediaGalleryProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
+  const thumbnailsRef = useRef<HTMLDivElement>(null);
 
   if (!media || media.length === 0) {
     return (
@@ -23,58 +26,136 @@ export default function MediaGallery({ media }: MediaGalleryProps) {
   }
 
   const nextSlide = () => {
+    setDirection(1);
     setCurrentIndex((prev) => (prev === media.length - 1 ? 0 : prev + 1));
   };
 
   const prevSlide = () => {
+    setDirection(-1);
     setCurrentIndex((prev) => (prev === 0 ? media.length - 1 : prev - 1));
   };
+
+  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    const swipeThreshold = 50;
+    if (info.offset.x < -swipeThreshold) {
+      nextSlide();
+    } else if (info.offset.x > swipeThreshold) {
+      prevSlide();
+    }
+  };
+
+  useEffect(() => {
+    if (thumbnailsRef.current) {
+        const activeThumbnail = thumbnailsRef.current.children[currentIndex] as HTMLElement;
+        if (activeThumbnail) {
+            activeThumbnail.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'center'
+            });
+        }
+    }
+  }, [currentIndex]);
+
 
   const isVideo = (url: string) => {
     return url.match(/\.(mp4|webm|ogg)$/i);
   };
 
+  const variants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? '100%' : '-100%',
+      opacity: 0,
+    }),
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction: number) => ({
+      zIndex: 0,
+      x: direction < 0 ? '100%' : '-100%',
+      opacity: 0,
+    }),
+  };
+
   return (
     <div className="space-y-4">
-      <div className="relative aspect-video w-full bg-black rounded-2xl overflow-hidden group">
-        {isVideo(media[currentIndex]) ? (
-          <video 
-            src={media[currentIndex]} 
-            controls 
-            className="w-full h-full object-contain"
-          />
-        ) : (
-          <img 
-            src={media[currentIndex]} 
-            alt={`Slide ${currentIndex + 1}`} 
-            className="w-full h-full object-contain"
-          />
-        )}
+      <div className="relative aspect-video w-full bg-black rounded-2xl overflow-hidden group touch-pan-y select-none">
+        <AnimatePresence initial={false} custom={direction} mode="popLayout">
+            <motion.div
+                key={currentIndex}
+                custom={direction}
+                variants={variants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{
+                    x: { type: "spring", stiffness: 300, damping: 30 },
+                    opacity: { duration: 0.2 }
+                }}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={1}
+                onDragEnd={handleDragEnd}
+                className="absolute inset-0 w-full h-full flex items-center justify-center cursor-grab active:cursor-grabbing"
+            >
+                {isVideo(media[currentIndex]) ? (
+                <div className="w-full h-full flex items-center justify-center">
+                    {/* Video wrapper to handle drag vs click issues if needed */}
+                     <video 
+                        src={media[currentIndex]} 
+                        controls 
+                        className="w-full h-full object-contain pointer-events-auto"
+                        playsInline
+                    />
+                </div>
+                ) : (
+                <img 
+                    src={media[currentIndex]} 
+                    alt={`Slide ${currentIndex + 1}`} 
+                    className="w-full h-full object-contain pointer-events-none"
+                    draggable={false}
+                />
+                )}
+            </motion.div>
+        </AnimatePresence>
 
         {media.length > 1 && (
           <>
-            <button 
-              onClick={prevSlide}
-              className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 text-white hover:bg-primary transition-colors backdrop-blur-sm"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-            <button 
-              onClick={nextSlide}
-              className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 text-white hover:bg-primary transition-colors backdrop-blur-sm"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
+            {/* Navigation Buttons */}
+            <div className="absolute inset-0 flex items-center justify-between p-4 pointer-events-none z-10">
+                <button 
+                    onClick={(e) => { e.stopPropagation(); prevSlide(); }}
+                    className="pointer-events-auto p-2 rounded-full bg-black/50 text-white hover:bg-primary transition-colors backdrop-blur-sm opacity-0 group-hover:opacity-100 focus:opacity-100"
+                    aria-label="Previous slide"
+                >
+                    <ChevronLeft className="w-6 h-6" />
+                </button>
+                <button 
+                    onClick={(e) => { e.stopPropagation(); nextSlide(); }}
+                    className="pointer-events-auto p-2 rounded-full bg-black/50 text-white hover:bg-primary transition-colors backdrop-blur-sm opacity-0 group-hover:opacity-100 focus:opacity-100"
+                    aria-label="Next slide"
+                >
+                    <ChevronRight className="w-6 h-6" />
+                </button>
+            </div>
             
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+            {/* Dots */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 pointer-events-none z-10">
                 {media.map((_, idx) => (
                     <button
                         key={idx}
-                        onClick={() => setCurrentIndex(idx)}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setDirection(idx > currentIndex ? 1 : -1);
+                            setCurrentIndex(idx);
+                        }}
                         className={cn(
-                            "w-2 h-2 rounded-full transition-all",
+                            "w-2 h-2 rounded-full transition-all pointer-events-auto",
                             currentIndex === idx ? "bg-primary w-6" : "bg-white/50 hover:bg-white"
                         )}
+                        aria-label={`Go to slide ${idx + 1}`}
                     />
                 ))}
             </div>
@@ -84,22 +165,28 @@ export default function MediaGallery({ media }: MediaGalleryProps) {
       
       {/* Thumbnails */}
       {media.length > 1 && (
-        <div className="flex gap-2 overflow-x-auto p-2 scrollbar-hide justify-center">
+        <div 
+            ref={thumbnailsRef}
+            className="flex gap-2 overflow-x-auto p-2 scrollbar-hide justify-start md:justify-center"
+        >
             {media.map((item, idx) => (
                 <button
                     key={idx}
-                    onClick={() => setCurrentIndex(idx)}
+                    onClick={() => {
+                        setDirection(idx > currentIndex ? 1 : -1);
+                        setCurrentIndex(idx);
+                    }}
                     className={cn(
                         "relative flex-shrink-0 w-24 h-16 rounded-lg overflow-hidden transition-all duration-300 border-2",
                         currentIndex === idx 
                             ? "border-primary opacity-100 scale-105" 
-                            : "border-transparent opacity-40 hover:opacity-100 grayscale hover:grayscale-0"
+                            : "border-transparent opacity-60 hover:opacity-100" 
                     )}
                 >
                      {isVideo(item) ? (
-                        <video src={item} className="w-full h-full object-cover" />
+                        <video src={item} className="w-full h-full object-cover" muted playsInline />
                     ) : (
-                        <img src={item} alt="" className="w-full h-full object-cover" />
+                        <img src={item} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
                     )}
                 </button>
             ))}
