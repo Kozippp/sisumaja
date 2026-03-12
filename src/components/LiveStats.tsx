@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { Eye, Heart, MessageCircle, Share2 } from 'lucide-react';
+import { Eye, Heart, MessageCircle, Share2, Bookmark } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface LiveStatsProps {
@@ -10,6 +10,7 @@ interface LiveStatsProps {
   initialLikes: string | null;
   initialComments: string | null;
   initialShares: string | null;
+  initialSaves: string | null;
   showYoutubeStats: boolean | null;
 }
 
@@ -19,6 +20,7 @@ export default function LiveStats({
   initialLikes, 
   initialComments, 
   initialShares,
+  initialSaves,
   showYoutubeStats
 }: LiveStatsProps) {
   const [stats, setStats] = useState({
@@ -26,6 +28,7 @@ export default function LiveStats({
     likes: showYoutubeStats ? null : initialLikes,
     comments: showYoutubeStats ? null : initialComments,
     shares: initialShares, // Shares come from manual input only (YouTube API doesn't provide this)
+    saves: initialSaves, // Saves come from manual input only (YouTube API doesn't provide this)
   });
 
   // If showing YT stats, start loading. Otherwise considered loaded.
@@ -74,6 +77,7 @@ export default function LiveStats({
                 likes: initialLikes,
                 comments: initialComments,
                 shares: initialShares,
+                saves: initialSaves,
             });
             setIsLoaded(true);
         }
@@ -87,7 +91,7 @@ export default function LiveStats({
         clearInterval(interval);
         clearTimeout(fallbackTimer);
     };
-  }, [projectId, showYoutubeStats, initialViews, initialLikes, initialComments, initialShares, isLoaded]);
+  }, [projectId, showYoutubeStats, initialViews, initialLikes, initialComments, initialShares, initialSaves, isLoaded]);
 
   // Don't render empty block if everything is null/zero and loaded - show only stats that are filled in admin
   const hasStatValue = (v: string | null | number) => {
@@ -95,7 +99,7 @@ export default function LiveStats({
     const raw = String(v).replace(/\s/g, '').replace(/k/i, '000').replace(/\D/g, '');
     return (parseInt(raw) || 0) > 0;
   };
-  const hasData = hasStatValue(stats.views) || hasStatValue(stats.likes) || hasStatValue(stats.comments) || hasStatValue(stats.shares);
+  const hasData = hasStatValue(stats.views) || hasStatValue(stats.likes) || hasStatValue(stats.comments) || hasStatValue(stats.shares) || hasStatValue(stats.saves);
   if (!hasData && isLoaded) return null;
 
   return (
@@ -129,6 +133,14 @@ export default function LiveStats({
             icon={Share2}
             value={stats.shares} 
             label="Jagamist" 
+            isLoading={false}
+        />
+        )}
+        {hasStatValue(stats.saves) && (
+        <StatItem 
+            icon={Bookmark}
+            value={stats.saves} 
+            label="Salvestamist" 
             isLoading={false}
         />
         )}

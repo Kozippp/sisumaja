@@ -183,6 +183,7 @@ export type Database = {
           slug: string
           stat_comments: string | null
           stat_likes: string | null
+          stat_saves: string | null
           stat_shares: string | null
           stat_views: string | null
           thumbnail_url: string | null
@@ -216,6 +217,7 @@ export type Database = {
           slug: string
           stat_comments?: string | null
           stat_likes?: string | null
+          stat_saves?: string | null
           stat_shares?: string | null
           stat_views?: string | null
           thumbnail_url?: string | null
@@ -249,6 +251,7 @@ export type Database = {
           slug?: string
           stat_comments?: string | null
           stat_likes?: string | null
+          stat_saves?: string | null
           stat_shares?: string | null
           stat_views?: string | null
           thumbnail_url?: string | null

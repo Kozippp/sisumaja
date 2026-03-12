@@ -64,6 +64,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     stat_likes: '',
     stat_comments: '',
     stat_shares: '',
+    stat_saves: '',
     client_name: '',
     client_role: '',
     client_avatar_url: '',
@@ -806,7 +807,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
             )}
         </div>
 
-        <div className={`grid grid-cols-2 md:grid-cols-4 gap-4 transition-opacity ${formData.show_youtube_stats ? 'opacity-50 pointer-events-none' : ''}`}>
+        <div className={`grid grid-cols-2 md:grid-cols-5 gap-4 transition-opacity ${formData.show_youtube_stats ? 'opacity-50 pointer-events-none' : ''}`}>
             <div>
                 <label className="block text-sm font-medium text-gray-400 mb-1">Vaatamised</label>
                 <input name="stat_views" value={formData.stat_views || ''} onChange={handleChange} className="w-full bg-black border border-neutral-700 rounded p-2" placeholder="nt. 50k" />
@@ -822,6 +823,10 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
              <div>
                 <label className="block text-sm font-medium text-gray-400 mb-1">Jagamised</label>
                 <input name="stat_shares" value={formData.stat_shares || ''} onChange={handleChange} className="w-full bg-black border border-neutral-700 rounded p-2" />
+            </div>
+             <div>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Salvestamised</label>
+                <input name="stat_saves" value={formData.stat_saves || ''} onChange={handleChange} className="w-full bg-black border border-neutral-700 rounded p-2" placeholder="nt. 1726" />
             </div>
         </div>
       </div>

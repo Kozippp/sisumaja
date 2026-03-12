@@ -224,7 +224,7 @@ export default async function ProjectPage({ params }: PageProps) {
   }
 
   // Check if we have any stats to show
-  const hasStats = project.stat_views || project.stat_likes || project.stat_comments || project.stat_shares;
+  const hasStats = project.stat_views || project.stat_likes || project.stat_comments || project.stat_shares || project.stat_saves;
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -283,6 +283,7 @@ export default async function ProjectPage({ params }: PageProps) {
                     initialLikes={project.stat_likes}
                     initialComments={project.stat_comments}
                     initialShares={project.stat_shares}
+                    initialSaves={project.stat_saves}
                     showYoutubeStats={project.show_youtube_stats}
                 />
                </div>
