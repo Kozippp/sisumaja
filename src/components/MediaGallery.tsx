@@ -82,7 +82,7 @@ export default function MediaGallery({ media }: MediaGalleryProps) {
   return (
     <div className="space-y-4">
       <div className="relative aspect-video w-full bg-black rounded-2xl overflow-hidden group touch-pan-y select-none">
-        <AnimatePresence initial={false} custom={direction} mode="popLayout">
+        <AnimatePresence initial={false} custom={direction}>
             <motion.div
                 key={currentIndex}
                 custom={direction}
@@ -91,7 +91,7 @@ export default function MediaGallery({ media }: MediaGalleryProps) {
                 animate="center"
                 exit="exit"
                 transition={{
-                    x: { type: "spring", stiffness: 300, damping: 30 },
+                    x: { type: "spring", stiffness: 200, damping: 50 },
                     opacity: { duration: 0.2 }
                 }}
                 drag="x"
