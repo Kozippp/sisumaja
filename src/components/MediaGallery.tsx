@@ -133,7 +133,7 @@ export default function MediaGallery({ media }: MediaGalleryProps) {
                 animate="center"
                 exit="exit"
                 transition={{
-                    x: { type: "spring", stiffness: 200, damping: 50 },
+                    x: { type: "spring", stiffness: 400, damping: 40 },
                     opacity: { duration: 0.2 }
                 }}
                 drag="x"
