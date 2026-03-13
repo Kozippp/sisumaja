@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Calendar, Youtube, Clapperboard, GraduationCap } from "lucide-react";
+import { ArrowUpRight, Calendar, Youtube, Clapperboard, GraduationCap, Mic } from "lucide-react";
 import { Database } from "@/types/database.types";
 
 type Project = Database['public']['Tables']['projects']['Row'];
@@ -55,7 +55,7 @@ export default function WorkPageClient({ projects }: WorkPageClientProps) {
             { value: 'all', label: 'Kõik tööd', icon: null },
             { value: 'youtube_ad', label: 'YouTube reklaam', icon: Youtube },
             { value: 'shorts', label: 'Lühivideod', icon: Clapperboard },
-            { value: 'training', label: 'Koolitused', icon: GraduationCap },
+            { value: 'training', label: 'Esinemised', icon: Mic },
           ] as { value: FilterType; label: string; icon: React.ElementType | null }[]).map(({ value, label, icon: Icon }) => (
             <button
               key={value}
