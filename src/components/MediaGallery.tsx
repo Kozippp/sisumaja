@@ -132,10 +132,7 @@ export default function MediaGallery({ media }: MediaGalleryProps) {
                 initial="enter"
                 animate="center"
                 exit="exit"
-                transition={{
-                    x: { type: "spring", stiffness: 400, damping: 40 },
-                    opacity: { duration: 0.2 }
-                }}
+                transition={{ duration: 0 }}
                 drag="x"
                 dragConstraints={{ left: 0, right: 0 }}
                 dragElastic={1}
