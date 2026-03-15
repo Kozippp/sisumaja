@@ -709,7 +709,7 @@ export default async function Home() {
               </div>
               <h2 className="text-4xl md:text-5xl font-black mb-6">Reklaam <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-fuchsia-500">Lühivideos</span> </h2>
               <p className="text-xl text-gray-400 leading-relaxed">
-              Koostöövideo meiega on väga kiire ja tõhus viis tutvustada oma toodet ligi 100 000 potentsiaalsele kliendile.               </p>
+              Lühivideo meiega on väga kiire ja tõhus viis tutvustada oma toodet ligi 100 000 potentsiaalsele kliendile.               </p>
             </div>
 
             {/* Main Feature Grid */}
@@ -735,7 +735,7 @@ export default async function Home() {
               {/* Right: Why It Works (The "Expert" text) */}
               <div>
                 <div className="mb-8">
-                  <h3 className="text-2xl font-bold text-white mb-4">Mis on koostöövideo?</h3>
+                  <h3 className="text-2xl font-bold text-white mb-4">Mida tähendab reklaam lühivideos?</h3>
                   <p className="text-lg text-gray-400 leading-relaxed">
                     Me loome vahva lühivideo (45-120 sekundit), mille siseselt tutvustame oma vaatajatele koostööpartneri toodet/teenust ning postitame selle 5 Kozipi platvormile, et maksimeerida ühe video nähtavus (TikTok, Reels, YouTube Shorts, Facebook ja Snapchat).
                   </p>
@@ -793,7 +793,7 @@ export default async function Home() {
             {/* New Statistics Section - Koostöövideote statistika */}
             <div className="mb-24">
               <div className="bg-neutral-900/50 border border-white/10 rounded-3xl p-8 backdrop-blur-sm">
-                <h3 className="text-xl font-bold text-white mb-6">Koostöövideote statistika</h3>
+                <h3 className="text-xl font-bold text-white mb-6">Lühivideote statistika</h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                   {/* 1. Vaatamisi */}
