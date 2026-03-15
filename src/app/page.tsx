@@ -707,7 +707,7 @@ export default async function Home() {
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-500 text-xs font-bold uppercase tracking-wider mb-6">
                 <Smartphone className="w-4 h-4" /> TikTok & Reels & Shorts
               </div>
-              <h2 className="text-4xl md:text-5xl font-black mb-6">Reklaam <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-fuchsia-500">TikToki</span> koostöövideos</h2>
+              <h2 className="text-4xl md:text-5xl font-black mb-6">Reklaam <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-fuchsia-500">Lühivideos</span> </h2>
               <p className="text-xl text-gray-400 leading-relaxed">
               Koostöövideo meiega on väga kiire ja tõhus viis tutvustada oma toodet ligi 100 000 potentsiaalsele kliendile.               </p>
             </div>
