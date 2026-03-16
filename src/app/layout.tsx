@@ -5,6 +5,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CookieConsent from "@/components/CookieConsent";
 import { RecaptchaProvider } from "@/components/RecaptchaProvider";
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 
 const spaceGrotesk = Space_Grotesk({ 
   subsets: ["latin"],
@@ -26,22 +28,26 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const messages = await getMessages();
+  
   return (
     <html lang="et" className="scroll-smooth">
       <body className={`${spaceGrotesk.variable} ${inter.variable} font-sans antialiased bg-background text-foreground`}>
-        <RecaptchaProvider>
-        <Navbar />
-        <main className="min-h-screen">
-          {children}
-        </main>
-        <Footer />
-        <CookieConsent />
-        </RecaptchaProvider>
+        <NextIntlClientProvider messages={messages}>
+          <RecaptchaProvider>
+          <Navbar />
+          <main className="min-h-screen">
+            {children}
+          </main>
+          <Footer />
+          <CookieConsent />
+          </RecaptchaProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

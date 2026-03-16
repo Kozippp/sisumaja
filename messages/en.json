@@ -1,0 +1,157 @@
+{
+  "nav": {
+    "home": "Home",
+    "portfolio": "Portfolio",
+    "contact": "Contact",
+    "contactUs": "Contact Us"
+  },
+  "hero": {
+    "title": "Advertise your brand in",
+    "titleBold": "Estonia's coolest",
+    "titleEnd": "family-friendly videos.",
+    "profileName": "@Kozip_Eesti",
+    "profileTitle": "Digital Creator",
+    "followersLabel": "Followers",
+    "viewsLabel": "Views"
+  },
+  "services": {
+    "youtube": {
+      "title": "YouTube Advertising",
+      "description": "Authentic advertising integrated into our YouTube videos."
+    },
+    "shorts": {
+      "title": "Short-Form Content",
+      "description": "Fast and engaging content on TikTok, Instagram, and YouTube Shorts."
+    },
+    "training": {
+      "title": "Speaking & Training",
+      "description": "We share insights on marketing, social media, investing, and entrepreneurship."
+    }
+  },
+  "clients": {
+    "title": "Trusted by:"
+  },
+  "about": {
+    "title": "Who is",
+    "titleBrand": "Kozip",
+    "intro1": "Kozip is one of Estonia's leading adventure entertainment channels",
+    "intro1Rest": ", where bold experiments, exciting stories, and top-tier video production come together.",
+    "intro2": "We don't just make videos – we create shows that people wait weeks for and watch repeatedly. Our goal is to inspire viewers with",
+    "intro2Bold": "courage to follow their hearts",
+    "intro2End": "and do amazing things in their own lives.",
+    "intro3Bold": "A community, not just numbers:",
+    "intro3": "Our fans aren't passive consumers but engaged thinkers who trust us like friends. For marketers, this means bringing your brand into an environment where advertising is part of an anticipated adventure, not a disruptive pause.",
+    "carouselTitle": "Our content speaks for itself",
+    "carouselSubtitle": "Large-scale challenges, experiments, and adventures"
+  },
+  "youtubeService": {
+    "badge": "YouTube",
+    "title": "Advertising in",
+    "titleBrand": "YouTube",
+    "titleEnd": "videos",
+    "subtitle": "YouTube video advertising is currently one of the world's most effective marketing methods.",
+    "whatIsMeaning": "What does YouTube video advertising mean?",
+    "whatIsDescription": "We create shows for the YouTube platform and weave advertising into their scripts, presented by the host in their own words. Thus, brand integration isn't disruptive but a natural part of the entertainment that fans trust.",
+    "statsTitle": "Who watches our videos?",
+    "statsViews": "Views",
+    "statsViewsValue": "60,000",
+    "statsViewsDesc": "average per video",
+    "statsWatch": "1 view =",
+    "statsWatchValue": "15 min",
+    "statsWatchDesc": "average watch time",
+    "statsDevice": "Primary device:",
+    "statsDeviceValue": "TV",
+    "statsDeviceDesc": "51% watch our videos on TV",
+    "statsAudience": "Target audience",
+    "statsAudienceValue": "16-28 y/o",
+    "statsAudienceDesc": "Often watched by whole families together",
+    "statsNote": "Often 1 view = friends, couples, or families watching together on the couch.",
+    "whyEffectiveTitle": "Why is it so effective?",
+    "reason1Title": "1. Trust",
+    "reason1Desc": "In traditional advertising, the brand praises itself. In our videos, a creator the viewer already trusts and loves recommends you. It's like a good friend's recommendation, but reaching tens or even hundreds of thousands of people at once.",
+    "reason2Title": "2. Real engagement",
+    "reason2Desc": "Our video statistics confirm that 95-99% of viewers watch the advertising segment in its entirety.",
+    "reason2DescRest": "This is a drastic difference compared to Meta ads, which are mostly ignored, or TV commercials, during which people grab their phones.",
+    "reason3Title": "3. Longevity",
+    "reason3Desc": "We create timeless content. Our videos are discovered and enjoyed years after publication – just like favorite movies. Your investment doesn't guarantee momentary visibility but lasting value that works for you for years.",
+    "comparisonTitle": "Why choose YouTube advertising?",
+    "portfolioTitle": "Portfolio",
+    "portfolioViewAll": "View all",
+    "noImage": "No image",
+    "selectProjects": "Select projects from the admin panel to display them here.",
+    "ctaButton": "Get in touch"
+  },
+  "shortsService": {
+    "badge": "TikTok & Reels & Shorts",
+    "title": "Advertising in",
+    "titleBrand": "Short Videos",
+    "subtitle": "A short video with us is a quick and effective way to introduce your product to nearly 100,000 potential customers.",
+    "whatIsMeaning": "What does short video advertising mean?",
+    "whatIsDescription": "We create an engaging short video (45-120 seconds) in which we introduce our viewers to our partner's product/service, and post it across 5 Kozip platforms to maximize the video's reach (TikTok, Reels, YouTube Shorts, Facebook, and Snapchat).",
+    "whyEffectiveTitle": "Why is it so effective?",
+    "reason1Title": "Years of built trust",
+    "reason1Desc": "We've built a relationship with our followers for years, so they genuinely trust and listen to us and our opinions.",
+    "reason2Title": "Recommendation, not advertising",
+    "reason2Desc": "When a brand talks about itself, it's perceived as advertising. But when we talk about a brand, it's an authentic and personal recommendation for the viewer.",
+    "reason3Title": "We handle everything",
+    "reason3Desc": "We don't need hand-holding or lengthy instructions – your goal is enough. Send us the product and watch the numbers grow while you focus on other things.",
+    "statsTitle": "Short video statistics",
+    "statsViews": "Views",
+    "statsViewsValue": "100,000",
+    "statsViewsDesc": "average per video",
+    "statsPlatforms": "We post on",
+    "statsPlatformsValue": "5 Platforms",
+    "statsPlatformsDesc": "TikTok, Instagram, FB, YouTube, Snapchat",
+    "statsEngagement": "Engagement",
+    "statsEngagementValue": "Very High",
+    "statsEngagementDesc": "6-10% of viewers are engaged",
+    "statsNiche": "Niche",
+    "statsNicheValue": "Lifestyle",
+    "statsNicheDesc": "Food, friends, relationships, fitness, sketches",
+    "portfolioTitle": "Portfolio: Short Videos",
+    "portfolioViewAll": "View all",
+    "portfolioReelLabel": "Reel / TikTok",
+    "ctaButton": "Partnership inquiry",
+    "addVideo": "Add video from admin page"
+  },
+  "trainingService": {
+    "badge": "Speaking & Training",
+    "title": "We share our knowledge",
+    "titleHighlight": "on stage and in training rooms.",
+    "subtitle": "We help bring energy to your event by hosting with flair or sharing practical knowledge in areas we work with daily. We're a partner for event organizers looking for a charismatic duo to perform, and for companies wanting to develop their team in our areas of expertise.",
+    "howCanWeHelp": "How can we help you?",
+    "service1Title": "Event Hosting",
+    "service1Desc": "We create a complete atmosphere and maintain the event's rhythm.",
+    "service2Title": "Speaking",
+    "service2Desc": "We share our knowledge and experiences through engaging presentations. For example, about entrepreneurship, content creation, or investing.",
+    "service3Title": "Training",
+    "service3Desc": "We share our knowledge with companies in social media, content creation, and marketing.",
+    "portfolioTitle": "Portfolio",
+    "portfolioViewAll": "View all",
+    "ctaButton": "Invite us to speak"
+  },
+  "contact": {
+    "title": "Let's start working together",
+    "subtitle": "Have an idea for collaboration? Write to us, and if your brand aligns with Kozip's values, we might create something truly amazing together!"
+  },
+  "recentWorks": {
+    "title": "Recent Work",
+    "viewAll": "View all",
+    "noWorks": "No public work available at the moment."
+  },
+  "footer": {
+    "description": "We create family-friendly content and offer brands the opportunity to reach thousands of viewers through YouTube ads, short videos, and speaking engagements.",
+    "navigation": "Navigation",
+    "contactTitle": "Contact",
+    "location": "Tallinn, Estonia",
+    "copyright": "Kozip. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use",
+    "cookies": "Cookie Policy"
+  },
+  "common": {
+    "videoMissing": "Video missing",
+    "imageMissing": "Image missing",
+    "loading": "Loading..."
+  }
+}

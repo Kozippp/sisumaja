@@ -6,11 +6,21 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import { useTranslations } from 'next-intl';
+import Cookies from 'js-cookie';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [currentLocale, setCurrentLocale] = useState('et');
   const pathname = usePathname();
+  const t = useTranslations('nav');
+
+  useEffect(() => {
+    const locale = Cookies.get('NEXT_LOCALE') || 'et';
+    setCurrentLocale(locale);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,14 +61,15 @@ export default function Navbar() {
 
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-8">
-              <NavLink href="/">Avaleht</NavLink>
-              <NavLink href="/tehtud-tood">Tehtud tööd</NavLink>
-              <NavLink href="/kontakt">Kontakt</NavLink>
+              <NavLink href="/">{t('home')}</NavLink>
+              <NavLink href="/tehtud-tood">{t('portfolio')}</NavLink>
+              <NavLink href="/kontakt">{t('contact')}</NavLink>
+              <LanguageSwitcher currentLocale={currentLocale} variant="navbar" />
               <Link
                 href="/kontakt"
                 className="px-6 py-2 bg-white text-black font-bold rounded-full hover:bg-primary hover:text-white transition-all duration-300 text-sm uppercase tracking-wide"
               >
-                Kirjuta meile
+                {t('contactUs')}
               </Link>
             </div>
 
@@ -84,14 +95,17 @@ export default function Navbar() {
             className="fixed inset-0 z-40 bg-black flex flex-col items-center justify-center space-y-8 md:hidden"
           >
             <MobileNavLink href="/" onClick={() => setIsOpen(false)}>
-              Avaleht
+              {t('home')}
             </MobileNavLink>
             <MobileNavLink href="/tehtud-tood" onClick={() => setIsOpen(false)}>
-              Tehtud tööd
+              {t('portfolio')}
             </MobileNavLink>
             <MobileNavLink href="/kontakt" onClick={() => setIsOpen(false)}>
-              Kontakt
+              {t('contact')}
             </MobileNavLink>
+            <div className="pt-4">
+              <LanguageSwitcher currentLocale={currentLocale} variant="navbar" />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

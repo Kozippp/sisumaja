@@ -4,9 +4,21 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Instagram, Youtube, Mail } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import { LanguageSwitcher } from './LanguageSwitcher';
+import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
 
 export default function Footer() {
   const pathname = usePathname();
+  const t = useTranslations('footer');
+  const tNav = useTranslations('nav');
+  const [currentLocale, setCurrentLocale] = useState('et');
+
+  useEffect(() => {
+    const locale = Cookies.get('NEXT_LOCALE') || 'et';
+    setCurrentLocale(locale);
+  }, []);
 
   if (pathname.startsWith('/admin')) {
     return null;
@@ -19,7 +31,6 @@ export default function Footer() {
           <div className="col-span-1 md:col-span-2">
             <div className="flex flex-col items-start">
               <Link href="/" className="block mb-6 w-auto max-w-[220px]">
-                {/* Asenda tulevikus Kozipi logoga */}
                 <Image
                   src="/kozip-logo.png"
                   alt="Kozip logo"
@@ -29,12 +40,11 @@ export default function Footer() {
                 />
               </Link>
               <p className="text-gray-400 max-w-sm mb-6 leading-relaxed">
-                Loome kogupere sisu ning pakume brändidele võimalust tuhandete vaatajate ette jõuda — YouTube'i reklaamide, lühivideote ja esinemiste kaudu.
+                {t('description')}
               </p>
               <div className="flex space-x-4">
                 <SocialLink href="https://www.youtube.com/@Sisumajatv" icon={Youtube} />
                 <SocialLink href="https://www.instagram.com/sisumaja.tv/" icon={Instagram} />
-                {/* TikTok ikoon vajab asendust kui pilt muutub */}
                 <SocialLink href="https://www.tiktok.com/@sisumaja.tv" icon={TikTokIcon} />
                 <SocialLink href="mailto:info@kozip.ee" icon={Mail} />
               </div>
@@ -42,18 +52,18 @@ export default function Footer() {
           </div>
           
           <div>
-            <h4 className="text-white font-bold uppercase tracking-wider mb-6">Navigatsioon</h4>
+            <h4 className="text-white font-bold uppercase tracking-wider mb-6">{t('navigation')}</h4>
             <ul className="space-y-4">
-              <FooterLink href="/">Avaleht</FooterLink>
-              <FooterLink href="/tehtud-tood">Tehtud tööd</FooterLink>
-              <FooterLink href="/kontakt">Kontakt</FooterLink>
+              <FooterLink href="/">{tNav('home')}</FooterLink>
+              <FooterLink href="/tehtud-tood">{tNav('portfolio')}</FooterLink>
+              <FooterLink href="/kontakt">{tNav('contact')}</FooterLink>
             </ul>
           </div>
           
           <div>
-            <h4 className="text-white font-bold uppercase tracking-wider mb-6">Kontakt</h4>
+            <h4 className="text-white font-bold uppercase tracking-wider mb-6">{t('contactTitle')}</h4>
             <ul className="space-y-4 text-gray-400">
-              <li>Tallinn, Eesti</li>
+              <li>{t('location')}</li>
               <li>
                 <a href="mailto:info@kozip.ee" className="hover:text-white transition-colors">
                   info@kozip.ee
@@ -63,12 +73,13 @@ export default function Footer() {
           </div>
         </div>
         
-        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-600">
-          <p>&copy; {new Date().getFullYear()} Kozip. Kõik õigused kaitstud.</p>
-          <div className="flex space-x-6 mt-4 md:mt-0 flex-wrap justify-end gap-y-2">
-            <Link href="/privaatsuspoliitika" className="hover:text-white transition-colors">Privaatsuspoliitika</Link>
-            <Link href="/kasutustingimused" className="hover:text-white transition-colors">Kasutustingimused</Link>
-            <Link href="/kupsiste-poliitika" className="hover:text-white transition-colors">Küpsiste poliitika</Link>
+        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-600 gap-4">
+          <p>&copy; {new Date().getFullYear()} {t('copyright')}</p>
+          <LanguageSwitcher currentLocale={currentLocale} variant="footer" />
+          <div className="flex space-x-6 flex-wrap justify-end gap-y-2">
+            <Link href="/privaatsuspoliitika" className="hover:text-white transition-colors">{t('privacy')}</Link>
+            <Link href="/kasutustingimused" className="hover:text-white transition-colors">{t('terms')}</Link>
+            <Link href="/kupsiste-poliitika" className="hover:text-white transition-colors">{t('cookies')}</Link>
           </div>
         </div>
       </div>

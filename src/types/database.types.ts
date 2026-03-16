@@ -170,6 +170,7 @@ export type Database = {
           content: Json | null
           created_at: string
           description: string | null
+          description_en: string | null
           id: string
           instagram_url: string | null
           is_visible: boolean | null
@@ -189,6 +190,7 @@ export type Database = {
           thumbnail_url: string | null
           tiktok_url: string | null
           title: string
+          title_en: string | null
           updated_at: string | null
           youtube_url: string | null
           youtube_video_id: string | null
@@ -204,6 +206,7 @@ export type Database = {
           content?: Json | null
           created_at?: string
           description?: string | null
+          description_en?: string | null
           id?: string
           instagram_url?: string | null
           is_visible?: boolean | null
@@ -223,6 +226,7 @@ export type Database = {
           thumbnail_url?: string | null
           tiktok_url?: string | null
           title: string
+          title_en?: string | null
           updated_at?: string | null
           youtube_url?: string | null
           youtube_video_id?: string | null
@@ -238,6 +242,7 @@ export type Database = {
           content?: Json | null
           created_at?: string
           description?: string | null
+          description_en?: string | null
           id?: string
           instagram_url?: string | null
           is_visible?: boolean | null
@@ -257,6 +262,7 @@ export type Database = {
           thumbnail_url?: string | null
           tiktok_url?: string | null
           title?: string
+          title_en?: string | null
           updated_at?: string | null
           youtube_url?: string | null
           youtube_video_id?: string | null

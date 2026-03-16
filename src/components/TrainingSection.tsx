@@ -4,42 +4,44 @@ import { motion } from "framer-motion";
 import { Mic, Users, ArrowRight, School, Calendar } from "lucide-react";
 import Link from "next/link";
 import { Database } from "@/types/database.types";
+import { useTranslations } from 'next-intl';
 
 type Project = Database['public']['Tables']['projects']['Row'];
-
-const SERVICES = [
-  {
-    title: "Õhtujuhtimine",
-    description: "Loome tervikliku atmosfääri ja hoiame sündmuse rütmi.",
-    icon: <Users className="w-6 h-6" />,
-    color: "bg-yellow-500",
-    textColor: "text-yellow-500",
-    gradient: "from-yellow-500/20 to-transparent"
-  },
-  {
-    title: "Esinemised",
-    description: "Jagame meeleolukate esinemistega oma teadmisi ja kogemusi. Näiteks ettevõtlusest, sisuloomest või investeerimisest.",
-    icon: <Mic className="w-6 h-6" />,
-    color: "bg-fuchsia-500",
-    textColor: "text-fuchsia-500",
-    gradient: "from-fuchsia-500/20 to-transparent"
-  },
-  {
-    title: "Koolitused",
-    description: "Jagame ettevõtetele oma teadmisi sotsiaalmeedia, sisuloome ning turunduse vallas.",
-    icon: <School className="w-6 h-6" />,
-    color: "bg-blue-500",
-    textColor: "text-blue-500",
-    gradient: "from-blue-500/20 to-transparent"
-  }
-];
 
 interface TrainingSectionProps {
   trainingProjects?: Project[];
 }
 
 export function TrainingSection({ trainingProjects = [] }: TrainingSectionProps) {
+  const t = useTranslations('trainingService');
   const hasProjects = trainingProjects.length > 0;
+
+  const SERVICES = [
+    {
+      title: t('service1Title'),
+      description: t('service1Desc'),
+      icon: <Users className="w-6 h-6" />,
+      color: "bg-yellow-500",
+      textColor: "text-yellow-500",
+      gradient: "from-yellow-500/20 to-transparent"
+    },
+    {
+      title: t('service2Title'),
+      description: t('service2Desc'),
+      icon: <Mic className="w-6 h-6" />,
+      color: "bg-fuchsia-500",
+      textColor: "text-fuchsia-500",
+      gradient: "from-fuchsia-500/20 to-transparent"
+    },
+    {
+      title: t('service3Title'),
+      description: t('service3Desc'),
+      icon: <School className="w-6 h-6" />,
+      color: "bg-blue-500",
+      textColor: "text-blue-500",
+      gradient: "from-blue-500/20 to-transparent"
+    }
+  ];
 
   return (
     <section id="training-service" className="py-32 border-b border-white/5 bg-neutral-950 relative overflow-hidden">
@@ -55,7 +57,7 @@ export function TrainingSection({ trainingProjects = [] }: TrainingSectionProps)
                 viewport={{ once: true }}
                 className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 text-green-500 text-xs font-bold uppercase tracking-wider mb-6"
              >
-                <Users className="w-4 h-4" /> Esinemised & Koolitused
+                <Users className="w-4 h-4" /> {t('badge')}
              </motion.div>
              
              <motion.h2 
@@ -65,7 +67,7 @@ export function TrainingSection({ trainingProjects = [] }: TrainingSectionProps)
                 transition={{ delay: 0.1 }}
                 className="text-4xl md:text-5xl lg:text-6xl font-black mb-8 text-white tracking-tight"
              >
-                Jagame oma teadmisi<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">laval ja koolitusruumis.</span>
+                {t('title')}<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">{t('titleHighlight')}</span>
              </motion.h2>
              
              <motion.p 
@@ -75,7 +77,7 @@ export function TrainingSection({ trainingProjects = [] }: TrainingSectionProps)
                 transition={{ delay: 0.2 }}
                 className="text-xl text-gray-400 leading-relaxed"
              >
-                Me aitame tuua sinu üritusele särtsu, juhtides meeleolukalt õhtut või jagades praktilisi teadmisi teemadel, milles ise igapäevaselt tegutseme. Oleme partneriks nii sündmuste korraldajatele, kes otsivad karismaatilist duot esinema, kui ka ettevõtetele, kes soovivad oma meeskonda meie eksptertiisivallas arendada.
+                {t('subtitle')}
              </motion.p>
           </div>
 
@@ -86,7 +88,7 @@ export function TrainingSection({ trainingProjects = [] }: TrainingSectionProps)
              viewport={{ once: true }}
              className="text-2xl md:text-3xl font-bold text-center mb-10"
           >
-             Kuidas saame sind aidata?
+             {t('howCanWeHelp')}
           </motion.h3>
 
           {/* 3 Cards */}
@@ -122,9 +124,9 @@ export function TrainingSection({ trainingProjects = [] }: TrainingSectionProps)
                className="mb-20"
             >
                <div className="flex justify-between items-end mb-8">
-                 <h3 className="text-2xl font-bold text-white">Tehtud tööd</h3>
+                 <h3 className="text-2xl font-bold text-white">{t('portfolioTitle')}</h3>
                  <Link href="/tehtud-tood?filter=training" className="text-sm font-bold uppercase text-gray-400 hover:text-white flex items-center gap-2 transition-colors">
-                   Vaata kõiki <ArrowRight className="w-4 h-4" />
+                   {t('portfolioViewAll')} <ArrowRight className="w-4 h-4" />
                  </Link>
                </div>
 
@@ -183,7 +185,7 @@ export function TrainingSection({ trainingProjects = [] }: TrainingSectionProps)
              className="text-center"
           >
              <Link href="#contact" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-fuchsia-500 hover:text-white transition-all duration-300">
-                Kutsu meid esinema <ArrowRight className="w-4 h-4" />
+                {t('ctaButton')} <ArrowRight className="w-4 h-4" />
              </Link>
           </motion.div>
        </div>

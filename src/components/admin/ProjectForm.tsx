@@ -46,8 +46,10 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
 
   const [formData, setFormData] = useState<Partial<ProjectInsert>>({
     title: '',
+    title_en: '',
     slug: '',
     description: '',
+    description_en: '',
     thumbnail_url: '',
     media_gallery: [],
     content: [],
@@ -454,7 +456,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
         <h3 className="text-xl font-bold border-b border-neutral-800 pb-2 mb-4">Põhiinfo</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">Pealkiri *</label>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Pealkiri (EST) *</label>
                 <input
                     name="title"
                     value={formData.title}
@@ -464,15 +466,25 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                 />
             </div>
             <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">Slug (URL) *</label>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Title (EN)</label>
                 <input
-                    name="slug"
-                    value={formData.slug}
+                    name="title_en"
+                    value={formData.title_en || ''}
                     onChange={handleChange}
                     className="w-full bg-black border border-neutral-700 rounded p-2"
-                    required
                 />
+                <p className="text-xs text-gray-500 mt-1">English translation of the title</p>
             </div>
+        </div>
+        <div>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Slug (URL) *</label>
+            <input
+                name="slug"
+                value={formData.slug}
+                onChange={handleChange}
+                className="w-full bg-black border border-neutral-700 rounded p-2"
+                required
+            />
         </div>
         <div>
             <label className="block text-sm font-medium text-gray-400 mb-1">Projekti avaldamise kuupäev</label>
@@ -489,7 +501,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
              <p className="text-xs text-gray-500 mt-1">Kuupäev, millal projekt avalikustati. See ilmub lehel pealkirja all.</p>
         </div>
         <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Lühikirjeldus (SEO & List View)</label>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Lühikirjeldus (EST) (SEO & List View)</label>
             <textarea
                 name="description"
                 value={formData.description || ''}
@@ -498,6 +510,17 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                 className="w-full bg-black border border-neutral-700 rounded p-2"
             />
              <p className="text-xs text-gray-500 mt-1">See tekst on nähtav Google otsingus ja tehtud tööde nimekirjas. Projekti detailvaates seda EI kuvata.</p>
+        </div>
+        <div>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Short Description (EN) (SEO & List View)</label>
+            <textarea
+                name="description_en"
+                value={formData.description_en || ''}
+                onChange={handleChange}
+                rows={3}
+                className="w-full bg-black border border-neutral-700 rounded p-2"
+            />
+             <p className="text-xs text-gray-500 mt-1">English translation of the short description. Visible in Google search and project list.</p>
         </div>
         
         {/* Image optimization toggle */}

@@ -1,0 +1,157 @@
+{
+  "nav": {
+    "home": "Avaleht",
+    "portfolio": "Tehtud tööd",
+    "contact": "Kontakt",
+    "contactUs": "Kirjuta meile"
+  },
+  "hero": {
+    "title": "Reklaami oma brändi",
+    "titleBold": "ägedaimates",
+    "titleEnd": "kogupere videotes.",
+    "profileName": "@Kozip_Eesti",
+    "profileTitle": "Digital Creator",
+    "followersLabel": "Jälgijaid",
+    "viewsLabel": "Vaatamisi"
+  },
+  "services": {
+    "youtube": {
+      "title": "YouTube'i Reklaam",
+      "description": "Autentne reklaam integreeritud meie YouTube'i videotesse."
+    },
+    "shorts": {
+      "title": "Lühivideod",
+      "description": "Kiire ja haarav sisu TikTokis, Instagramis ja YouTube Shortsis."
+    },
+    "training": {
+      "title": "Esinemised & Koolitused",
+      "description": "Jagame kogemusi turundusest, sotsiaalmeediast, investeerimisest ja ettevõtlusest."
+    }
+  },
+  "clients": {
+    "title": "Rahulolevad Kliendid:"
+  },
+  "about": {
+    "title": "Kes on",
+    "titleBrand": "Kozip",
+    "intro1": "Kozip on üks Eesti juhtivaid seikluslikke meelelahutuskanaleid",
+    "intro1Rest": ", kus kohtuvad hulljulged eksperimendid, põnevad lood ja tipptase videoproduktsioonis.",
+    "intro2": "Me ei tee lihtsalt videoid – me loome saateid, mida oodatakse nädalaid ja vaadatakse korduvalt. Meie eesmärk on süstida vaatajasse",
+    "intro2Bold": "julgust järgida oma südant",
+    "intro2End": "ning teha ka oma elus ägedaid asju.",
+    "intro3Bold": "Kogukond, mitte lihtsalt numbrid:",
+    "intro3": "Meie fännid ei ole lihtsalt passiivsed tarbijad vaid kaasamõtlejad, kes usaldavad meid nagu sõpru. Turundaja jaoks tähendab see brändi viimist keskkonda, kus reklaam on osa oodatud seiklusest, mitte häiriv paus.",
+    "carouselTitle": "Meie sisu räägib enda eest",
+    "carouselSubtitle": "Suuremahulised väljakutsed, eksperimendid ja seiklused"
+  },
+  "youtubeService": {
+    "badge": "YouTube",
+    "title": "Reklaam",
+    "titleBrand": "YouTube'i",
+    "titleEnd": "videos",
+    "subtitle": "YouTube'i videosse loodud reklaam on praegu üks maailma efektiivsemaid turundusmeetodeid.",
+    "whatIsMeaning": "Mida tähendab YouTube'i videosse integreeritud reklaam?",
+    "whatIsDescription": "Me loome YouTube'i platformile saateid ning me põimime nende saadete stsenaariumitesse reklaami, mida seda esitleb saatejuht oma sõnadega. Seega brändi integratsioon ei ole segav faktor, vaid loomulik osa meelelahutusest, mida fännid usaldavad.",
+    "statsTitle": "Kes meie videoid vaatab?",
+    "statsViews": "Vaatamisi",
+    "statsViewsValue": "60 000",
+    "statsViewsDesc": "keskmiselt ühe video kohta",
+    "statsWatch": "1 vaatamine =",
+    "statsWatchValue": "15 min",
+    "statsWatchDesc": "keskmiselt vaatamisaega",
+    "statsDevice": "Peamine seade:",
+    "statsDeviceValue": "Telekas",
+    "statsDeviceDesc": "51% vaatab meie videoid TV-lt",
+    "statsAudience": "Sihtrühm",
+    "statsAudienceValue": "16-28.a",
+    "statsAudienceDesc": "Tihti vaatab terve pere koos",
+    "statsNote": "Sageli 1 vaatamine = sõbrad, noorpaar või pere koos diivanil vaatamas.",
+    "whyEffectiveTitle": "Miks see nii efektiivne on?",
+    "reason1Title": "1. Usaldus",
+    "reason1Desc": "Tavareklaamis kiidab bränd end ise. Meie videos soovitab sind sisulooja, keda vaataja juba usaldab ja armastab. See on nagu hea sõbra soovitus, aga jõudes korraga kümnete kui mitte sadade tuhandete inimesteni korraga.",
+    "reason2Title": "2. Reaalne huvi",
+    "reason2Desc": "Meie videote statistika kinnitab, et 95-99% vaatajatest vaatab reklaamsegmendi täies mahus ära.",
+    "reason2DescRest": "See on drastiline erinevus võrreldes Meta reklaamidega, mida enamasti ignoreeritakse, või telekanalite pausidega, mille ajal haaratakse hoopis telefon.",
+    "reason3Title": "3. Pikaajalisus",
+    "reason3Desc": "Me loome sisu, mis on ajatu. Meie videoid avastatakse ja nauditakse ka aastaid peale avaldamist – täpselt nagu oma lemmikfilme. Sinu investeering ei taga hetkelist nähtavust, vaid püsivat väärtust, mis töötab Sinu kasuks aastaid.",
+    "comparisonTitle": "Miks valida YouTube'i reklaam?",
+    "portfolioTitle": "Tehtud tööd",
+    "portfolioViewAll": "Vaata kõiki",
+    "noImage": "Pilt puudub",
+    "selectProjects": "Vali projektid admin paneelist, et neid siin kuvada.",
+    "ctaButton": "Võta ühendust"
+  },
+  "shortsService": {
+    "badge": "TikTok & Reels & Shorts",
+    "title": "Reklaam",
+    "titleBrand": "Lühivideos",
+    "subtitle": "Lühivideo meiega on väga kiire ja tõhus viis tutvustada oma toodet ligi 100 000 potentsiaalsele kliendile.",
+    "whatIsMeaning": "Mida tähendab reklaam lühivideos?",
+    "whatIsDescription": "Me loome vahva lühivideo (45-120 sekundit), mille siseselt tutvustame oma vaatajatele koostööpartneri toodet/teenust ning postitame selle 5 Kozipi platvormile, et maksimeerida ühe video nähtavus (TikTok, Reels, YouTube Shorts, Facebook ja Snapchat).",
+    "whyEffectiveTitle": "Miks see on nii tõhus?",
+    "reason1Title": "Aastaid ehitatud usaldus",
+    "reason1Desc": "Oleme ehitanud oma jälgijaskonnaga suhet aastaid, seega meid ja meie arvamusi päriselt usaldatakse ja kuulatakse.",
+    "reason2Title": "Soovitus, mitte reklaam",
+    "reason2Desc": "Kui bränd räägib iseendast, tajutakse seda reklaamina. Kui aga meie räägime brändist, on see vaataja jaoks autentne ja isiklik soovitus.",
+    "reason3Title": "Vastutame kõige eest",
+    "reason3Desc": "Me ei vaja \"käehoidmist\" ega pikki juhendeid – meile piisab sinu eesmärgist. Saada meile toode ja vaata, kuidas numbrid kasvavad, kuni sina saad keskenduda muule.",
+    "statsTitle": "Lühivideote statistika",
+    "statsViews": "Vaatamisi",
+    "statsViewsValue": "100 000",
+    "statsViewsDesc": "keskmiselt ühe video kohta",
+    "statsPlatforms": "Postitame",
+    "statsPlatformsValue": "5 Platvormi",
+    "statsPlatformsDesc": "TikTok, Instagram, FB, YouTube, Snapchat",
+    "statsEngagement": "Kaasatus",
+    "statsEngagementValue": "Väga Kõrge",
+    "statsEngagementDesc": "6-10% vaatajatest on kaasatud",
+    "statsNiche": "Nišš",
+    "statsNicheValue": "Elustiil",
+    "statsNicheDesc": "Toitumine, sõbrad, suhe, trenn, sketšid",
+    "portfolioTitle": "Tehtud tööd: Lühivideod",
+    "portfolioViewAll": "Vaata kõiki",
+    "portfolioReelLabel": "Reel / TikTok",
+    "ctaButton": "Koostööpäring",
+    "addVideo": "Lisa video admin lehelt"
+  },
+  "trainingService": {
+    "badge": "Esinemised & Koolitused",
+    "title": "Jagame oma teadmisi",
+    "titleHighlight": "laval ja koolitusruumis.",
+    "subtitle": "Me aitame tuua sinu üritusele särtsu, juhtides meeleolukalt õhtut või jagades praktilisi teadmisi teemadel, milles ise igapäevaselt tegutseme. Oleme partneriks nii sündmuste korraldajatele, kes otsivad karismaatilist duot esinema, kui ka ettevõtetele, kes soovivad oma meeskonda meie eksptertiisivallas arendada.",
+    "howCanWeHelp": "Kuidas saame sind aidata?",
+    "service1Title": "Õhtujuhtimine",
+    "service1Desc": "Loome tervikliku atmosfääri ja hoiame sündmuse rütmi.",
+    "service2Title": "Esinemised",
+    "service2Desc": "Jagame meeleolukate esinemistega oma teadmisi ja kogemusi. Näiteks ettevõtlusest, sisuloomest või investeerimisest.",
+    "service3Title": "Koolitused",
+    "service3Desc": "Jagame ettevõtetele oma teadmisi sotsiaalmeedia, sisuloome ning turunduse vallas.",
+    "portfolioTitle": "Tehtud tööd",
+    "portfolioViewAll": "Vaata kõiki",
+    "ctaButton": "Kutsu meid esinema"
+  },
+  "contact": {
+    "title": "Alustame koostööd",
+    "subtitle": "Sul on idee koostööks? Kirjuta meile ja kui teie Bränd Kozipi väärtustega klapib, siis ehk saame midagi väga vinget ellu viia!"
+  },
+  "recentWorks": {
+    "title": "Viimased tööd",
+    "viewAll": "Vaata kõiki",
+    "noWorks": "Hetkel avalikud tööd puuduvad."
+  },
+  "footer": {
+    "description": "Loome kogupere sisu ning pakume brändidele võimalust tuhandete vaatajate ette jõuda — YouTube'i reklaamide, lühivideote ja esinemiste kaudu.",
+    "navigation": "Navigatsioon",
+    "contactTitle": "Kontakt",
+    "location": "Tallinn, Eesti",
+    "copyright": "Kozip. Kõik õigused kaitstud.",
+    "privacy": "Privaatsuspoliitika",
+    "terms": "Kasutustingimused",
+    "cookies": "Küpsiste poliitika"
+  },
+  "common": {
+    "videoMissing": "Video puudub",
+    "imageMissing": "Pilt puudub",
+    "loading": "Laadimine..."
+  }
+}
