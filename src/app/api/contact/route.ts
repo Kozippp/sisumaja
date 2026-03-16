@@ -10,12 +10,40 @@ export async function POST(req: NextRequest) {
     const email = (formData.get('email') || '').toString().trim();
     const phone = (formData.get('phone') || '').toString().trim() || null;
     const message = (formData.get('message') || '').toString().trim();
+    const honeypot = (formData.get('website') || '').toString().trim();
+
+    // Honeypot: bots fill hidden fields, humans don't
+    if (honeypot) {
+      return NextResponse.json({ success: true }); // Pretend success to not alert bots
+    }
 
     if (!name || !email || !message) {
       return NextResponse.json(
         { error: 'missing_fields', message: 'Palun täida vähemalt nimi, e-mail ja sõnum.' },
         { status: 400 }
       );
+    }
+
+    // Spam heuristic: random-looking strings (e.g. jPhyNzRdjbwpibOjKA)
+    const looksLikeRandomString = (s: string) =>
+      s.length >= 15 && !/\s/.test(s) && /^[a-zA-Z0-9]+$/.test(s);
+    if (looksLikeRandomString(name) || looksLikeRandomString(message)) {
+      return NextResponse.json({ success: true }); // Pretend success
+    }
+
+    // reCAPTCHA v3 verification (optional – only when keys are set)
+    const recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY;
+    const recaptchaToken = (formData.get('recaptcha_token') || '').toString();
+    if (recaptchaSecret && recaptchaToken) {
+      const verifyRes = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `secret=${recaptchaSecret}&response=${recaptchaToken}`,
+      });
+      const verify = await verifyRes.json();
+      if (!verify.success || (verify.score !== undefined && verify.score < 0.5)) {
+        return NextResponse.json({ success: true }); // Pretend success
+      }
     }
 
     // Salvestame Supabase'i backupiks

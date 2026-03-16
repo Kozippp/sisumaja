@@ -3,12 +3,14 @@
 import { Mail, MapPin, Instagram, Youtube, ArrowRight, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import Image from 'next/image';
 import { useState, FormEvent, useEffect } from 'react';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
   useEffect(() => {
     setMounted(true);
@@ -26,6 +28,15 @@ export default function ContactPage() {
 
     const form = e.currentTarget;
     const formData = new FormData(form);
+
+    if (executeRecaptcha) {
+      try {
+        const token = await executeRecaptcha('contact');
+        formData.set('recaptcha_token', token);
+      } catch {
+        // reCAPTCHA failed, continue without – server will use other checks
+      }
+    }
 
     try {
       const response = await fetch('/api/contact', {
@@ -132,6 +143,12 @@ export default function ContactPage() {
               )}
 
               <form className="space-y-6" onSubmit={handleSubmit} noValidate>
+                {/* Honeypot – hidden from users, bots fill it */}
+                <div className="absolute -left-[9999px] w-1 h-1 overflow-hidden" aria-hidden="true">
+                  <label htmlFor="website">Website</label>
+                  <input type="text" id="website" name="website" tabIndex={-1} autoComplete="off" />
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label htmlFor="name" className="text-sm font-medium text-gray-400 uppercase tracking-wider">Sinu nimi</label>

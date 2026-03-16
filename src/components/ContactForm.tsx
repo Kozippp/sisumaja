@@ -2,6 +2,7 @@
 
 import { ArrowRight, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { useState, FormEvent, useEffect } from 'react';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 /**
  * Same contact form as on /kontakt page – copy, not a new component.
@@ -12,6 +13,7 @@ export function ContactForm() {
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
   useEffect(() => {
     setMounted(true);
@@ -28,6 +30,15 @@ export function ContactForm() {
 
     const form = e.currentTarget;
     const formData = new FormData(form);
+
+    if (executeRecaptcha) {
+      try {
+        const token = await executeRecaptcha('contact');
+        formData.set('recaptcha_token', token);
+      } catch {
+        // reCAPTCHA failed, continue without – server will use other checks
+      }
+    }
 
     try {
       const response = await fetch('/api/contact', {
@@ -109,6 +120,12 @@ export function ContactForm() {
               disabled={isSubmitting}
             />
           </div>
+        </div>
+
+        {/* Honeypot – hidden from users, bots fill it */}
+        <div className="absolute -left-[9999px] w-1 h-1 overflow-hidden" aria-hidden="true">
+          <label htmlFor="home-website">Website</label>
+          <input type="text" id="home-website" name="website" tabIndex={-1} autoComplete="off" />
         </div>
 
         <div className="space-y-2">

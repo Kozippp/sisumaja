@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CookieConsent from "@/components/CookieConsent";
+import { RecaptchaProvider } from "@/components/RecaptchaProvider";
 
 const spaceGrotesk = Space_Grotesk({ 
   subsets: ["latin"],
@@ -33,12 +34,14 @@ export default function RootLayout({
   return (
     <html lang="et" className="scroll-smooth">
       <body className={`${spaceGrotesk.variable} ${inter.variable} font-sans antialiased bg-background text-foreground`}>
+        <RecaptchaProvider>
         <Navbar />
         <main className="min-h-screen">
           {children}
         </main>
         <Footer />
         <CookieConsent />
+        </RecaptchaProvider>
       </body>
     </html>
   );
