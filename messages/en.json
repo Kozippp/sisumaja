@@ -134,6 +134,12 @@
     "title": "Let's start working together",
     "subtitle": "Have an idea for collaboration? Write to us, and if your brand aligns with Kozip's values, we might create something truly amazing together!"
   },
+  "testimonials": {
+    "title": "What people",
+    "titleHighlight": "are saying",
+    "subtitle": "See what our partners and fans think about working with us.",
+    "loading": "Loading testimonials..."
+  },
   "recentWorks": {
     "title": "Recent Work",
     "viewAll": "View all",

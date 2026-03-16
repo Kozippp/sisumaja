@@ -134,6 +134,12 @@
     "title": "Alustame koostööd",
     "subtitle": "Sul on idee koostööks? Kirjuta meile ja kui teie Bränd Kozipi väärtustega klapib, siis ehk saame midagi väga vinget ellu viia!"
   },
+  "testimonials": {
+    "title": "Rahvas",
+    "titleHighlight": "räägib",
+    "subtitle": "Vaata, mida koostööpartnerid ja fännid meie kohta arvavad.",
+    "loading": "Laen tagasisidet..."
+  },
   "recentWorks": {
     "title": "Viimased tööd",
     "viewAll": "Vaata kõiki",

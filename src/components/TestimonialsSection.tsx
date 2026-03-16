@@ -7,11 +7,13 @@ import { Testimonial } from "@/types/testimonials";
 import Image from "next/image";
 import { Star, Quote, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from 'next-intl';
 
 export function TestimonialsSection() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const t = useTranslations('testimonials');
 
   useEffect(() => {
     async function fetchTestimonials() {
@@ -41,7 +43,7 @@ export function TestimonialsSection() {
     };
   }, [selectedId]);
 
-  if (loading) return <div className="py-20 text-center text-white/20">Laen tagasisidet...</div>;
+  if (loading) return <div className="py-20 text-center text-white/20">{t('loading')}</div>;
   if (testimonials.length === 0) return null;
 
   const selectedTestimonial = testimonials.find(t => t.id === selectedId);
@@ -62,10 +64,10 @@ export function TestimonialsSection() {
           className="text-center mb-20"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Rahvas <span className="text-fuchsia-500">räägib</span>
+            {t('title')} <span className="text-fuchsia-500">{t('titleHighlight')}</span>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-            Vaata, mida koostööpartnerid ja fännid meie kohta arvavad.
+            {t('subtitle')}
           </p>
         </motion.div>
 
