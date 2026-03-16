@@ -125,6 +125,11 @@
   }
 }
 
+/* Hide reCAPTCHA badge */
+.grecaptcha-badge {
+  visibility: hidden !important;
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;

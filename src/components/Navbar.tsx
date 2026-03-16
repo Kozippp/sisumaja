@@ -18,9 +18,21 @@ export default function Navbar() {
   const t = useTranslations('nav');
 
   useEffect(() => {
-    const locale = Cookies.get('NEXT_LOCALE') || 'et';
-    setCurrentLocale(locale);
+    const updateLocale = () => {
+      const locale = Cookies.get('NEXT_LOCALE') || 'et';
+      setCurrentLocale(locale);
+    };
+    
+    updateLocale();
+    
+    const interval = setInterval(updateLocale, 100);
+    
+    return () => clearInterval(interval);
   }, []);
+
+  const handleLocaleChange = (locale: string) => {
+    setCurrentLocale(locale);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -64,7 +76,11 @@ export default function Navbar() {
               <NavLink href="/">{t('home')}</NavLink>
               <NavLink href="/tehtud-tood">{t('portfolio')}</NavLink>
               <NavLink href="/kontakt">{t('contact')}</NavLink>
-              <LanguageSwitcher currentLocale={currentLocale} variant="navbar" />
+              <LanguageSwitcher 
+                currentLocale={currentLocale} 
+                variant="navbar"
+                onLocaleChange={handleLocaleChange}
+              />
               <Link
                 href="/kontakt"
                 className="px-6 py-2 bg-white text-black font-bold rounded-full hover:bg-primary hover:text-white transition-all duration-300 text-sm uppercase tracking-wide"
@@ -104,7 +120,11 @@ export default function Navbar() {
               {t('contact')}
             </MobileNavLink>
             <div className="pt-4">
-              <LanguageSwitcher currentLocale={currentLocale} variant="navbar" />
+              <LanguageSwitcher 
+                currentLocale={currentLocale} 
+                variant="navbar"
+                onLocaleChange={handleLocaleChange}
+              />
             </div>
           </motion.div>
         )}

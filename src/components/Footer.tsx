@@ -16,9 +16,21 @@ export default function Footer() {
   const [currentLocale, setCurrentLocale] = useState('et');
 
   useEffect(() => {
-    const locale = Cookies.get('NEXT_LOCALE') || 'et';
-    setCurrentLocale(locale);
+    const updateLocale = () => {
+      const locale = Cookies.get('NEXT_LOCALE') || 'et';
+      setCurrentLocale(locale);
+    };
+    
+    updateLocale();
+    
+    const interval = setInterval(updateLocale, 100);
+    
+    return () => clearInterval(interval);
   }, []);
+
+  const handleLocaleChange = (locale: string) => {
+    setCurrentLocale(locale);
+  };
 
   if (pathname.startsWith('/admin')) {
     return null;
@@ -75,7 +87,11 @@ export default function Footer() {
         
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-600 gap-4">
           <p>&copy; {new Date().getFullYear()} {t('copyright')}</p>
-          <LanguageSwitcher currentLocale={currentLocale} variant="footer" />
+          <LanguageSwitcher 
+            currentLocale={currentLocale} 
+            variant="footer"
+            onLocaleChange={handleLocaleChange}
+          />
           <div className="flex space-x-6 flex-wrap justify-end gap-y-2">
             <Link href="/privaatsuspoliitika" className="hover:text-white transition-colors">{t('privacy')}</Link>
             <Link href="/kasutustingimused" className="hover:text-white transition-colors">{t('terms')}</Link>
