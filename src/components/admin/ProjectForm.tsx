@@ -43,6 +43,10 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [translating, setTranslating] = useState(false);
+  
+  // Language toggle state
+  const [currentLanguage, setCurrentLanguage] = useState<'et' | 'en'>('et');
 
   const [formData, setFormData] = useState<Partial<ProjectInsert>>({
     title: '',
@@ -53,7 +57,9 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     thumbnail_url: '',
     media_gallery: [],
     content: [],
+    content_en: [],
     links: [],
+    links_en: [],
     youtube_url: '',
     tiktok_url: '',
     instagram_url: '',
@@ -71,14 +77,16 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     client_role: '',
     client_avatar_url: '',
     client_quote: '',
+    client_quote_en: '',
     client_review_stars: 5,
     client_review_title: '',
+    client_review_title_en: '',
     is_visible: false,
     collaboration_completed_at: null,
     ...initialData,
   });
 
-  // Load content blocks from initialData
+  // Load content blocks from initialData - separate for each language
   const [contentBlocks, setContentBlocks] = useState<ContentBlock[]>(() => {
     if (initialData?.content && Array.isArray(initialData.content)) {
       return initialData.content as unknown as ContentBlock[];
@@ -86,10 +94,24 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     return [];
   });
 
-  // Load custom links from initialData
+  const [contentBlocksEn, setContentBlocksEn] = useState<ContentBlock[]>(() => {
+    if (initialData?.content_en && Array.isArray(initialData.content_en)) {
+      return initialData.content_en as unknown as ContentBlock[];
+    }
+    return [];
+  });
+
+  // Load custom links from initialData - separate for each language
   const [customLinks, setCustomLinks] = useState<CustomLink[]>(() => {
     if (initialData?.links && Array.isArray(initialData.links)) {
         return initialData.links as unknown as CustomLink[];
+    }
+    return [];
+  });
+
+  const [customLinksEn, setCustomLinksEn] = useState<CustomLink[]>(() => {
+    if (initialData?.links_en && Array.isArray(initialData.links_en)) {
+        return initialData.links_en as unknown as CustomLink[];
     }
     return [];
   });
@@ -108,8 +130,14 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
         if (initialData.content && Array.isArray(initialData.content)) {
             setContentBlocks(initialData.content as unknown as ContentBlock[]);
         }
+        if (initialData.content_en && Array.isArray(initialData.content_en)) {
+            setContentBlocksEn(initialData.content_en as unknown as ContentBlock[]);
+        }
         if (initialData.links && Array.isArray(initialData.links)) {
             setCustomLinks(initialData.links as unknown as CustomLink[]);
+        }
+        if (initialData.links_en && Array.isArray(initialData.links_en)) {
+            setCustomLinksEn(initialData.links_en as unknown as CustomLink[]);
         }
     }
   }, [initialData]);
@@ -204,8 +232,29 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
   };
 
   // --- CONTENT BUILDER FUNCTIONS ---
+  
+  // Helper to get the correct content blocks based on language
+  const getCurrentContentBlocks = () => currentLanguage === 'et' ? contentBlocks : contentBlocksEn;
+  const setCurrentContentBlocks = (blocks: ContentBlock[]) => {
+    if (currentLanguage === 'et') {
+      setContentBlocks(blocks);
+    } else {
+      setContentBlocksEn(blocks);
+    }
+  };
+
+  // Helper to get the correct links based on language
+  const getCurrentLinks = () => currentLanguage === 'et' ? customLinks : customLinksEn;
+  const setCurrentLinks = (links: CustomLink[]) => {
+    if (currentLanguage === 'et') {
+      setCustomLinks(links);
+    } else {
+      setCustomLinksEn(links);
+    }
+  };
 
   const addBlock = (type: BlockType) => {
+    const currentBlocks = getCurrentContentBlocks();
     const newBlock: ContentBlock = {
       id: Math.random().toString(36).substring(2, 9),
       type,
@@ -216,27 +265,30 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
       thumbnailUrl: '',
       mediaItems: [],
     };
-    setContentBlocks([...contentBlocks, newBlock]);
+    setCurrentContentBlocks([...currentBlocks, newBlock]);
   };
 
   const removeBlock = (id: string) => {
-    setContentBlocks(contentBlocks.filter(b => b.id !== id));
+    const currentBlocks = getCurrentContentBlocks();
+    setCurrentContentBlocks(currentBlocks.filter(b => b.id !== id));
   };
 
   const moveBlock = (index: number, direction: 'up' | 'down') => {
+    const currentBlocks = getCurrentContentBlocks();
     if (
       (direction === 'up' && index === 0) || 
-      (direction === 'down' && index === contentBlocks.length - 1)
+      (direction === 'down' && index === currentBlocks.length - 1)
     ) return;
 
-    const newBlocks = [...contentBlocks];
+    const newBlocks = [...currentBlocks];
     const targetIndex = direction === 'up' ? index - 1 : index + 1;
     [newBlocks[index], newBlocks[targetIndex]] = [newBlocks[targetIndex], newBlocks[index]];
-    setContentBlocks(newBlocks);
+    setCurrentContentBlocks(newBlocks);
   };
 
   const updateBlock = (id: string, updates: Partial<ContentBlock>) => {
-    setContentBlocks(contentBlocks.map(b => b.id === id ? { ...b, ...updates } : b));
+    const currentBlocks = getCurrentContentBlocks();
+    setCurrentContentBlocks(currentBlocks.map(b => b.id === id ? { ...b, ...updates } : b));
   };
 
   const handleBlockMediaUpload = async (file: File, blockId: string, field: 'mediaUrl' | 'thumbnailUrl') => {
@@ -260,7 +312,8 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
             const url = await uploadFile(files[i], optimizeImages);
             newUrls.push(url);
         }
-        const block = contentBlocks.find(b => b.id === blockId);
+        const currentBlocks = getCurrentContentBlocks();
+        const block = currentBlocks.find(b => b.id === blockId);
         const currentItems = block?.mediaItems || [];
         updateBlock(blockId, { mediaItems: [...currentItems, ...newUrls] });
     } catch (err: unknown) {
@@ -272,7 +325,8 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
   };
 
   const moveCarouselImage = (blockId: string, imageIndex: number, direction: 'up' | 'down') => {
-    const block = contentBlocks.find(b => b.id === blockId);
+    const currentBlocks = getCurrentContentBlocks();
+    const block = currentBlocks.find(b => b.id === blockId);
     const items = block?.mediaItems || [];
     if (
       (direction === 'up' && imageIndex === 0) ||
@@ -286,33 +340,95 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
 
   // --- LINKS BUILDER FUNCTIONS ---
   const addLink = () => {
+    const currentLinks = getCurrentLinks();
     const newLink: CustomLink = {
         id: Math.random().toString(36).substring(2, 9),
         type: 'youtube', // default
         label: '',
         url: ''
     };
-    setCustomLinks([...customLinks, newLink]);
+    setCurrentLinks([...currentLinks, newLink]);
   };
 
   const removeLink = (id: string) => {
-    setCustomLinks(customLinks.filter(l => l.id !== id));
+    const currentLinks = getCurrentLinks();
+    setCurrentLinks(currentLinks.filter(l => l.id !== id));
   };
 
   const moveLink = (index: number, direction: 'up' | 'down') => {
-     if (
+    const currentLinks = getCurrentLinks();
+    if (
       (direction === 'up' && index === 0) || 
-      (direction === 'down' && index === customLinks.length - 1)
+      (direction === 'down' && index === currentLinks.length - 1)
     ) return;
     
-    const newLinks = [...customLinks];
+    const newLinks = [...currentLinks];
     const targetIndex = direction === 'up' ? index - 1 : index + 1;
     [newLinks[index], newLinks[targetIndex]] = [newLinks[targetIndex], newLinks[index]];
-    setCustomLinks(newLinks);
+    setCurrentLinks(newLinks);
   };
 
   const updateLink = (id: string, updates: Partial<CustomLink>) => {
-      setCustomLinks(customLinks.map(l => l.id === id ? { ...l, ...updates } : l));
+    const currentLinks = getCurrentLinks();
+    setCurrentLinks(currentLinks.map(l => l.id === id ? { ...l, ...updates } : l));
+  };
+
+  // ---------------------------------
+
+  const handleTranslateToEnglish = async () => {
+    setTranslating(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/translate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: formData.title,
+          description: formData.description,
+          content: contentBlocks,
+          links: customLinks,
+          client_quote: formData.client_quote,
+          client_review_title: formData.client_review_title,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Translation failed');
+      }
+
+      const data = await response.json();
+      const { translations } = data;
+
+      // Update form data with translations
+      setFormData(prev => ({
+        ...prev,
+        title_en: translations.title_en || prev.title_en,
+        description_en: translations.description_en || prev.description_en,
+        client_quote_en: translations.client_quote_en || prev.client_quote_en,
+        client_review_title_en: translations.client_review_title_en || prev.client_review_title_en,
+      }));
+
+      // Update content blocks English version
+      if (translations.content_en) {
+        setContentBlocksEn(translations.content_en);
+      }
+
+      // Update links English version
+      if (translations.links_en) {
+        setCustomLinksEn(translations.links_en);
+      }
+
+      // Switch to English view to show the translations
+      setCurrentLanguage('en');
+
+      alert('Translation completed! Switched to English view to review translations.');
+    } catch (err) {
+      console.error('Translation error:', err);
+      setError('Translation failed. Please try again or translate manually.');
+    } finally {
+      setTranslating(false);
+    }
   };
 
   // ---------------------------------
@@ -343,8 +459,10 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
         title, // Ensure title is always a string
         slug, // Ensure slug is always a string
         media_gallery: mediaItems,
-        content: contentBlocks as unknown as Database['public']['Tables']['projects']['Insert']['content'], // Cast for Supabase
+        content: contentBlocks as unknown as Database['public']['Tables']['projects']['Insert']['content'],
+        content_en: contentBlocksEn as unknown as Database['public']['Tables']['projects']['Insert']['content_en'],
         links: customLinks as unknown as Database['public']['Tables']['projects']['Insert']['links'],
+        links_en: customLinksEn as unknown as Database['public']['Tables']['projects']['Insert']['links_en'],
         published_at: formData.published_at || new Date().toISOString(),
     };
 
@@ -380,6 +498,73 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
           {error}
         </div>
       )}
+
+      {/* Language Toggle */}
+      <div className="sticky top-4 z-50 bg-neutral-900/95 backdrop-blur-sm p-4 rounded-xl border border-neutral-800 shadow-lg">
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-medium text-gray-400">Edit Language:</span>
+            <div className="flex bg-black rounded-lg p-1 border border-neutral-800">
+              <button 
+                type="button"
+                onClick={() => setCurrentLanguage('et')}
+                className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${
+                  currentLanguage === 'et' 
+                    ? 'bg-fuchsia-600 text-white' 
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                🇪🇪 Eesti
+              </button>
+              <button 
+                type="button"
+                onClick={() => setCurrentLanguage('en')}
+                className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${
+                  currentLanguage === 'en' 
+                    ? 'bg-blue-600 text-white' 
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                🇬🇧 English
+              </button>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleTranslateToEnglish}
+              disabled={translating || !formData.title}
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+            >
+              {translating ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Translating...
+                </>
+              ) : (
+                <>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                  </svg>
+                  Tõlgi inglise keelde (AI)
+                </>
+              )}
+            </button>
+            <div className="text-xs text-gray-500 max-w-xs">
+              {currentLanguage === 'et' 
+                ? 'Praegu muudad eestikeelset versiooni' 
+                : 'Currently editing English version'}
+            </div>
+          </div>
+        </div>
+        
+        {translating && (
+          <div className="mt-3 text-xs text-blue-400 animate-pulse">
+            AI tõlgib eestikeelse sisu inglise keelde. See võib võtta mõned sekundid...
+          </div>
+        )}
+      </div>
 
       {/* Project Type */}
       <div className="bg-neutral-900 p-6 rounded-xl border border-neutral-800 space-y-4">
@@ -456,35 +641,31 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
         <h3 className="text-xl font-bold border-b border-neutral-800 pb-2 mb-4">Põhiinfo</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">Pealkiri (EST) *</label>
+                <label className="block text-sm font-medium text-gray-400 mb-1">
+                  {currentLanguage === 'et' ? 'Pealkiri (EST) *' : 'Title (EN) *'}
+                </label>
                 <input
-                    name="title"
-                    value={formData.title}
+                    name={currentLanguage === 'et' ? 'title' : 'title_en'}
+                    value={currentLanguage === 'et' ? formData.title : (formData.title_en || '')}
                     onChange={handleChange}
                     className="w-full bg-black border border-neutral-700 rounded p-2"
-                    required
+                    required={currentLanguage === 'et'}
                 />
             </div>
             <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">Title (EN)</label>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Slug (URL) *</label>
                 <input
-                    name="title_en"
-                    value={formData.title_en || ''}
+                    name="slug"
+                    value={formData.slug}
                     onChange={handleChange}
                     className="w-full bg-black border border-neutral-700 rounded p-2"
+                    required
+                    disabled={currentLanguage === 'en'}
                 />
-                <p className="text-xs text-gray-500 mt-1">English translation of the title</p>
+                {currentLanguage === 'en' && (
+                  <p className="text-xs text-gray-500 mt-1">Slug is shared between languages</p>
+                )}
             </div>
-        </div>
-        <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Slug (URL) *</label>
-            <input
-                name="slug"
-                value={formData.slug}
-                onChange={handleChange}
-                className="w-full bg-black border border-neutral-700 rounded p-2"
-                required
-            />
         </div>
         <div>
             <label className="block text-sm font-medium text-gray-400 mb-1">Projekti avaldamise kuupäev</label>
@@ -497,30 +678,30 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                     setFormData(prev => ({ ...prev, collaboration_completed_at: value }));
                 }}
                 className="w-full bg-black border border-neutral-700 rounded p-2"
+                disabled={currentLanguage === 'en'}
             />
-             <p className="text-xs text-gray-500 mt-1">Kuupäev, millal projekt avalikustati. See ilmub lehel pealkirja all.</p>
+             <p className="text-xs text-gray-500 mt-1">
+               {currentLanguage === 'et' 
+                 ? 'Kuupäev, millal projekt avalikustati. See ilmub lehel pealkirja all.' 
+                 : 'Publication date is shared between languages'}
+             </p>
         </div>
         <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Lühikirjeldus (EST) (SEO & List View)</label>
+            <label className="block text-sm font-medium text-gray-400 mb-1">
+              {currentLanguage === 'et' ? 'Lühikirjeldus (EST) (SEO & List View)' : 'Short Description (EN) (SEO & List View)'}
+            </label>
             <textarea
-                name="description"
-                value={formData.description || ''}
+                name={currentLanguage === 'et' ? 'description' : 'description_en'}
+                value={currentLanguage === 'et' ? (formData.description || '') : (formData.description_en || '')}
                 onChange={handleChange}
                 rows={3}
                 className="w-full bg-black border border-neutral-700 rounded p-2"
             />
-             <p className="text-xs text-gray-500 mt-1">See tekst on nähtav Google otsingus ja tehtud tööde nimekirjas. Projekti detailvaates seda EI kuvata.</p>
-        </div>
-        <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Short Description (EN) (SEO & List View)</label>
-            <textarea
-                name="description_en"
-                value={formData.description_en || ''}
-                onChange={handleChange}
-                rows={3}
-                className="w-full bg-black border border-neutral-700 rounded p-2"
-            />
-             <p className="text-xs text-gray-500 mt-1">English translation of the short description. Visible in Google search and project list.</p>
+             <p className="text-xs text-gray-500 mt-1">
+               {currentLanguage === 'et' 
+                 ? 'See tekst on nähtav Google otsingus ja tehtud tööde nimekirjas. Projekti detailvaates seda EI kuvata.'
+                 : 'This text is visible in Google search and project list. NOT displayed in project detail view.'}
+             </p>
         </div>
         
         {/* Image optimization toggle */}
@@ -564,23 +745,29 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
       {/* --- CONTENT BUILDER --- */}
       <div className="space-y-4">
         <div className="flex items-center justify-between border-b border-neutral-800 pb-4">
-            <h3 className="text-2xl font-bold">Sisu Segmendid (Builder)</h3>
+            <h3 className="text-2xl font-bold">
+              {currentLanguage === 'et' ? 'Sisu Segmendid (Builder)' : 'Content Segments (Builder)'}
+            </h3>
             <div className="flex gap-2">
-                <button type="button" onClick={() => addBlock('text')} className="flex items-center gap-2 bg-neutral-800 hover:bg-neutral-700 px-3 py-2 rounded text-sm transition-colors"><Type className="w-4 h-4" /> Tekst</button>
-                <button type="button" onClick={() => addBlock('image')} className="flex items-center gap-2 bg-neutral-800 hover:bg-neutral-700 px-3 py-2 rounded text-sm transition-colors"><ImageIcon className="w-4 h-4" /> Pilt</button>
+                <button type="button" onClick={() => addBlock('text')} className="flex items-center gap-2 bg-neutral-800 hover:bg-neutral-700 px-3 py-2 rounded text-sm transition-colors"><Type className="w-4 h-4" /> {currentLanguage === 'et' ? 'Tekst' : 'Text'}</button>
+                <button type="button" onClick={() => addBlock('image')} className="flex items-center gap-2 bg-neutral-800 hover:bg-neutral-700 px-3 py-2 rounded text-sm transition-colors"><ImageIcon className="w-4 h-4" /> {currentLanguage === 'et' ? 'Pilt' : 'Image'}</button>
                 <button type="button" onClick={() => addBlock('video')} className="flex items-center gap-2 bg-neutral-800 hover:bg-neutral-700 px-3 py-2 rounded text-sm transition-colors"><Video className="w-4 h-4" /> Video</button>
-                <button type="button" onClick={() => addBlock('carousel')} className="flex items-center gap-2 bg-neutral-800 hover:bg-neutral-700 px-3 py-2 rounded text-sm transition-colors"><GalleryHorizontal className="w-4 h-4" /> Karussell</button>
+                <button type="button" onClick={() => addBlock('carousel')} className="flex items-center gap-2 bg-neutral-800 hover:bg-neutral-700 px-3 py-2 rounded text-sm transition-colors"><GalleryHorizontal className="w-4 h-4" /> {currentLanguage === 'et' ? 'Karussell' : 'Carousel'}</button>
             </div>
         </div>
 
-        {contentBlocks.length === 0 && (
+        {getCurrentContentBlocks().length === 0 && (
             <div className="text-center py-12 bg-neutral-900/50 border border-dashed border-neutral-800 rounded-xl">
-                <p className="text-gray-500">Pole ühtegi segmenti lisatud. Vali ülevalt tüüp, et alustada.</p>
+                <p className="text-gray-500">
+                  {currentLanguage === 'et' 
+                    ? 'Pole ühtegi segmenti lisatud. Vali ülevalt tüüp, et alustada.' 
+                    : 'No segments added. Select a type above to start.'}
+                </p>
             </div>
         )}
 
         <div className="space-y-6">
-            {contentBlocks.map((block, index) => (
+            {getCurrentContentBlocks().map((block, index) => (
                 <div key={block.id} className="bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden relative group">
                     {/* Block Header / Controls */}
                     <div className="bg-neutral-800/50 px-4 py-2 flex items-center justify-between border-b border-neutral-800">
@@ -590,7 +777,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                         </div>
                         <div className="flex items-center gap-1">
                             <button type="button" onClick={() => moveBlock(index, 'up')} disabled={index === 0} className="p-1 hover:bg-neutral-700 rounded disabled:opacity-30"><ArrowUp className="w-4 h-4" /></button>
-                            <button type="button" onClick={() => moveBlock(index, 'down')} disabled={index === contentBlocks.length - 1} className="p-1 hover:bg-neutral-700 rounded disabled:opacity-30"><ArrowDown className="w-4 h-4" /></button>
+                            <button type="button" onClick={() => moveBlock(index, 'down')} disabled={index === getCurrentContentBlocks().length - 1} className="p-1 hover:bg-neutral-700 rounded disabled:opacity-30"><ArrowDown className="w-4 h-4" /></button>
                             <div className="w-px h-4 bg-neutral-700 mx-1" />
                             <button type="button" onClick={() => removeBlock(block.id)} className="p-1 hover:bg-red-500/20 text-red-500 rounded"><Trash2 className="w-4 h-4" /></button>
                         </div>
@@ -858,20 +1045,28 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
       {/* Social Links Builder (NEW) */}
       <div className="bg-neutral-900 p-6 rounded-xl border border-neutral-800 space-y-4">
         <div className="flex items-center justify-between border-b border-neutral-800 pb-2 mb-4">
-            <h3 className="text-xl font-bold">Lingid (Sotsiaalmeedia)</h3>
-             <button type="button" onClick={addLink} className="flex items-center gap-2 bg-neutral-800 hover:bg-neutral-700 px-3 py-2 rounded text-sm transition-colors"><Plus className="w-4 h-4" /> Lisa Link</button>
+            <h3 className="text-xl font-bold">
+              {currentLanguage === 'et' ? 'Lingid (Sotsiaalmeedia)' : 'Links (Social Media)'}
+            </h3>
+             <button type="button" onClick={addLink} className="flex items-center gap-2 bg-neutral-800 hover:bg-neutral-700 px-3 py-2 rounded text-sm transition-colors">
+               <Plus className="w-4 h-4" /> {currentLanguage === 'et' ? 'Lisa Link' : 'Add Link'}
+             </button>
         </div>
         
-         {customLinks.length === 0 && (
-            <p className="text-gray-500 text-sm">Lisa siia lingid sotsiaalmeediasse (nt. YouTube, TikTok, Instagram).</p>
+         {getCurrentLinks().length === 0 && (
+            <p className="text-gray-500 text-sm">
+              {currentLanguage === 'et' 
+                ? 'Lisa siia lingid sotsiaalmeediasse (nt. YouTube, TikTok, Instagram).' 
+                : 'Add social media links here (e.g. YouTube, TikTok, Instagram).'}
+            </p>
         )}
 
         <div className="space-y-4">
-            {customLinks.map((link, index) => (
+            {getCurrentLinks().map((link, index) => (
                 <div key={link.id} className="flex items-center gap-4 bg-black p-4 rounded border border-neutral-800">
                      <div className="flex flex-col gap-1">
                         <button type="button" onClick={() => moveLink(index, 'up')} disabled={index === 0} className="p-1 hover:bg-neutral-800 rounded text-gray-500 disabled:opacity-30"><ArrowUp className="w-3 h-3" /></button>
-                        <button type="button" onClick={() => moveLink(index, 'down')} disabled={index === customLinks.length - 1} className="p-1 hover:bg-neutral-800 rounded text-gray-500 disabled:opacity-30"><ArrowDown className="w-3 h-3" /></button>
+                        <button type="button" onClick={() => moveLink(index, 'down')} disabled={index === getCurrentLinks().length - 1} className="p-1 hover:bg-neutral-800 rounded text-gray-500 disabled:opacity-30"><ArrowDown className="w-3 h-3" /></button>
                     </div>
                     
                     {/* Icon Select */}
@@ -918,63 +1113,102 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
 
        {/* Client Feedback */}
       <div className="bg-neutral-900 p-6 rounded-xl border border-neutral-800 space-y-4">
-        <h3 className="text-xl font-bold border-b border-neutral-800 pb-2 mb-4">Kliendi Tagasiside</h3>
+        <h3 className="text-xl font-bold border-b border-neutral-800 pb-2 mb-4">
+          {currentLanguage === 'et' ? 'Kliendi Tagasiside' : 'Client Testimonial'}
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
              <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">Kliendi Nimi</label>
-                <input name="client_name" value={formData.client_name || ''} onChange={handleChange} className="w-full bg-black border border-neutral-700 rounded p-2" />
+                <label className="block text-sm font-medium text-gray-400 mb-1">
+                  {currentLanguage === 'et' ? 'Kliendi Nimi' : 'Client Name'}
+                </label>
+                <input 
+                  name="client_name" 
+                  value={formData.client_name || ''} 
+                  onChange={handleChange} 
+                  className="w-full bg-black border border-neutral-700 rounded p-2"
+                  disabled={currentLanguage === 'en'}
+                />
+                {currentLanguage === 'en' && (
+                  <p className="text-xs text-gray-500 mt-1">Client name is shared between languages</p>
+                )}
             </div>
              <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">Kliendi Amet</label>
-                <input name="client_role" value={formData.client_role || ''} onChange={handleChange} className="w-full bg-black border border-neutral-700 rounded p-2" />
+                <label className="block text-sm font-medium text-gray-400 mb-1">
+                  {currentLanguage === 'et' ? 'Kliendi Amet' : 'Client Role'}
+                </label>
+                <input 
+                  name="client_role" 
+                  value={formData.client_role || ''} 
+                  onChange={handleChange} 
+                  className="w-full bg-black border border-neutral-700 rounded p-2"
+                  disabled={currentLanguage === 'en'}
+                />
+                {currentLanguage === 'en' && (
+                  <p className="text-xs text-gray-500 mt-1">Client role is shared between languages</p>
+                )}
             </div>
         </div>
         <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Kliendi Pilt (Avatar)</label>
+            <label className="block text-sm font-medium text-gray-400 mb-1">
+              {currentLanguage === 'et' ? 'Kliendi Pilt (Avatar)' : 'Client Picture (Avatar)'}
+            </label>
             <div className="flex items-center gap-4">
                  {formData.client_avatar_url && (
                     <img src={formData.client_avatar_url} alt="Client" className="w-12 h-12 rounded-full object-cover border border-neutral-700" />
                 )}
                 <label className="cursor-pointer bg-neutral-800 px-4 py-2 rounded hover:bg-neutral-700 transition-colors flex items-center text-sm">
-                    {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Lae pilt'}
-                    <input type="file" onChange={handleClientAvatarUpload} accept="image/*" className="hidden" />
+                    {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : (currentLanguage === 'et' ? 'Lae pilt' : 'Upload Image')}
+                    <input type="file" onChange={handleClientAvatarUpload} accept="image/*" className="hidden" disabled={currentLanguage === 'en'} />
                 </label>
+                {currentLanguage === 'en' && (
+                  <p className="text-xs text-gray-500">Avatar is shared between languages</p>
+                )}
             </div>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-                 <label className="block text-sm font-medium text-gray-400 mb-1">Tagasiside pealkiri</label>
+                 <label className="block text-sm font-medium text-gray-400 mb-1">
+                   {currentLanguage === 'et' ? 'Tagasiside pealkiri' : 'Review Title'}
+                 </label>
                  <input 
-                    name="client_review_title" 
-                    value={formData.client_review_title || ''} 
+                    name={currentLanguage === 'et' ? 'client_review_title' : 'client_review_title_en'}
+                    value={currentLanguage === 'et' ? (formData.client_review_title || '') : (formData.client_review_title_en || '')}
                     onChange={handleChange} 
                     className="w-full bg-black border border-neutral-700 rounded p-2" 
-                    placeholder="nt. Suurepärane koostöö!"
+                    placeholder={currentLanguage === 'et' ? 'nt. Suurepärane koostöö!' : 'e.g. Great collaboration!'}
                 />
             </div>
             <div>
-                 <label className="block text-sm font-medium text-gray-400 mb-1">Hinne (1-5 tärni)</label>
+                 <label className="block text-sm font-medium text-gray-400 mb-1">
+                   {currentLanguage === 'et' ? 'Hinne (1-5 tärni)' : 'Rating (1-5 stars)'}
+                 </label>
                  <select 
                     name="client_review_stars" 
                     value={formData.client_review_stars || 5} 
                     onChange={handleChange} 
                     className="w-full bg-black border border-neutral-700 rounded p-2"
+                    disabled={currentLanguage === 'en'}
                 >
-                    <option value={5}>5 Tärni</option>
-                    <option value={4}>4 Tärni</option>
-                    <option value={3}>3 Tärni</option>
-                    <option value={2}>2 Tärni</option>
-                    <option value={1}>1 Tärn</option>
+                    <option value={5}>5 {currentLanguage === 'et' ? 'Tärni' : 'Stars'}</option>
+                    <option value={4}>4 {currentLanguage === 'et' ? 'Tärni' : 'Stars'}</option>
+                    <option value={3}>3 {currentLanguage === 'et' ? 'Tärni' : 'Stars'}</option>
+                    <option value={2}>2 {currentLanguage === 'et' ? 'Tärni' : 'Stars'}</option>
+                    <option value={1}>1 {currentLanguage === 'et' ? 'Tärn' : 'Star'}</option>
                 </select>
+                {currentLanguage === 'en' && (
+                  <p className="text-xs text-gray-500 mt-1">Rating is shared between languages</p>
+                )}
             </div>
         </div>
 
         <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Tagasiside (Tsitaat)</label>
+            <label className="block text-sm font-medium text-gray-400 mb-1">
+              {currentLanguage === 'et' ? 'Tagasiside (Tsitaat)' : 'Testimonial (Quote)'}
+            </label>
              <textarea
-                name="client_quote"
-                value={formData.client_quote || ''}
+                name={currentLanguage === 'et' ? 'client_quote' : 'client_quote_en'}
+                value={currentLanguage === 'et' ? (formData.client_quote || '') : (formData.client_quote_en || '')}
                 onChange={handleChange}
                 rows={3}
                 className="w-full bg-black border border-neutral-700 rounded p-2"

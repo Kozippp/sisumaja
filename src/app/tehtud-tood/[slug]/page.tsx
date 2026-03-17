@@ -9,6 +9,7 @@ import { ContentBlock, CustomLink } from "@/components/admin/ProjectForm";
 import { Testimonial } from "@/components/Testimonial";
 import LiveStats from "@/components/LiveStats";
 import { MotionWrapper, MotionItem } from "@/components/MotionWrapper";
+import { getLocale } from '@/lib/locale';
 
 type Project = Database['public']['Tables']['projects']['Row'];
 
@@ -160,6 +161,7 @@ const MediaBlock = ({ block }: { block: ContentBlock }) => {
 
 export default async function ProjectPage({ params }: PageProps) {
   const { slug } = await params;
+  const locale = await getLocale();
 
   // Fetch current project
   const { data: project } = await supabase
@@ -173,6 +175,9 @@ export default async function ProjectPage({ params }: PageProps) {
     notFound();
   }
 
+  // Get localized title for display
+  const displayTitle = locale === 'en' && project.title_en ? project.title_en : project.title;
+
   // Fetch other projects for "See also"
   const { data: otherProjects } = await supabase
     .from("projects")
@@ -182,21 +187,24 @@ export default async function ProjectPage({ params }: PageProps) {
     .limit(3)
     .returns<Project[]>();
 
-  // Determine content blocks
+  // Determine content blocks based on locale
   let blocks: ContentBlock[] = [];
   
-  if (project.content && Array.isArray(project.content) && project.content.length > 0) {
-      blocks = project.content as unknown as ContentBlock[];
+  // Use English content if locale is 'en' and English content exists
+  const contentToUse = (locale === 'en' && project.content_en && Array.isArray(project.content_en) && project.content_en.length > 0) 
+    ? project.content_en 
+    : project.content;
+  
+  if (contentToUse && Array.isArray(contentToUse) && contentToUse.length > 0) {
+      blocks = contentToUse as unknown as ContentBlock[];
   } else {
       // Fallback: Construct blocks from legacy fields ONLY if no new content exists
-      // If user clears content but keeps description, we might want to respect that? 
-      // Current logic: If content array exists (even empty), we use it. If null, we use fallback.
-      
       if (project.description) {
+          const descToUse = (locale === 'en' && project.description_en) ? project.description_en : project.description;
           blocks.push({
               id: 'legacy-desc',
               type: 'text',
-              content: project.description
+              content: descToUse
           });
       }
 
@@ -211,16 +219,20 @@ export default async function ProjectPage({ params }: PageProps) {
       }
   }
 
-  // Links
+  // Links - use English version if available
   let links: CustomLink[] = [];
-  if (project.links && Array.isArray(project.links)) {
-      links = project.links as unknown as CustomLink[];
+  const linksToUse = (locale === 'en' && project.links_en && Array.isArray(project.links_en) && project.links_en.length > 0)
+    ? project.links_en
+    : project.links;
+    
+  if (linksToUse && Array.isArray(linksToUse)) {
+      links = linksToUse as unknown as CustomLink[];
   }
   // If no new links, construct from legacy
   if (links.length === 0) {
-      if (project.youtube_url) links.push({ id: 'yt', type: 'youtube', label: 'Vaata YouTube\'is', url: project.youtube_url });
-      if (project.instagram_url) links.push({ id: 'ig', type: 'instagram', label: 'Vaata Instagramis', url: project.instagram_url });
-      if (project.tiktok_url) links.push({ id: 'tt', type: 'tiktok', label: 'Vaata TikTokis', url: project.tiktok_url });
+      if (project.youtube_url) links.push({ id: 'yt', type: 'youtube', label: locale === 'en' ? 'Watch on YouTube' : 'Vaata YouTube\'is', url: project.youtube_url });
+      if (project.instagram_url) links.push({ id: 'ig', type: 'instagram', label: locale === 'en' ? 'View on Instagram' : 'Vaata Instagramis', url: project.instagram_url });
+      if (project.tiktok_url) links.push({ id: 'tt', type: 'tiktok', label: locale === 'en' ? 'Watch on TikTok' : 'Vaata TikTokis', url: project.tiktok_url });
   }
 
   // Helper to check if stat has value
@@ -254,7 +266,7 @@ export default async function ProjectPage({ params }: PageProps) {
             
             <MotionItem>
             <h1 className="text-3xl sm:text-4xl md:text-6xl font-black text-white mb-8 uppercase leading-tight tracking-tight break-words hyphens-auto">
-                {project.title}
+                {displayTitle}
             </h1>
             </MotionItem>
 
@@ -327,12 +339,12 @@ export default async function ProjectPage({ params }: PageProps) {
         {project.client_quote && (
           <MotionItem className="mb-24 px-4">
              <Testimonial 
-                quote={project.client_quote}
-                author={project.client_name || "Klient"}
-                role={project.client_role || "Koostööpartner"}
+                quote={(locale === 'en' && project.client_quote_en) ? project.client_quote_en : project.client_quote}
+                author={project.client_name || (locale === 'en' ? 'Client' : 'Klient')}
+                role={project.client_role || (locale === 'en' ? 'Collaboration Partner' : 'Koostööpartner')}
                 imageSrc={project.client_avatar_url || undefined}
                 stars={project.client_review_stars ?? 5}
-                title={project.client_review_title || undefined}
+                title={((locale === 'en' && project.client_review_title_en) ? project.client_review_title_en : project.client_review_title) || undefined}
                 className="max-w-4xl mx-auto"
              />
           </MotionItem>
@@ -341,7 +353,9 @@ export default async function ProjectPage({ params }: PageProps) {
         {/* Social Links (Dynamic) */}
         {links.length > 0 && (
             <MotionItem className="mb-24 text-center py-9">
-                 <h2 className="text-2xl font-bold text-white mb-8 uppercase">Vaata projekti sotsiaalmeedias:</h2>
+                 <h2 className="text-2xl font-bold text-white mb-8 uppercase">
+                   {locale === 'en' ? 'View project on social media:' : 'Vaata projekti sotsiaalmeedias:'}
+                 </h2>
                  <div className="flex flex-wrap justify-center gap-4">
                     {links.map((link) => {
                         let Icon = ExternalLink;
@@ -391,21 +405,28 @@ export default async function ProjectPage({ params }: PageProps) {
       {otherProjects && otherProjects.length > 0 && (
           <div className="bg-neutral-900/50 py-24 border-t border-neutral-900">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 className="text-3xl font-black text-white mb-12 uppercase text-center">Vaata ka teisi töid</h2>
+                <h2 className="text-3xl font-black text-white mb-12 uppercase text-center">
+                  {locale === 'en' ? 'Check out other projects' : 'Vaata ka teisi töid'}
+                </h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {otherProjects.map((p) => (
+                {otherProjects.map((p) => {
+                    const otherTitle = (locale === 'en' && p.title_en) ? p.title_en : p.title;
+                    return (
                     <Link key={p.id} href={`/tehtud-tood/${p.slug}`} className="group block">
                     <div className="aspect-video bg-neutral-900 rounded-xl overflow-hidden mb-6 relative border border-neutral-800 group-hover:border-primary transition-all shadow-lg">
                         {p.thumbnail_url ? (
-                        <img src={p.thumbnail_url} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <img src={p.thumbnail_url} alt={otherTitle} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                         ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-700">Pilt puudub</div>
+                        <div className="w-full h-full flex items-center justify-center text-gray-700">
+                          {locale === 'en' ? 'No image' : 'Pilt puudub'}
+                        </div>
                         )}
                         <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors" />
                     </div>
-                    <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors text-center">{p.title}</h3>
+                    <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors text-center">{otherTitle}</h3>
                     </Link>
-                ))}
+                    );
+                })}
                 </div>
             </div>
           </div>

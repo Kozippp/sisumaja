@@ -163,11 +163,14 @@ export type Database = {
           client_avatar_url: string | null
           client_name: string | null
           client_quote: string | null
+          client_quote_en: string | null
           client_review_stars: number | null
           client_review_title: string | null
+          client_review_title_en: string | null
           client_role: string | null
           collaboration_completed_at: string | null
           content: Json | null
+          content_en: Json | null
           created_at: string
           description: string | null
           description_en: string | null
@@ -175,6 +178,7 @@ export type Database = {
           instagram_url: string | null
           is_visible: boolean | null
           links: Json | null
+          links_en: Json | null
           media_gallery: Json | null
           project_type: 'youtube_ad' | 'shorts' | 'training'
           published_at: string | null
@@ -199,11 +203,14 @@ export type Database = {
           client_avatar_url?: string | null
           client_name?: string | null
           client_quote?: string | null
+          client_quote_en?: string | null
           client_review_stars?: number | null
           client_review_title?: string | null
+          client_review_title_en?: string | null
           client_role?: string | null
           collaboration_completed_at?: string | null
           content?: Json | null
+          content_en?: Json | null
           created_at?: string
           description?: string | null
           description_en?: string | null
@@ -211,6 +218,7 @@ export type Database = {
           instagram_url?: string | null
           is_visible?: boolean | null
           links?: Json | null
+          links_en?: Json | null
           media_gallery?: Json | null
           project_type?: 'youtube_ad' | 'shorts' | 'training'
           published_at?: string | null
@@ -235,11 +243,14 @@ export type Database = {
           client_avatar_url?: string | null
           client_name?: string | null
           client_quote?: string | null
+          client_quote_en?: string | null
           client_review_stars?: number | null
           client_review_title?: string | null
+          client_review_title_en?: string | null
           client_role?: string | null
           collaboration_completed_at?: string | null
           content?: Json | null
+          content_en?: Json | null
           created_at?: string
           description?: string | null
           description_en?: string | null
@@ -247,6 +258,7 @@ export type Database = {
           instagram_url?: string | null
           is_visible?: boolean | null
           links?: Json | null
+          links_en?: Json | null
           media_gallery?: Json | null
           project_type?: 'youtube_ad' | 'shorts' | 'training'
           published_at?: string | null
