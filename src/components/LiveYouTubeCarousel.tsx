@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Play } from 'lucide-react';
 import { formatViewCount } from '@/lib/youtube';
 import { Database } from '@/types/database.types';
+import { useTranslations, useLocale } from 'next-intl';
 
 type FeaturedVideo = Database['public']['Tables']['featured_videos']['Row'];
 
@@ -17,6 +18,8 @@ const SECONDS_PER_VIDEO = 6;
 const MIN_SCROLL_DURATION_SECONDS = 16;
 
 export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarouselProps) {
+  const t = useTranslations('categories');
+  const locale = useLocale();
   const [videos, setVideos] = useState<FeaturedVideo[]>(initialVideos);
   const [scrollDistance, setScrollDistance] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -83,6 +86,8 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
     MIN_SCROLL_DURATION_SECONDS
   );
 
+  const viewsLabel = locale === 'en' ? 'views' : 'vaatamist';
+
   return (
     <>
       {/* Infinite Scroll Carousel */}
@@ -146,7 +151,7 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
                   </div>
                 </div>
                 <div className="absolute top-2 right-2 px-2 py-1 bg-black/80 backdrop-blur-sm rounded text-xs font-bold text-white">
-                  {formatViewCount(video.view_count)} vaatamist
+                  {formatViewCount(video.view_count)} {viewsLabel}
                 </div>
               </div>
               <h4 className="text-sm font-bold text-white mb-1 line-clamp-2 group-hover:text-red-400 transition-colors">
@@ -160,14 +165,14 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
       {/* Content Categories */}
       <div className="flex flex-wrap justify-center gap-3 mt-12">
         {[
-          "Eksperimendid",
-          "Reality-Sarjad",
-          "Reisimine",
-          "Odav vs. Kallis",
-          "Väljakutsed",
-          "Investeerimine",
-          "Toitumine",
-          "Trenn"
+          t('experiments'),
+          t('realitySeries'),
+          t('travel'),
+          t('cheapVsExpensive'),
+          t('challenges'),
+          t('investing'),
+          t('nutrition'),
+          t('training')
         ].map((tag, i) => (
           <span key={i} className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-gray-300 hover:border-fuchsia-500/30 hover:text-white transition-all cursor-default">
             {tag}

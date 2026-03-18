@@ -4,15 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Calendar, Youtube, Clapperboard, GraduationCap, Mic } from "lucide-react";
 import { Database } from "@/types/database.types";
+import { useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
 
 type Project = Database['public']['Tables']['projects']['Row'];
 type FilterType = 'all' | 'youtube_ad' | 'shorts' | 'training';
-
-const TYPE_LABELS: Record<string, { label: string; icon: React.ElementType; color: string }> = {
-  youtube_ad: { label: 'YouTube reklaam', icon: Youtube, color: 'text-red-400 bg-red-500/10' },
-  shorts: { label: 'Lühivideo koostöö', icon: Clapperboard, color: 'text-blue-400 bg-blue-500/10' },
-  training: { label: 'Koolitus / Üritus', icon: GraduationCap, color: 'text-green-400 bg-green-500/10' },
-};
 
 const FILTER_ACTIVE_STYLES: Record<FilterType, string> = {
   all: 'bg-white border-white text-black',
@@ -27,6 +23,14 @@ interface WorkPageClientProps {
 
 export default function WorkPageClient({ projects }: WorkPageClientProps) {
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
+  const t = useTranslations('portfolio');
+  const locale = useLocale();
+
+  const TYPE_LABELS: Record<string, { label: string; icon: React.ElementType; color: string }> = {
+    youtube_ad: { label: t('typeLabels.youtubeAd'), icon: Youtube, color: 'text-red-400 bg-red-500/10' },
+    shorts: { label: t('typeLabels.shorts'), icon: Clapperboard, color: 'text-blue-400 bg-blue-500/10' },
+    training: { label: t('typeLabels.training'), icon: GraduationCap, color: 'text-green-400 bg-green-500/10' },
+  };
 
   const filtered = activeFilter === 'all'
     ? projects
@@ -43,19 +47,19 @@ export default function WorkPageClient({ projects }: WorkPageClientProps) {
     <div className="min-h-screen bg-black pt-32 pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h1 className="text-[56px] md:text-[56px] font-black text-white mb-0 uppercase tracking-tighter">Tehtud tööd</h1>
+          <h1 className="text-[56px] md:text-[56px] font-black text-white mb-0 uppercase tracking-tighter">{t('title')}</h1>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
-            Siin näed, mis brändidega ja kuidas oleme koostööd teinud.
+            {t('subtitle')}
           </p>
         </div>
 
         {/* Filter tabs */}
         <div className="flex gap-2 flex-wrap justify-center mb-12">
           {([
-            { value: 'all', label: 'Kõik tööd', icon: null },
-            { value: 'youtube_ad', label: 'YouTube reklaam', icon: Youtube },
-            { value: 'shorts', label: 'Lühivideod', icon: Clapperboard },
-            { value: 'training', label: 'Esinemised', icon: Mic },
+            { value: 'all', label: t('filters.all'), icon: null },
+            { value: 'youtube_ad', label: t('filters.youtubeAd'), icon: Youtube },
+            { value: 'shorts', label: t('filters.shorts'), icon: Clapperboard },
+            { value: 'training', label: t('filters.training'), icon: Mic },
           ] as { value: FilterType; label: string; icon: React.ElementType | null }[]).map(({ value, label, icon: Icon }) => (
             <button
               key={value}
@@ -84,15 +88,18 @@ export default function WorkPageClient({ projects }: WorkPageClientProps) {
             filtered.map((project) => {
               const typeInfo = project.project_type ? TYPE_LABELS[project.project_type] : null;
               const TypeIcon = typeInfo?.icon;
+              const displayTitle = locale === 'en' && project.title_en ? project.title_en : project.title;
+              const displayDescription = locale === 'en' && project.description_en ? project.description_en : project.description;
+              
               return (
                 <Link key={project.id} href={`/tehtud-tood/${project.slug}`} className="group block h-full">
                   <article className="flex flex-col h-full">
                     <div className="aspect-[4/3] bg-neutral-900 rounded-2xl overflow-hidden mb-6 relative border border-white/5 group-hover:border-primary/50 transition-all duration-500">
                       {project.thumbnail_url ? (
-                        <img src={project.thumbnail_url} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <img src={project.thumbnail_url} alt={displayTitle} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-gray-700 bg-neutral-900">
-                          <span className="uppercase tracking-widest text-sm">Pilt puudub</span>
+                          <span className="uppercase tracking-widest text-sm">{t('noImage')}</span>
                         </div>
                       )}
                       <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-2 group-hover:translate-y-0">
@@ -108,13 +115,13 @@ export default function WorkPageClient({ projects }: WorkPageClientProps) {
                     
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-2xl font-bold text-white group-hover:text-primary transition-colors">{project.title}</h3>
+                        <h3 className="text-2xl font-bold text-white group-hover:text-primary transition-colors">{displayTitle}</h3>
                       </div>
-                      <p className="text-gray-500 line-clamp-2 leading-relaxed mb-3">{project.description}</p>
+                      <p className="text-gray-500 line-clamp-2 leading-relaxed mb-3">{displayDescription}</p>
                       {project.collaboration_completed_at && (
                         <div className="flex items-center gap-2 text-xs text-gray-400">
                           <Calendar className="w-3 h-3" />
-                          <span>Valminud {new Date(project.collaboration_completed_at).toLocaleDateString('et-EE', { 
+                          <span>{t('completedOn')} {new Date(project.collaboration_completed_at).toLocaleDateString(locale === 'en' ? 'en-US' : 'et-EE', { 
                             year: 'numeric', 
                             month: 'short', 
                             day: 'numeric' 
@@ -128,8 +135,8 @@ export default function WorkPageClient({ projects }: WorkPageClientProps) {
             })
           ) : (
             <div className="col-span-3 text-center py-32 text-gray-500 bg-white/5 rounded-3xl border border-dashed border-white/10">
-              <h3 className="text-2xl font-bold text-white mb-2">Töid ei leitud</h3>
-              <p>Selles kategoorias pole hetkel avalikke töid. Tule varsti tagasi!</p>
+              <h3 className="text-2xl font-bold text-white mb-2">{t('noWorksTitle')}</h3>
+              <p>{t('noWorksDesc')}</p>
             </div>
           )}
         </div>

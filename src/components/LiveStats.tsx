@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { Eye, Heart, MessageCircle, Share2, Bookmark } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 interface LiveStatsProps {
   projectId: string;
@@ -23,15 +24,16 @@ export default function LiveStats({
   initialSaves,
   showYoutubeStats
 }: LiveStatsProps) {
+  const t = useTranslations('projectPage');
+  
   const [stats, setStats] = useState({
     views: showYoutubeStats ? null : initialViews,
     likes: showYoutubeStats ? null : initialLikes,
     comments: showYoutubeStats ? null : initialComments,
-    shares: initialShares, // Shares come from manual input only (YouTube API doesn't provide this)
-    saves: initialSaves, // Saves come from manual input only (YouTube API doesn't provide this)
+    shares: initialShares,
+    saves: initialSaves,
   });
 
-  // If showing YT stats, start loading. Otherwise considered loaded.
   const [isLoaded, setIsLoaded] = useState(!showYoutubeStats);
 
   useEffect(() => {
@@ -68,8 +70,6 @@ export default function LiveStats({
       }
     };
 
-    // Fallback: If YouTube data doesn't arrive in 2 seconds, show DB data.
-    // Reduced from 3s to 2s to show content faster.
     fallbackTimer = setTimeout(() => {
         if (isMounted && !isLoaded) {
             setStats({
@@ -93,7 +93,6 @@ export default function LiveStats({
     };
   }, [projectId, showYoutubeStats, initialViews, initialLikes, initialComments, initialShares, initialSaves, isLoaded]);
 
-  // Don't render empty block if everything is null/zero and loaded - show only stats that are filled in admin
   const hasStatValue = (v: string | null | number) => {
     if (v == null || v === '') return false;
     const raw = String(v).replace(/\s/g, '').replace(/k/i, '000').replace(/\D/g, '');
@@ -102,17 +101,15 @@ export default function LiveStats({
   const hasData = hasStatValue(stats.views) || hasStatValue(stats.likes) || hasStatValue(stats.comments) || hasStatValue(stats.shares) || hasStatValue(stats.saves);
   if (!hasData && isLoaded) return null;
 
-  // Build array of visible stat items for responsive layout
   const statItems: { icon: typeof Eye; value: string | null | number; label: string; isLoading: boolean }[] = [];
-  if (hasStatValue(stats.views)) statItems.push({ icon: Eye, value: stats.views, label: "Vaatamist", isLoading: !isLoaded && !!showYoutubeStats && !stats.views });
-  if (hasStatValue(stats.likes)) statItems.push({ icon: Heart, value: stats.likes, label: "Like'i", isLoading: !isLoaded && !!showYoutubeStats && !stats.likes });
-  if (hasStatValue(stats.comments)) statItems.push({ icon: MessageCircle, value: stats.comments, label: "Kommentaari", isLoading: !isLoaded && !!showYoutubeStats && !stats.comments });
-  if (hasStatValue(stats.shares)) statItems.push({ icon: Share2, value: stats.shares, label: "Jagamist", isLoading: false });
-  if (hasStatValue(stats.saves)) statItems.push({ icon: Bookmark, value: stats.saves, label: "Salvestamist", isLoading: false });
+  if (hasStatValue(stats.views)) statItems.push({ icon: Eye, value: stats.views, label: t('views'), isLoading: !isLoaded && !!showYoutubeStats && !stats.views });
+  if (hasStatValue(stats.likes)) statItems.push({ icon: Heart, value: stats.likes, label: t('likes'), isLoading: !isLoaded && !!showYoutubeStats && !stats.likes });
+  if (hasStatValue(stats.comments)) statItems.push({ icon: MessageCircle, value: stats.comments, label: t('comments'), isLoading: !isLoaded && !!showYoutubeStats && !stats.comments });
+  if (hasStatValue(stats.shares)) statItems.push({ icon: Share2, value: stats.shares, label: t('shares'), isLoading: false });
+  if (hasStatValue(stats.saves)) statItems.push({ icon: Bookmark, value: stats.saves, label: t('saves'), isLoading: false });
 
   const count = statItems.length;
 
-  // Mobile layout: 1-3 = one row, 4 = 2x2, 5 = 2 top + 3 bottom
   const mobileLayoutClass =
     count <= 3
       ? "flex flex-row flex-wrap justify-center gap-4"

@@ -4,8 +4,10 @@ import { Mail, MapPin, Instagram, Youtube, ArrowRight, Loader2, CheckCircle, Ale
 import Image from 'next/image';
 import { useState, FormEvent, useEffect } from 'react';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import { useTranslations } from 'next-intl';
 
 export default function ContactPage() {
+  const t = useTranslations('contactPage');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -19,7 +21,6 @@ export default function ContactPage() {
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     
-    // Topeltkaitse
     if (isSubmitting) return;
 
     setIsSubmitting(true);
@@ -34,7 +35,7 @@ export default function ContactPage() {
         const token = await executeRecaptcha('contact');
         formData.set('recaptcha_token', token);
       } catch {
-        // reCAPTCHA failed, continue without – server will use other checks
+        // reCAPTCHA failed, continue without
       }
     }
 
@@ -57,11 +58,11 @@ export default function ContactPage() {
       setStatus('error');
       
       if (error.message === 'missing_fields') {
-        setErrorMessage('Palun veendu, et oled täitnud kõik vajalikud väljad (nimi, e-mail ja sõnum).');
+        setErrorMessage(t('errorMissingFields'));
       } else if (error.message === 'email_failed') {
-        setErrorMessage('Kahjuks tekkis sõnumi saatmisel tehniline tõrge. Palun proovi hiljem uuesti või kirjuta meile otse aadressil info@kozip.ee.');
+        setErrorMessage(t('errorEmailFailed'));
       } else {
-        setErrorMessage('Midagi läks valesti. Palun proovi uuesti või võta meiega ühendust aadressil info@kozip.ee.');
+        setErrorMessage(t('errorGeneric'));
       }
     } finally {
       setIsSubmitting(false);
@@ -78,11 +79,10 @@ export default function ContactPage() {
           {/* Contact Info */}
           <div>
             <h1 className="text-6xl md:text-7xl font-black text-white mb-8 uppercase tracking-tighter leading-none">
-              Võta <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-purple-600">ühendust</span>
+              {t('title')}
             </h1>
             <p className="text-xl text-gray-400 mb-12 leading-relaxed max-w-lg">
-              Sul on idee koostööks? Kirjuta meile ja kui teie Bränd Kozipi väärtustega klapib, siis ehk saame midagi väga vinget ellu viia!
+              {t('subtitle')}
             </p>
 
             <div className="space-y-8 mb-16">
@@ -91,7 +91,7 @@ export default function ContactPage() {
                   <Mail className="w-6 h-6 text-white group-hover:text-primary transition-colors" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white mb-1">Kirjuta meile</h3>
+                  <h3 className="text-lg font-bold text-white mb-1">{t('writeToUs')}</h3>
                   <a href="mailto:info@kozip.ee" className="text-gray-400 hover:text-white transition-colors text-lg">info@kozip.ee</a>
                 </div>
               </div>
@@ -101,14 +101,14 @@ export default function ContactPage() {
                   <MapPin className="w-6 h-6 text-white group-hover:text-primary transition-colors" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white mb-1">Asukoht</h3>
+                  <h3 className="text-lg font-bold text-white mb-1">{t('location')}</h3>
                   <p className="text-gray-400 text-lg">Tallinn, Eesti</p>
                 </div>
               </div>
             </div>
 
             <div>
-              <h3 className="text-lg font-bold text-white mb-6 uppercase tracking-wider">Jälgi meid</h3>
+              <h3 className="text-lg font-bold text-white mb-6 uppercase tracking-wider">{t('followUs')}</h3>
               <div className="flex gap-4">
                 <SocialButton icon={<Instagram className="w-6 h-6" />} href="https://www.instagram.com/sisumaja.tv/" />
                 <SocialButton icon={<Youtube className="w-6 h-6" />} href="https://www.youtube.com/@Sisumajatv" />
@@ -120,14 +120,14 @@ export default function ContactPage() {
           {/* Form */}
           <div className="relative">
             <div className="bg-neutral-900/50 backdrop-blur-xl p-8 md:p-12 rounded-3xl border border-white/10 shadow-2xl">
-              <h2 className="text-2xl font-bold text-white mb-4 uppercase">Saada meile kiri</h2>
+              <h2 className="text-2xl font-bold text-white mb-4 uppercase">{t('sendMessage')}</h2>
 
               {status === 'success' && (
                 <div className="mb-6 rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-200 px-4 py-3 text-sm flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-bold">Sõnum saadetud!</p>
-                    <p>Aitäh kirja eest! Sinu sõnum jõudis meieni ja vastame Sulle esimesel võimalusel.</p>
+                    <p className="font-bold">{t('messageSent')}</p>
+                    <p>{t('messageSentDesc')}</p>
                   </div>
                 </div>
               )}
@@ -136,14 +136,14 @@ export default function ContactPage() {
                 <div className="mb-6 rounded-xl border border-red-500/40 bg-red-500/10 text-red-200 px-4 py-3 text-sm flex items-start gap-3">
                   <AlertCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-bold">Viga saatmisel</p>
+                    <p className="font-bold">{t('sendError')}</p>
                     <p>{errorMessage}</p>
                   </div>
                 </div>
               )}
 
               <form className="space-y-6" onSubmit={handleSubmit} noValidate>
-                {/* Honeypot – hidden from users, bots fill it */}
+                {/* Honeypot */}
                 <div className="absolute -left-[9999px] w-1 h-1 overflow-hidden" aria-hidden="true">
                   <label htmlFor="website">Website</label>
                   <input type="text" id="website" name="website" tabIndex={-1} autoComplete="off" />
@@ -151,25 +151,25 @@ export default function ContactPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label htmlFor="name" className="text-sm font-medium text-gray-400 uppercase tracking-wider">Sinu nimi</label>
+                    <label htmlFor="name" className="text-sm font-medium text-gray-400 uppercase tracking-wider">{t('yourName')}</label>
                     <input 
                       type="text" 
                       id="name" 
                       name="name"
                       className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                      placeholder="Ees- ja perekonnanimi"
+                      placeholder={t('namePlaceholder')}
                       required
                       disabled={isSubmitting}
                     />
                   </div>
                   <div className="space-y-2">
-                    <label htmlFor="email" className="text-sm font-medium text-gray-400 uppercase tracking-wider">Sinu e-mail</label>
+                    <label htmlFor="email" className="text-sm font-medium text-gray-400 uppercase tracking-wider">{t('yourEmail')}</label>
                     <input 
                       type="email" 
                       id="email" 
                       name="email"
                       className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                      placeholder="nimi@ettevote.ee"
+                      placeholder={t('emailPlaceholder')}
                       required
                       disabled={isSubmitting}
                     />
@@ -178,26 +178,26 @@ export default function ContactPage() {
 
                 <div className="space-y-2">
                   <label htmlFor="phone" className="text-sm font-medium text-gray-400 uppercase tracking-wider">
-                    Sinu telefon <span className="normal-case text-gray-500">(valikuline)</span>
+                    {t('yourPhone')} <span className="normal-case text-gray-500">{t('optional')}</span>
                   </label>
                   <input
                     type="tel"
                     id="phone"
                     name="phone"
                     className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                    placeholder="+372 5xxxxx"
+                    placeholder={t('phonePlaceholder')}
                     disabled={isSubmitting}
                   />
                 </div>
                 
                 <div className="space-y-2">
-                  <label htmlFor="message" className="text-sm font-medium text-gray-400 uppercase tracking-wider">Sõnum</label>
+                  <label htmlFor="message" className="text-sm font-medium text-gray-400 uppercase tracking-wider">{t('message')}</label>
                   <textarea 
                     id="message" 
                     name="message"
                     rows={6}
                     className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-gray-600 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
-                    placeholder="Kirjelda oma ideed..."
+                    placeholder={t('messagePlaceholder')}
                     required
                     disabled={isSubmitting}
                   />
@@ -211,11 +211,11 @@ export default function ContactPage() {
                   {isSubmitting ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      Saadan...
+                      {t('sending')}
                     </>
                   ) : (
                     <>
-                      Saada sõnum <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                      {t('sendButton')} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </>
                   )}
                 </button>

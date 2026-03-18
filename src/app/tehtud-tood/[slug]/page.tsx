@@ -10,6 +10,7 @@ import { Testimonial } from "@/components/Testimonial";
 import LiveStats from "@/components/LiveStats";
 import { MotionWrapper, MotionItem } from "@/components/MotionWrapper";
 import { getLocale } from '@/lib/locale';
+import { getTranslations } from 'next-intl/server';
 
 type Project = Database['public']['Tables']['projects']['Row'];
 
@@ -162,6 +163,7 @@ const MediaBlock = ({ block }: { block: ContentBlock }) => {
 export default async function ProjectPage({ params }: PageProps) {
   const { slug } = await params;
   const locale = await getLocale();
+  const t = await getTranslations('projectPage');
 
   // Fetch current project
   const { data: project } = await supabase
@@ -230,9 +232,9 @@ export default async function ProjectPage({ params }: PageProps) {
   }
   // If no new links, construct from legacy
   if (links.length === 0) {
-      if (project.youtube_url) links.push({ id: 'yt', type: 'youtube', label: locale === 'en' ? 'Watch on YouTube' : 'Vaata YouTube\'is', url: project.youtube_url });
-      if (project.instagram_url) links.push({ id: 'ig', type: 'instagram', label: locale === 'en' ? 'View on Instagram' : 'Vaata Instagramis', url: project.instagram_url });
-      if (project.tiktok_url) links.push({ id: 'tt', type: 'tiktok', label: locale === 'en' ? 'Watch on TikTok' : 'Vaata TikTokis', url: project.tiktok_url });
+      if (project.youtube_url) links.push({ id: 'yt', type: 'youtube', label: t('watchOnYouTube'), url: project.youtube_url });
+      if (project.instagram_url) links.push({ id: 'ig', type: 'instagram', label: t('viewOnInstagram'), url: project.instagram_url });
+      if (project.tiktok_url) links.push({ id: 'tt', type: 'tiktok', label: t('watchOnTikTok'), url: project.tiktok_url });
   }
 
   // Helper to check if stat has value
@@ -260,7 +262,7 @@ export default async function ProjectPage({ params }: PageProps) {
             <MotionItem>
             <Link href="/tehtud-tood" className="inline-flex items-center text-gray-400 hover:text-white mb-8 transition-colors">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Tagasi kõikide tööde juurde
+                {t('backToAll')}
             </Link>
             </MotionItem>
             
@@ -277,7 +279,7 @@ export default async function ProjectPage({ params }: PageProps) {
                     <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4 text-white" />
                         <span>
-                            Avalikustatud: <span className="text-white font-medium">{new Date(project.collaboration_completed_at).toLocaleDateString('et-EE', { 
+                            {t('published')}: <span className="text-white font-medium">{new Date(project.collaboration_completed_at).toLocaleDateString(locale === 'en' ? 'en-US' : 'et-EE', { 
                                 year: 'numeric', 
                                 month: 'long',
                                 day: 'numeric'
@@ -288,7 +290,7 @@ export default async function ProjectPage({ params }: PageProps) {
                  <div className="flex items-center gap-2">
                     <Clock className="w-4 h-4 text-white" />
                     <span>
-                         Viimati uuendatud: <span className="text-gray-300 font-medium">{new Date(project.updated_at ?? new Date()).toLocaleDateString('et-EE', { 
+                         {t('lastUpdated')}: <span className="text-gray-300 font-medium">{new Date(project.updated_at ?? new Date()).toLocaleDateString(locale === 'en' ? 'en-US' : 'et-EE', { 
                                 year: 'numeric', 
                                 month: 'long',
                                 day: 'numeric'
@@ -340,8 +342,8 @@ export default async function ProjectPage({ params }: PageProps) {
           <MotionItem className="mb-24 px-4">
              <Testimonial 
                 quote={(locale === 'en' && project.client_quote_en) ? project.client_quote_en : project.client_quote}
-                author={project.client_name || (locale === 'en' ? 'Client' : 'Klient')}
-                role={project.client_role || (locale === 'en' ? 'Collaboration Partner' : 'Koostööpartner')}
+                author={project.client_name || t('client')}
+                role={project.client_role || t('partner')}
                 imageSrc={project.client_avatar_url || undefined}
                 stars={project.client_review_stars ?? 5}
                 title={((locale === 'en' && project.client_review_title_en) ? project.client_review_title_en : project.client_review_title) || undefined}
@@ -354,7 +356,7 @@ export default async function ProjectPage({ params }: PageProps) {
         {links.length > 0 && (
             <MotionItem className="mb-24 text-center py-9">
                  <h2 className="text-2xl font-bold text-white mb-8 uppercase">
-                   {locale === 'en' ? 'View project on social media:' : 'Vaata projekti sotsiaalmeedias:'}
+                   {t('viewOnSocial')}
                  </h2>
                  <div className="flex flex-wrap justify-center gap-4">
                     {links.map((link) => {
@@ -406,7 +408,7 @@ export default async function ProjectPage({ params }: PageProps) {
           <div className="bg-neutral-900/50 py-24 border-t border-neutral-900">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 className="text-3xl font-black text-white mb-12 uppercase text-center">
-                  {locale === 'en' ? 'Check out other projects' : 'Vaata ka teisi töid'}
+                  {t('checkOtherProjects')}
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {otherProjects.map((p) => {
