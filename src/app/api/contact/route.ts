@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import nodemailer from 'nodemailer';
+import { getTranslations } from 'next-intl/server';
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,6 +13,10 @@ export async function POST(req: NextRequest) {
     const message = (formData.get('message') || '').toString().trim();
     const honeypot = (formData.get('website') || '').toString().trim();
 
+    // Get locale from cookie
+    const locale = req.cookies.get('NEXT_LOCALE')?.value || 'et';
+    const t = await getTranslations({ locale, namespace: 'email' });
+
     // Honeypot: bots fill hidden fields, humans don't
     if (honeypot) {
       return NextResponse.json({ success: true }); // Pretend success to not alert bots
@@ -19,7 +24,7 @@ export async function POST(req: NextRequest) {
 
     if (!name || !email || !message) {
       return NextResponse.json(
-        { error: 'missing_fields', message: 'Palun täida vähemalt nimi, e-mail ja sõnum.' },
+        { error: 'missing_fields', message: 'Please fill in at least name, email and message.' },
         { status: 400 }
       );
     }
@@ -46,7 +51,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Salvestame Supabase'i backupiks
+    // Save to Supabase as backup
     const { error: dbError } = await (supabase as any)
       .from('contact_messages')
       .insert({
@@ -58,10 +63,10 @@ export async function POST(req: NextRequest) {
 
     if (dbError) {
       console.error('Supabase insert error:', dbError);
-      // Me ei katkesta siin, kui ainult andmebaasi salvestamine ebaõnnestub, proovime ikka e-kirja saata
+      // We don't break here if only database save fails, we still try to send the email
     }
 
-    // Saadame e-kirja Zoho kaudu
+    // Send email via Zoho
     const host = process.env.SMTP_HOST;
     const port = process.env.SMTP_PORT
       ? Number(process.env.SMTP_PORT)
@@ -69,39 +74,39 @@ export async function POST(req: NextRequest) {
     const user = process.env.SMTP_USER;
     const pass = process.env.SMTP_PASS;
     const from = process.env.SMTP_FROM || 'Kozip <info@kozip.ee>';
-    // Saaja aadress – kasuta CONTACT_EMAIL_TO (nt Vercelis), vaikimisi info@kozip.ee
+    // Recipient address – use CONTACT_EMAIL_TO (e.g. in Vercel), default info@kozip.ee
     const to = (process.env.CONTACT_EMAIL_TO || 'info@kozip.ee').trim();
 
     if (host && port && user && pass) {
       const transporter = nodemailer.createTransport({
         host,
         port,
-        secure: port === 465, // Zoho: tavaliselt 465 (SSL) või 587 (STARTTLS)
+        secure: port === 465, // Zoho: typically 465 (SSL) or 587 (STARTTLS)
         auth: {
           user,
           pass,
         },
       });
 
-      const subject = `Uus kontaktivormi sõnum - ${name}`;
+      const subject = t('newContactSubject', { name });
 
       const textBody = [
-        'Uus sõnum Kozip kontaktivormist:',
+        t('newContactTitle'),
         '',
-        `Nimi: ${name}`,
-        `E-mail: ${email}`,
-        `Telefon: ${phone || '—'}`,
+        `${t('nameLabel')}: ${name}`,
+        `${t('emailLabel')}: ${email}`,
+        `${t('phoneLabel')}: ${phone || '—'}`,
         '',
-        'Sõnum:',
+        `${t('messageLabel')}:`,
         message,
       ].join('\n');
 
       const htmlBody = `
-        <h2>Uus sõnum Kozip kontaktivormist</h2>
-        <p><strong>Nimi:</strong> ${name}</p>
-        <p><strong>E-mail:</strong> ${email}</p>
-        <p><strong>Telefon:</strong> ${phone || '—'}</p>
-        <p><strong>Sõnum:</strong></p>
+        <h2>${t('newContactTitle')}</h2>
+        <p><strong>${t('nameLabel')}:</strong> ${name}</p>
+        <p><strong>${t('emailLabel')}:</strong> ${email}</p>
+        <p><strong>${t('phoneLabel')}:</strong> ${phone || '—'}</p>
+        <p><strong>${t('messageLabel')}:</strong></p>
         <p>${message.replace(/\n/g, '<br />')}</p>
       `;
 
@@ -115,21 +120,21 @@ export async function POST(req: NextRequest) {
           html: htmlBody,
         });
 
-        // Kinnitus kirjutajale: sinu kiri jõudis meieni
-        const confirmSubject = 'Kozip – Sinu sõnum jõudis meieni';
+        // Confirmation email to sender: your message reached us
+        const confirmSubject = t('confirmSubject');
         const confirmText = [
-          `Tere ${name},`,
+          t('confirmGreeting', { name }),
           '',
-          'Täname Sind, et võtsid meiega ühendust!',
-          'Sinu sõnum on meieni jõudnud ja vastame Sulle esimesel võimalusel.',
+          t('confirmThankYou'),
+          t('confirmReceived'),
           '',
-          'Parimate soovidega,',
-          'Kozip meeskond',
+          t('confirmSignature'),
+          t('confirmTeam'),
         ].join('\n');
         const confirmHtml = `
-          <p>Tere ${name},</p>
-          <p>Täname Sind, et võtsid meiega ühendust! Sinu sõnum on meieni jõudnud ja vastame Sulle esimesel võimalusel.</p>
-          <p>Parimate soovidega,<br /><strong>Kozip meeskond</strong></p>
+          <p>${t('confirmGreeting', { name })}</p>
+          <p>${t('confirmThankYou')} ${t('confirmReceived')}</p>
+          <p>${t('confirmSignature')}<br /><strong>${t('confirmTeam')}</strong></p>
         `;
         await transporter.sendMail({
           from,
@@ -142,13 +147,13 @@ export async function POST(req: NextRequest) {
       } catch (emailError) {
         console.error('Email send error:', emailError);
         return NextResponse.json(
-          { error: 'email_failed', message: 'Sõnumi saatmine ebaõnnestus.' },
+          { error: 'email_failed', message: 'Failed to send message.' },
           { status: 500 }
         );
       }
     } else {
       console.warn(
-        'SMTP env muutujad puuduvad, e-kirja ei saadetud. Lisa SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM.'
+        'SMTP env variables missing, email not sent. Add SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM.'
       );
     }
 
@@ -156,7 +161,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error('Contact API error:', error);
     return NextResponse.json(
-      { error: 'unknown', message: 'Tekkis tundmatu viga.' },
+      { error: 'unknown', message: 'An unknown error occurred.' },
       { status: 500 }
     );
   }

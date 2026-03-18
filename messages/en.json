@@ -221,6 +221,20 @@
     "sending": "Sending...",
     "sendButton": "Send message"
   },
+  "email": {
+    "newContactSubject": "New contact form message - {{name}}",
+    "newContactTitle": "New message from Kozip contact form",
+    "nameLabel": "Name",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
+    "messageLabel": "Message",
+    "confirmSubject": "Kozip – Your message reached us",
+    "confirmGreeting": "Hello {{name}},",
+    "confirmThankYou": "Thank you for contacting us!",
+    "confirmReceived": "Your message has reached us and we will get back to you as soon as possible.",
+    "confirmSignature": "Best regards,",
+    "confirmTeam": "Kozip team"
+  },
   "categories": {
     "experiments": "Experiments",
     "realitySeries": "Reality Series",

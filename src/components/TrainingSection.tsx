@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Mic, Users, ArrowRight, School, Calendar } from "lucide-react";
 import Link from "next/link";
 import { Database } from "@/types/database.types";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 
 type Project = Database['public']['Tables']['projects']['Row'];
 
@@ -14,6 +14,8 @@ interface TrainingSectionProps {
 
 export function TrainingSection({ trainingProjects = [] }: TrainingSectionProps) {
   const t = useTranslations('trainingService');
+  const tCommon = useTranslations('common');
+  const locale = useLocale();
   const hasProjects = trainingProjects.length > 0;
 
   const SERVICES = [
@@ -135,7 +137,11 @@ export function TrainingSection({ trainingProjects = [] }: TrainingSectionProps)
                   <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-neutral-950 to-transparent z-10 pointer-events-none" />
 
                   <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-12 pt-4 px-6 hide-scrollbar cursor-grab active:cursor-grabbing">
-                     {trainingProjects.map((project) => (
+                     {trainingProjects.map((project) => {
+                        const displayTitle = locale === 'en' && project.title_en ? project.title_en : project.title;
+                        const displayDescription = locale === 'en' && project.description_en ? project.description_en : project.description;
+                        
+                        return (
                         <Link
                            key={project.id}
                            href={`/tehtud-tood/${project.slug}`}
@@ -144,13 +150,13 @@ export function TrainingSection({ trainingProjects = [] }: TrainingSectionProps)
                            {project.thumbnail_url ? (
                               <img
                                  src={project.thumbnail_url}
-                                 alt={project.title}
+                                 alt={displayTitle}
                                  className="absolute inset-0 w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-700"
                               />
                            ) : (
                               <div className="absolute inset-0 bg-neutral-800 flex items-center justify-center text-gray-600 group-hover/card:scale-105 transition-transform duration-700">
                                  <div className="text-center p-6">
-                                    <p className="text-sm font-medium opacity-50 mb-2">Pilt puudub</p>
+                                    <p className="text-sm font-medium opacity-50 mb-2">{tCommon('imageMissing')}</p>
                                     <div className="w-12 h-1 rounded-full bg-green-500 mx-auto opacity-50" />
                                  </div>
                               </div>
@@ -160,16 +166,17 @@ export function TrainingSection({ trainingProjects = [] }: TrainingSectionProps)
                               {project.collaboration_completed_at && (
                                  <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-2">
                                     <Calendar className="w-3 h-3" />
-                                    <span>{new Date(project.collaboration_completed_at).toLocaleDateString('et-EE', { year: 'numeric', month: 'short' })}</span>
+                                    <span>{new Date(project.collaboration_completed_at).toLocaleDateString(locale === 'en' ? 'en-US' : 'et-EE', { year: 'numeric', month: 'short' })}</span>
                                  </div>
                               )}
-                              <h4 className="text-2xl font-bold text-white leading-tight">{project.title}</h4>
-                              {project.description && (
-                                 <p className="text-gray-300 text-sm mt-2 line-clamp-2">{project.description}</p>
+                              <h4 className="text-2xl font-bold text-white leading-tight">{displayTitle}</h4>
+                              {displayDescription && (
+                                 <p className="text-gray-300 text-sm mt-2 line-clamp-2">{displayDescription}</p>
                               )}
                            </div>
                         </Link>
-                     ))}
+                        );
+                     })}
                      
                      <div className="w-6 shrink-0" />
                   </div>

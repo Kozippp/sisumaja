@@ -221,6 +221,20 @@
     "sending": "Saadan...",
     "sendButton": "Saada sõnum"
   },
+  "email": {
+    "newContactSubject": "Uus kontaktivormi sõnum - {{name}}",
+    "newContactTitle": "Uus sõnum Kozip kontaktivormist",
+    "nameLabel": "Nimi",
+    "emailLabel": "E-mail",
+    "phoneLabel": "Telefon",
+    "messageLabel": "Sõnum",
+    "confirmSubject": "Kozip – Sinu sõnum jõudis meieni",
+    "confirmGreeting": "Tere {{name}},",
+    "confirmThankYou": "Täname Sind, et võtsid meiega ühendust!",
+    "confirmReceived": "Sinu sõnum on meieni jõudnud ja vastame Sulle esimesel võimalusel.",
+    "confirmSignature": "Parimate soovidega,",
+    "confirmTeam": "Kozip meeskond"
+  },
   "categories": {
     "experiments": "Eksperimendid",
     "realitySeries": "Reality-Sarjad",
