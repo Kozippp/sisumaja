@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Plus, Edit, Trash2, Eye, EyeOff, LogOut, Users, TrendingUp, Youtube, MessageSquare, Video, BarChart3, GraduationCap, Clapperboard, ImageIcon } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, EyeOff, LogOut, Users, TrendingUp, Youtube, MessageSquare, Video, BarChart3, GraduationCap, Clapperboard, ImageIcon, FileText } from 'lucide-react';
 import { Database } from '@/types/database.types';
 
 type Project = Database['public']['Tables']['projects']['Row'];
@@ -80,8 +80,15 @@ export default function DashboardPage() {
         <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-12 gap-6">
           <h1 className="text-3xl font-bold text-white uppercase">Admin Dashboard</h1>
           <div className="flex gap-2 flex-wrap">
-            <Link 
-              href="/admin/social-stats" 
+            <Link
+              href="/admin/pakkumised"
+              className="bg-fuchsia-900/50 text-fuchsia-300 px-4 py-2 rounded-lg font-bold hover:bg-fuchsia-800/50 hover:text-white transition-colors flex items-center text-sm border border-fuchsia-700/30"
+            >
+              <FileText className="w-4 h-4 mr-2" />
+              Hinnapakkumised
+            </Link>
+            <Link
+              href="/admin/social-stats"
               className="bg-neutral-800 text-gray-300 px-4 py-2 rounded-lg font-bold hover:bg-neutral-700 hover:text-white transition-colors flex items-center text-sm"
             >
               <TrendingUp className="w-4 h-4 mr-2" />
