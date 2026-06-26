@@ -1,6 +1,3 @@
-import { cookies } from 'next/headers';
-
-export async function getLocale(): Promise<string> {
-  const cookieStore = await cookies();
-  return cookieStore.get('NEXT_LOCALE')?.value || 'et';
-}
+// Keel tuleb nüüd URL-ist (next-intl), mitte küpsisest.
+// Säilitatud sama nimega, et serverikomponendid ei vajaks muutmist.
+export { getLocale } from 'next-intl/server';

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Mic, Users, ArrowRight, School, Calendar } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Database } from "@/types/database.types";
 import { useTranslations, useLocale } from 'next-intl';
 
@@ -191,9 +191,9 @@ export function TrainingSection({ trainingProjects = [] }: TrainingSectionProps)
              viewport={{ once: true }}
              className="text-center"
           >
-             <Link href="#contact" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-fuchsia-500 hover:text-white transition-all duration-300">
+             <a href="#contact" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-fuchsia-500 hover:text-white transition-all duration-300">
                 {t('ctaButton')} <ArrowRight className="w-4 h-4" />
-             </Link>
+             </a>
           </motion.div>
        </div>
     </section>

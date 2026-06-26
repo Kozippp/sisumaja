@@ -1,36 +1,16 @@
 "use client";
 
-import Link from 'next/link';
+import { Link, usePathname } from '@/i18n/navigation';
 import Image from 'next/image';
 import { Instagram, Youtube, Mail, Facebook } from 'lucide-react';
-import { usePathname } from 'next/navigation';
 import { LanguageSwitcher } from './LanguageSwitcher';
-import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
-import Cookies from 'js-cookie';
+import { useTranslations, useLocale } from 'next-intl';
 
 export default function Footer() {
   const pathname = usePathname();
   const t = useTranslations('footer');
   const tNav = useTranslations('nav');
-  const [currentLocale, setCurrentLocale] = useState('et');
-
-  useEffect(() => {
-    const updateLocale = () => {
-      const locale = Cookies.get('NEXT_LOCALE') || 'et';
-      setCurrentLocale(locale);
-    };
-    
-    updateLocale();
-    
-    const interval = setInterval(updateLocale, 100);
-    
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleLocaleChange = (locale: string) => {
-    setCurrentLocale(locale);
-  };
+  const currentLocale = useLocale();
 
   if (pathname.startsWith('/admin')) {
     return null;
@@ -90,10 +70,9 @@ export default function Footer() {
         
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-600 gap-4">
           <p>&copy; {new Date().getFullYear()} {t('copyright')}</p>
-          <LanguageSwitcher 
-            currentLocale={currentLocale} 
+          <LanguageSwitcher
+            currentLocale={currentLocale}
             variant="footer"
-            onLocaleChange={handleLocaleChange}
           />
           <div className="flex space-x-6 flex-wrap justify-end gap-y-2">
             <Link href="/privaatsuspoliitika" className="hover:text-white transition-colors">{t('privacy')}</Link>

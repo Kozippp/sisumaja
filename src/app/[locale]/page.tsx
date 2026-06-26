@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { ArrowRight, Play, Star, Zap, TrendingUp, Clapperboard, Users, MessageCircle, CheckCircle, Youtube, Video, Mic, BadgeCheck, Smartphone, Repeat, Eye, BarChart3, ThumbsUp, Target } from "lucide-react";
 import Image from "next/image";
 import { Database } from "@/types/database.types";
@@ -14,8 +14,7 @@ import { TrainingSection } from "@/components/TrainingSection";
 import { RetentionImagesModal } from "@/components/RetentionImagesModal";
 import { RetentionLink } from "@/components/RetentionLink";
 import { ContactForm } from "@/components/ContactForm";
-import { getTranslations } from 'next-intl/server';
-import { getLocale } from '@/lib/locale';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 export const revalidate = 60;
 
@@ -134,8 +133,13 @@ async function getRetentionImages(): Promise<RetentionImage[]> {
   return data || [];
 }
 
-export default async function Home() {
-  const locale = await getLocale();
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations();
   
   const recentProjects = await getRecentProjects();
@@ -231,7 +235,7 @@ export default async function Home() {
             >
               <div className="relative group cursor-default scale-90 lg:scale-100 origin-center">
                 {/* Instagram-style Card - smaller padding and content on mobile */}
-                <Link href="#about" className="relative bg-black/40 backdrop-blur-xl border border-white/10 p-5 pr-6 lg:p-8 lg:pr-12 rounded-2xl lg:rounded-3xl flex items-center gap-4 lg:gap-8 transform hover:scale-[1.02] transition-transform duration-500 cursor-pointer">
+                <a href="#about" className="relative bg-black/40 backdrop-blur-xl border border-white/10 p-5 pr-6 lg:p-8 lg:pr-12 rounded-2xl lg:rounded-3xl flex items-center gap-4 lg:gap-8 transform hover:scale-[1.02] transition-transform duration-500 cursor-pointer">
                   {/* Profile Picture with Story Ring - smaller on mobile */}
                   <div className="relative flex-shrink-0">
                      <div className="absolute -inset-[4px] lg:-inset-[5px] bg-gradient-to-tr from-yellow-500 via-fuchsia-500 to-purple-600 rounded-full opacity-100"></div>
@@ -266,7 +270,7 @@ export default async function Home() {
                       </div>
                     </div>
                   </div>
-                </Link>
+                </a>
               </div>
             </motion.div>
 
@@ -706,9 +710,9 @@ export default async function Home() {
             </div>
             
             <div className="mt-16 text-center">
-              <Link href="#contact" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-fuchsia-500 hover:text-white transition-all duration-300">
+              <a href="#contact" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-fuchsia-500 hover:text-white transition-all duration-300">
                 {t('youtubeService.ctaButton')} <ArrowRight className="w-4 h-4" />
-              </Link>
+              </a>
             </div>
 
           </div>
@@ -889,9 +893,9 @@ export default async function Home() {
 
             {/* CTA at end of TikTok block */}
             <div className="mt-16 text-center">
-              <Link href="#contact" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-fuchsia-500 hover:text-white transition-all duration-300">
+              <a href="#contact" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-fuchsia-500 hover:text-white transition-all duration-300">
                 {t('shortsService.ctaButton')} <ArrowRight className="w-4 h-4" />
-              </Link>
+              </a>
             </div>
 
           </div>

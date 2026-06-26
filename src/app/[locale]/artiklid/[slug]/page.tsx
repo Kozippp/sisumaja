@@ -1,10 +1,11 @@
 import { Metadata } from "next";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { setRequestLocale } from "next-intl/server";
 import { ArrowLeft, Clock } from "lucide-react";
-import { getLocale } from "@/lib/locale";
 import { getArticleBySlug, localizeArticle, readingMinutes } from "@/lib/articles";
+import { buildAlternates, localePath } from "@/lib/site";
 import JsonLd from "@/components/JsonLd";
 import ArticleTracker from "@/components/ArticleTracker";
 import { articleSchema, breadcrumbSchema } from "@/lib/schema";
@@ -12,23 +13,22 @@ import { articleSchema, breadcrumbSchema } from "@/lib/schema";
 export const revalidate = 60;
 
 interface PageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const locale = await getLocale();
+  const { slug, locale } = await params;
   const article = await getArticleBySlug(slug);
   if (!article) return { title: locale === "en" ? "Article not found" : "Artiklit ei leitud" };
   const a = localizeArticle(article, locale);
   return {
     title: a.title,
     description: a.excerpt || undefined,
-    alternates: { canonical: `/artiklid/${slug}` },
+    alternates: buildAlternates(`/artiklid/${slug}`, locale),
     openGraph: {
       title: `${a.title} | Kozip`,
       description: a.excerpt || undefined,
-      url: `/artiklid/${slug}`,
+      url: localePath(`/artiklid/${slug}`, locale),
       type: "article",
       ...(a.cover_image_url ? { images: [{ url: a.cover_image_url }] } : {}),
     },
@@ -61,8 +61,8 @@ function formatDate(date: string | null, locale: string): string {
 }
 
 export default async function ArticlePage({ params }: PageProps) {
-  const { slug } = await params;
-  const locale = await getLocale();
+  const { slug, locale } = await params;
+  setRequestLocale(locale);
   const en = locale === "en";
   const article = await getArticleBySlug(slug);
   if (!article) notFound();

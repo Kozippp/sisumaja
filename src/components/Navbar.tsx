@@ -1,38 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import { Link, usePathname } from "@/i18n/navigation";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { usePathname } from "next/navigation";
 import { LanguageSwitcher } from "./LanguageSwitcher";
-import { useTranslations } from 'next-intl';
-import Cookies from 'js-cookie';
+import { useTranslations, useLocale } from 'next-intl';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [currentLocale, setCurrentLocale] = useState('et');
+  const currentLocale = useLocale();
   const pathname = usePathname();
   const t = useTranslations('nav');
-
-  useEffect(() => {
-    const updateLocale = () => {
-      const locale = Cookies.get('NEXT_LOCALE') || 'et';
-      setCurrentLocale(locale);
-    };
-    
-    updateLocale();
-    
-    const interval = setInterval(updateLocale, 100);
-    
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleLocaleChange = (locale: string) => {
-    setCurrentLocale(locale);
-  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -79,9 +60,8 @@ export default function Navbar() {
               <NavLink href="/artiklid">{t('articles')}</NavLink>
               <NavLink href="/kontakt">{t('contact')}</NavLink>
               <LanguageSwitcher
-                currentLocale={currentLocale} 
+                currentLocale={currentLocale}
                 variant="navbar"
-                onLocaleChange={handleLocaleChange}
               />
               <Link
                 href="/kontakt"
@@ -128,10 +108,9 @@ export default function Navbar() {
               {t('contact')}
             </MobileNavLink>
             <div className="pt-4">
-              <LanguageSwitcher 
-                currentLocale={currentLocale} 
+              <LanguageSwitcher
+                currentLocale={currentLocale}
                 variant="navbar"
-                onLocaleChange={handleLocaleChange}
               />
             </div>
           </motion.div>

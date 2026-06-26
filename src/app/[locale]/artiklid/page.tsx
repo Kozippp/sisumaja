@@ -1,26 +1,30 @@
 import { Metadata } from "next";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
-import { getLocale } from "@/lib/locale";
+import { setRequestLocale } from "next-intl/server";
 import { getPublishedArticles, localizeArticle } from "@/lib/articles";
 import JsonLd from "@/components/JsonLd";
 import { breadcrumbSchema } from "@/lib/schema";
-import { absoluteUrl } from "@/lib/site";
+import { absoluteUrl, buildAlternates, localePath } from "@/lib/site";
 
 export const revalidate = 60;
 
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale();
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
   const en = locale === "en";
   return {
     title: en ? "Articles — influencer marketing insights" : "Artiklid — influencer-turunduse teadmised",
     description: en
       ? "Articles and insights on influencer marketing, YouTube and short-form video, and reaching young audiences in Estonia — by Kozip."
       : "Artiklid ja teadmised influencer-turundusest, YouTube’ist ja lühivideotest ning noorte sihtrühmani jõudmisest Eestis — Kozipilt.",
-    alternates: { canonical: "/artiklid" },
+    alternates: buildAlternates("/artiklid", locale),
     openGraph: {
       title: en ? "Articles | Kozip" : "Artiklid | Kozip",
-      url: "/artiklid",
+      url: localePath("/artiklid", locale),
       type: "website",
     },
   };
@@ -33,8 +37,13 @@ function formatDate(date: string | null, locale: string): string {
   });
 }
 
-export default async function ArticlesPage() {
-  const locale = await getLocale();
+export default async function ArticlesPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
   const en = locale === "en";
   const articles = (await getPublishedArticles()).map((a) => localizeArticle(a, locale));
 

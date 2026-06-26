@@ -333,12 +333,23 @@ Branchil `feature/ai-visibility` on tehtud järgmine. Kõik on et+en.
    - `NEXT_PUBLIC_POSTHOG_HOST` = `https://eu.i.posthog.com` (kui EU)
 3. **Tee tegelik OG-pilt** soovi korral ilusamaks (praegu auto-genereeritud).
 
+### URL-põhine keelevahetus ✅ (TEHTUD)
+- Üleminek cookie-põhiselt i18n-lt **URL-põhisele** (next-intl middleware + `[locale]`
+  segment). Strateegia **`as-needed`**: eesti ilma prefiksita (`/koostoo`), inglise
+  `/en/koostoo`. Olemasolevad eestikeelsed URL-id ei muutu.
+- Iga keel on nüüd otsingurobotitele eraldi indekseeritav URL + korrektne
+  `hreflang` (et / en / x-default), canonical ja `<html lang>` keele järgi.
+- Failid: `src/i18n/routing.ts`, `navigation.ts`, `middleware.ts`; kõik lehed
+  liigutatud `src/app/[locale]/` alla; avalik navigatsioon kasutab next-intl `Link`'i.
+- Märkus: Next.js 16 hoiatab, et `middleware`-konventsioon on ümber nimetatud
+  `proxy`-ks — praegu töötab, võib hiljem `src/proxy.ts`-ks ümber nimetada.
+
 ## Veel võimalik lisada (jäänud TODO)
 - `video_play` ja `outbound_click` sündmused tehtud tööde videotele.
 - PostHog dashboardid (Tehtud tööd, Artiklid, Funnel) — luuakse PostHogi UI-s.
 - Esimesed päris artiklid (sisu).
-- Pikem plaan: URL-põhine i18n (`/en/...`) — praegu cookie-põhine, mistõttu crawlerid
-  näevad vaid eesti versiooni. Suur arhitektuurimuudatus, eraldi projekt.
+- Soovi korral artiklite/juriidiliste lehtede ingliskeelne tõlge (praegu õigus-lehed
+  on eestikeelsed mõlemas keeles).
 
 ---
 

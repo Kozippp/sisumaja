@@ -1,29 +1,39 @@
 import { Metadata } from "next";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { setRequestLocale } from "next-intl/server";
 import { ArrowRight, ExternalLink } from "lucide-react";
-import { getLocale } from "@/lib/locale";
 import { getKoostooContent } from "@/lib/koostoo-content";
+import { buildAlternates, localePath } from "@/lib/site";
 import JsonLd from "@/components/JsonLd";
 import { faqSchema, breadcrumbSchema } from "@/lib/schema";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale();
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
   const c = getKoostooContent(locale);
   return {
     title: c.metaTitle,
     description: c.metaDescription,
-    alternates: { canonical: "/koostoo" },
+    alternates: buildAlternates("/koostoo", locale),
     openGraph: {
       title: `${c.metaTitle} | Kozip`,
       description: c.metaDescription,
-      url: "/koostoo",
+      url: localePath("/koostoo", locale),
       type: "website",
     },
   };
 }
 
-export default async function KoostooPage() {
-  const locale = await getLocale();
+export default async function KoostooPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
   const c = getKoostooContent(locale);
 
   return (

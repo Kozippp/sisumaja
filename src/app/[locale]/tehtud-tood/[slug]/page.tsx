@@ -1,7 +1,9 @@
 import { supabase } from "@/lib/supabase";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import { setRequestLocale } from "next-intl/server";
+import { buildAlternates, localePath } from "@/lib/site";
 import { ArrowLeft, Eye, Heart, MessageCircle, Share2, Youtube, Instagram, Calendar, Clock, Play, Link as LinkIcon, ExternalLink } from "lucide-react";
 import MediaGallery from "@/components/MediaGallery";
 import { Database } from "@/types/database.types";
@@ -9,7 +11,6 @@ import { ContentBlock, CustomLink } from "@/components/admin/ProjectForm";
 import { Testimonial } from "@/components/Testimonial";
 import LiveStats from "@/components/LiveStats";
 import { MotionWrapper, MotionItem } from "@/components/MotionWrapper";
-import { getLocale } from '@/lib/locale';
 import { getTranslations } from 'next-intl/server';
 import JsonLd from "@/components/JsonLd";
 import { creativeWorkSchema, breadcrumbSchema } from "@/lib/schema";
@@ -18,11 +19,11 @@ type Project = Database['public']['Tables']['projects']['Row'];
 
 // Define interface for params
 interface PageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const { data: project } = await supabase
     .from("projects")
     .select("title, description, client_name, thumbnail_url")
@@ -48,11 +49,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    alternates: { canonical: `/tehtud-tood/${slug}` },
+    alternates: buildAlternates(`/tehtud-tood/${slug}`, locale),
     openGraph: {
       title: `${title} | Kozip`,
       description,
-      url: `/tehtud-tood/${slug}`,
+      url: localePath(`/tehtud-tood/${slug}`, locale),
       type: "article",
       ...(project.thumbnail_url ? { images: [{ url: project.thumbnail_url }] } : {}),
     },
@@ -180,8 +181,8 @@ const MediaBlock = ({ block }: { block: ContentBlock }) => {
 
 
 export default async function ProjectPage({ params }: PageProps) {
-  const { slug } = await params;
-  const locale = await getLocale();
+  const { slug, locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations('projectPage');
 
   // Fetch current project

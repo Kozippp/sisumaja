@@ -74,3 +74,28 @@ export const socialLinks = Object.values(siteConfig.social);
 export function absoluteUrl(path = '/'): string {
   return `${SITE_URL}${path.startsWith('/') ? '' : '/'}${path}`;
 }
+
+/**
+ * Lokaliseeritud tee 'as-needed' strateegiaga:
+ * eesti = ilma prefiksita (/koostoo), inglise = /en prefiksiga (/en/koostoo).
+ */
+export function localePath(path: string, locale: string): string {
+  const p = path.startsWith('/') ? path : `/${path}`;
+  if (locale === 'en') return p === '/' ? '/en' : `/en${p}`;
+  return p;
+}
+
+/**
+ * Metadata `alternates` plokk: canonical (käesolev keel) + hreflang lingid
+ * mõlemale keelele + x-default. Töötab koos metadataBase'iga (suhtelised teed).
+ */
+export function buildAlternates(path: string, locale: string) {
+  return {
+    canonical: localePath(path, locale),
+    languages: {
+      et: localePath(path, 'et'),
+      en: localePath(path, 'en'),
+      'x-default': localePath(path, 'et'),
+    },
+  };
+}

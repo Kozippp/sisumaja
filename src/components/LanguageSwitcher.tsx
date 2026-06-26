@@ -1,22 +1,20 @@
 'use client';
 
 import { useTransition, useState, useEffect } from 'react';
-import { setLocale } from '@/actions/locale';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from '@/i18n/navigation';
 import { Globe, Loader2 } from 'lucide-react';
-import Cookies from 'js-cookie';
 import { track } from '@/lib/analytics';
 
 interface LanguageSwitcherProps {
   currentLocale: string;
   variant?: 'navbar' | 'footer';
-  onLocaleChange?: (locale: string) => void;
 }
 
-export function LanguageSwitcher({ currentLocale: initialLocale, variant = 'navbar', onLocaleChange }: LanguageSwitcherProps) {
+export function LanguageSwitcher({ currentLocale: initialLocale, variant = 'navbar' }: LanguageSwitcherProps) {
   const [isPending, startTransition] = useTransition();
   const [optimisticLocale, setOptimisticLocale] = useState(initialLocale);
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     setOptimisticLocale(initialLocale);
@@ -24,24 +22,13 @@ export function LanguageSwitcher({ currentLocale: initialLocale, variant = 'navb
 
   const handleLanguageChange = (locale: string) => {
     if (locale === optimisticLocale || isPending) return;
-    
-    setOptimisticLocale(locale);
-    
-    if (onLocaleChange) {
-      onLocaleChange(locale);
-    }
 
+    setOptimisticLocale(locale);
     track('language_switch', { from: optimisticLocale, to: locale });
 
-    startTransition(async () => {
-      try {
-        await setLocale(locale);
-        Cookies.set('NEXT_LOCALE', locale, { path: '/', expires: 365 });
-        router.refresh();
-      } catch (error) {
-        console.error('Language change failed:', error);
-        setOptimisticLocale(initialLocale);
-      }
+    // Vaheta keelt URL-i kaudu (säilitab praeguse lehe), nt /koostoo <-> /en/koostoo
+    startTransition(() => {
+      router.replace(pathname, { locale });
     });
   };
 
