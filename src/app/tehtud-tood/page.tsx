@@ -6,8 +6,17 @@ import WorkPageClient from "./WorkPageClient";
 type Project = Database['public']['Tables']['projects']['Row'];
 
 export const metadata: Metadata = {
-  title: "Tehtud tööd | Sisumaja",
-  description: "Vaata Sisumaja tehtud töid ja koostööprojekte.",
+  title: "Tehtud tööd — brändikoostööd ja kampaaniad",
+  description:
+    "Vaata Kozipi tehtud töid ja brändikoostöid: YouTube’i reklaamvideod, lühivideod ja kampaaniad toidu-, finants-, tehnoloogia- ja meelelahutusbrändidega.",
+  alternates: { canonical: "/tehtud-tood" },
+  openGraph: {
+    title: "Tehtud tööd — brändikoostööd ja kampaaniad | Kozip",
+    description:
+      "Kozipi brändikoostööd ja kampaaniad YouTube’is ja lühivideotes — päris näited ja tulemused.",
+    url: "/tehtud-tood",
+    type: "website",
+  },
 };
 
 export const revalidate = 60;

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
+import { disableAnalytics } from '@/lib/analytics';
 
 export default function CookieConsent() {
   const [isVisible, setIsVisible] = useState(false);
@@ -21,11 +22,14 @@ export default function CookieConsent() {
   const handleAcceptAll = () => {
     localStorage.setItem('cookie-consent', 'all');
     setIsVisible(false);
+    // Käivita analüütika kohe (Analytics komponent kuulab seda sündmust)
+    window.dispatchEvent(new Event('cookie-consent-changed'));
   };
 
   const handleAcceptNecessary = () => {
     localStorage.setItem('cookie-consent', 'necessary');
     setIsVisible(false);
+    disableAnalytics();
   };
 
   return (

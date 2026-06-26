@@ -5,6 +5,7 @@ import { setLocale } from '@/actions/locale';
 import { useRouter } from 'next/navigation';
 import { Globe, Loader2 } from 'lucide-react';
 import Cookies from 'js-cookie';
+import { track } from '@/lib/analytics';
 
 interface LanguageSwitcherProps {
   currentLocale: string;
@@ -29,7 +30,9 @@ export function LanguageSwitcher({ currentLocale: initialLocale, variant = 'navb
     if (onLocaleChange) {
       onLocaleChange(locale);
     }
-    
+
+    track('language_switch', { from: optimisticLocale, to: locale });
+
     startTransition(async () => {
       try {
         await setLocale(locale);

@@ -2,6 +2,8 @@
   "nav": {
     "home": "Home",
     "portfolio": "Portfolio",
+    "collaboration": "Collaboration",
+    "articles": "Articles",
     "contact": "Contact",
     "contactUs": "Contact Us"
   },

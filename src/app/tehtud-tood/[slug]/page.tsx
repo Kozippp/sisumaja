@@ -11,6 +11,8 @@ import LiveStats from "@/components/LiveStats";
 import { MotionWrapper, MotionItem } from "@/components/MotionWrapper";
 import { getLocale } from '@/lib/locale';
 import { getTranslations } from 'next-intl/server';
+import JsonLd from "@/components/JsonLd";
+import { creativeWorkSchema, breadcrumbSchema } from "@/lib/schema";
 
 type Project = Database['public']['Tables']['projects']['Row'];
 
@@ -23,10 +25,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const { data: project } = await supabase
     .from("projects")
-    .select("title, description")
+    .select("title, description, client_name, thumbnail_url")
     .eq("slug", slug)
     .eq("is_visible", true)
-    .single<Pick<Project, 'title' | 'description'>>();
+    .single<Pick<Project, 'title' | 'description' | 'client_name' | 'thumbnail_url'>>();
 
   if (!project) {
     return {
@@ -34,9 +36,26 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
+  const brand = project.client_name?.trim();
+  // Pane brändinimi pealkirja, et AI/Google seoks "Kozip × Bränd" koostöö kokku.
+  const title = brand
+    ? `${project.title} — koostöövideo brändiga ${brand}`
+    : `${project.title} — brändikoostöö`;
+  const description =
+    project.description ||
+    `Kozipi brändikoostöö${brand ? ` brändiga ${brand}` : ""}: video, tulemused ja näide.`;
+
   return {
-    title: `${project.title} | Sisumaja`,
-    description: project.description,
+    title,
+    description,
+    alternates: { canonical: `/tehtud-tood/${slug}` },
+    openGraph: {
+      title: `${title} | Kozip`,
+      description,
+      url: `/tehtud-tood/${slug}`,
+      type: "article",
+      ...(project.thumbnail_url ? { images: [{ url: project.thumbnail_url }] } : {}),
+    },
   };
 }
 
@@ -253,9 +272,31 @@ export default async function ProjectPage({ params }: PageProps) {
     hasStatValue(project.stat_shares) || 
     hasStatValue(project.stat_saves);
 
+  // Vaatamiste arv numbrina (stat_views võib olla nt "137 100" või "61427")
+  const viewsNum = parseInt(String(project.stat_views ?? "").replace(/\D/g, ""), 10) || null;
+  const brandName = project.client_name?.trim() || null;
+
   return (
     <div className="min-h-screen bg-black text-white">
-      
+      <JsonLd
+        data={[
+          creativeWorkSchema({
+            name: displayTitle,
+            description: locale === 'en' && project.description_en ? project.description_en : project.description,
+            path: `/tehtud-tood/${slug}`,
+            image: project.thumbnail_url,
+            brand: brandName,
+            views: viewsNum,
+            datePublished: project.collaboration_completed_at || project.published_at,
+          }),
+          breadcrumbSchema([
+            { name: "Avaleht", path: "/" },
+            { name: "Tehtud tööd", path: "/tehtud-tood" },
+            { name: displayTitle, path: `/tehtud-tood/${slug}` },
+          ]),
+        ]}
+      />
+
       {/* Header Section */}
       <div className={`relative pt-32 px-4 sm:px-6 lg:px-8 border-b border-neutral-900 bg-neutral-950 ${hasStats ? 'pb-16' : 'pb-8'}`}>
         <MotionWrapper className="max-w-5xl mx-auto text-center">

@@ -6,7 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { clsx } from "clsx";
 
 export function HeroSection() {
-  const text = "SISUMAJA";
+  const text = "KOZIP";
   const letters = text.split("");
 
   const containerVariants: Variants = {

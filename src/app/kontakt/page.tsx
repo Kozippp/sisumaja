@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useState, FormEvent, useEffect } from 'react';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { useTranslations } from 'next-intl';
+import { track } from '@/lib/analytics';
 
 export default function ContactPage() {
   const t = useTranslations('contactPage');
@@ -52,6 +53,7 @@ export default function ContactPage() {
       }
 
       setStatus('success');
+      track('contact_form_submit', { page: 'kontakt' });
       form.reset();
     } catch (error: any) {
       console.error('Submission error:', error);
@@ -110,9 +112,9 @@ export default function ContactPage() {
             <div>
               <h3 className="text-lg font-bold text-white mb-6 uppercase tracking-wider">{t('followUs')}</h3>
               <div className="flex gap-4">
-                <SocialButton icon={<Instagram className="w-6 h-6" />} href="https://www.instagram.com/sisumaja.tv/" />
-                <SocialButton icon={<Youtube className="w-6 h-6" />} href="https://www.youtube.com/@Sisumajatv" />
-                <SocialButton icon={<TikTokIcon className="w-6 h-6" />} href="https://www.tiktok.com/@sisumaja.tv" />
+                <SocialButton icon={<Instagram className="w-6 h-6" />} href="https://www.instagram.com/kozip_eesti/" />
+                <SocialButton icon={<Youtube className="w-6 h-6" />} href="https://www.youtube.com/@Kozip" />
+                <SocialButton icon={<TikTokIcon className="w-6 h-6" />} href="https://www.tiktok.com/@kozipeesti" />
               </div>
             </div>
           </div>

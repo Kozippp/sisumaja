@@ -11,6 +11,12 @@
 See dokument on **prioritiseeritud TODO-list**. Võta järjest ette: P0 → P1 → P2 → P3.
 Iga punkt on tehtav eraldi, ilma et eelmine peaks 100% valmis olema.
 
+> **⚙️ STAATUS (branch `feature/ai-visibility`):** Suur osa P0–P3 baasist on
+> implementeeritud. Vt jaotist [„Mis on implementeeritud"](#mis-on-implementeeritud-feature-ai-visibility)
+> dokumendi lõpus. Enne kui artiklid ja analüütika tööle hakkavad, on vaja:
+> (1) rakendada Supabase migratsioon `supabase/migrations/create_articles_table.sql`,
+> (2) lisada Vercelisse `NEXT_PUBLIC_SITE_URL` ja `NEXT_PUBLIC_POSTHOG_KEY`.
+
 Mõisted:
 - **SEO** = Google'i tavaotsing.
 - **LLMO** (LLM Optimization) = optimeerimine selleks, et AI-vestlusrobotid (ChatGPT, Gemini,
@@ -276,6 +282,63 @@ Autocapture katab põhilise, aga need defineeri käsitsi, et saaks puhtad raport
    ja näeksid hiljem mis töötab.
 3. P1 (brändi-fookus) — suurim äriline võit.
 4. P2 (artiklid) — pikaajaline autoriteet, ja siis tuleb P3 artikli-trackimine kasuks.
+
+---
+
+# Mis on implementeeritud (`feature/ai-visibility`)
+
+Branchil `feature/ai-visibility` on tehtud järgmine. Kõik on et+en.
+
+### P0 — tehniline vundament ✅
+- `src/lib/site.ts` — keskne saidi-konfiguratsioon (domeen, Kozipi sotsiaalmeedia, tiim).
+- `src/app/robots.ts` — robots.txt (lubab AI-crawlerid, blokib /admin, /api, /pakkumine).
+- `src/app/sitemap.ts` — dünaamiline sitemap (staatilised lehed + tehtud tööd + artiklid).
+- `src/lib/schema.ts` + `src/components/JsonLd.tsx` — Organization, WebSite, FAQ,
+  CreativeWork, Article, Breadcrumb JSON-LD.
+- `src/app/layout.tsx` — täielik metadata (metadataBase, OG, Twitter, canonical, keywords)
+  + Organization/WebSite JSON-LD.
+- `src/app/opengraph-image.tsx` — dünaamiline OG-pilt (pole binaarset faili vaja).
+
+### Brändiparandus ✅
+- Kõik vanad **Sisumaja** lingid asendatud **Kozipi** vastu (Footer, Kontakt, Hero
+  animatsioon „SISUMAJA" → „KOZIP"). sameAs: YouTube @Kozip, IG kozip_eesti, TikTok
+  kozipeesti, Facebook KozipEesti. Tiim (Mihkel, Maia-Liis) + isiklikud kanalid JSON-LD-s.
+
+### P1 — brändi-fookusega sisu ✅
+- `/koostoo` leht (`src/app/koostoo/page.tsx` + `src/lib/koostoo-content.ts`):
+  brändikategooriad päris näidetega + turundajate FAQ (FAQPage JSON-LD).
+- Tehtud tööde lehed: brändinimi pealkirjas/metadatas + CreativeWork JSON-LD (bränd,
+  vaatamised). Navbar + footer: lingid /koostoo ja /artiklid (et+en).
+
+### P2 — artiklid ✅ (vajab migratsiooni)
+- `supabase/migrations/create_articles_table.sql` — **POLE VEEL RAKENDATUD** (vt allpool).
+- Admin: `/admin/articles` (list), `/admin/articles/new`, `/admin/articles/[id]` (muuda).
+- Avalik: `/artiklid` (list) + `/artiklid/[slug]` (Article JSON-LD, lugemisaeg).
+
+### P3 — analüütika ✅ (vajab PostHog võtit)
+- PostHog (`posthog-js`), `src/lib/analytics.ts` + `src/components/Analytics.tsx`.
+  Laaditakse **ainult küpsiste-nõusoleku korral** (CookieConsent integreeritud).
+- Sündmused: `article_view`, `article_scroll_depth`, `article_read_complete`,
+  `article_read_time` (ArticleTracker), `case_study_click`, `language_switch`,
+  `contact_form_submit`, automaatne `$pageview`.
+
+## ⏭️ Mida sina pead veel tegema, et kõik tööle hakkaks
+
+1. **Rakenda Supabase migratsioon** (artiklite tabel):
+   Supabase dashboard → SQL Editor → kleebi `supabase/migrations/create_articles_table.sql`
+   sisu ja käivita. (Või Claude'i kaudu, kui annad migratsiooniks loa.)
+2. **Lisa Vercelisse keskkonnamuutujad** (Project → Settings → Environment Variables):
+   - `NEXT_PUBLIC_SITE_URL` = `https://reklaam.kozip.ee`
+   - `NEXT_PUBLIC_POSTHOG_KEY` = (PostHog projekti võti)
+   - `NEXT_PUBLIC_POSTHOG_HOST` = `https://eu.i.posthog.com` (kui EU)
+3. **Tee tegelik OG-pilt** soovi korral ilusamaks (praegu auto-genereeritud).
+
+## Veel võimalik lisada (jäänud TODO)
+- `video_play` ja `outbound_click` sündmused tehtud tööde videotele.
+- PostHog dashboardid (Tehtud tööd, Artiklid, Funnel) — luuakse PostHogi UI-s.
+- Esimesed päris artiklid (sisu).
+- Pikem plaan: URL-põhine i18n (`/en/...`) — praegu cookie-põhine, mistõttu crawlerid
+  näevad vaid eesti versiooni. Suur arhitektuurimuudatus, eraldi projekt.
 
 ---
 

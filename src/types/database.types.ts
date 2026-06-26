@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      articles: {
+        Row: {
+          id: string
+          created_at: string
+          updated_at: string
+          slug: string
+          title: string
+          title_en: string | null
+          excerpt: string | null
+          excerpt_en: string | null
+          content: string | null
+          content_en: string | null
+          cover_image_url: string | null
+          is_published: boolean | null
+          published_at: string | null
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          slug: string
+          title: string
+          title_en?: string | null
+          excerpt?: string | null
+          excerpt_en?: string | null
+          content?: string | null
+          content_en?: string | null
+          cover_image_url?: string | null
+          is_published?: boolean | null
+          published_at?: string | null
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          slug?: string
+          title?: string
+          title_en?: string | null
+          excerpt?: string | null
+          excerpt_en?: string | null
+          content?: string | null
+          content_en?: string | null
+          cover_image_url?: string | null
+          is_published?: boolean | null
+          published_at?: string | null
+        }
+        Relationships: []
+      }
       featured_videos: {
         Row: {
           id: string

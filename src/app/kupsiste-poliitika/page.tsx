@@ -29,7 +29,7 @@ export default function KupsistePoliitika() {
             </p>
             <ul className="list-disc pl-6 mb-4 space-y-2">
               <li><strong>Hädavajalikud küpsised:</strong> Need on vajalikud veebilehe toimimiseks ja ei saa meie süsteemides välja lülitada.</li>
-              <li><strong>Analüütilised küpsised:</strong> Aitavad meil mõista, kuidas külastajad veebilehte kasutavad, et saaksime seda parendada (nt Google Analytics).</li>
+              <li><strong>Analüütilised küpsised:</strong> Aitavad meil mõista, kuidas külastajad veebilehte kasutavad (millised lehed ja artiklid on populaarsed, kui kaua neid loetakse), et saaksime sisu ja kasutuskogemust parendada. Selleks kasutame PostHog analüütikat. Analüütilised küpsised laaditakse ainult siis, kui annate selleks nõusoleku, vajutades „Nõustun kõigiga“.</li>
               <li><strong>Funktsionaalsed küpsised:</strong> Võimaldavad veebilehel pakkuda paremat funktsionaalsust ja isikupärastamist.</li>
             </ul>
           </section>
@@ -37,7 +37,7 @@ export default function KupsistePoliitika() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4 text-white">3. Kolmandate osapoolte küpsised</h2>
             <p className="mb-4">
-              Meie veebilehel võivad olla ka kolmandate osapoolte teenusepakkujate (nt YouTube, Facebook, TikTok) küpsised, mis on seotud sisu jagamise või statistika kogumisega. Me ei kontrolli neid küpsiseid.
+              Meie veebilehel võivad olla ka kolmandate osapoolte teenusepakkujate (nt YouTube, Facebook, TikTok) küpsised, mis on seotud sisu jagamise või statistika kogumisega. Lisaks kasutame analüütikateenust PostHog (andmeid hoitakse EL-is), mis aitab meil mõista veebilehe kasutust. Me ei kontrolli kolmandate osapoolte küpsiseid.
             </p>
           </section>
 

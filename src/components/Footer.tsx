@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Instagram, Youtube, Mail } from 'lucide-react';
+import { Instagram, Youtube, Mail, Facebook } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { useTranslations } from 'next-intl';
@@ -55,9 +55,10 @@ export default function Footer() {
                 {t('description')}
               </p>
               <div className="flex space-x-4">
-                <SocialLink href="https://www.youtube.com/@Sisumajatv" icon={Youtube} />
-                <SocialLink href="https://www.instagram.com/sisumaja.tv/" icon={Instagram} />
-                <SocialLink href="https://www.tiktok.com/@sisumaja.tv" icon={TikTokIcon} />
+                <SocialLink href="https://www.youtube.com/@Kozip" icon={Youtube} />
+                <SocialLink href="https://www.instagram.com/kozip_eesti/" icon={Instagram} />
+                <SocialLink href="https://www.tiktok.com/@kozipeesti" icon={TikTokIcon} />
+                <SocialLink href="https://www.facebook.com/KozipEesti" icon={Facebook} />
                 <SocialLink href="mailto:info@kozip.ee" icon={Mail} />
               </div>
             </div>
@@ -67,7 +68,9 @@ export default function Footer() {
             <h4 className="text-white font-bold uppercase tracking-wider mb-6">{t('navigation')}</h4>
             <ul className="space-y-4">
               <FooterLink href="/">{tNav('home')}</FooterLink>
+              <FooterLink href="/koostoo">{tNav('collaboration')}</FooterLink>
               <FooterLink href="/tehtud-tood">{tNav('portfolio')}</FooterLink>
+              <FooterLink href="/artiklid">{tNav('articles')}</FooterLink>
               <FooterLink href="/kontakt">{tNav('contact')}</FooterLink>
             </ul>
           </div>

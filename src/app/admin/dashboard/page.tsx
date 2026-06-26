@@ -136,12 +136,19 @@ export default function DashboardPage() {
               <BarChart3 className="w-4 h-4 mr-2" />
               Retention Pildid
             </Link>
-            <Link 
-              href="/admin/image-optimizer" 
+            <Link
+              href="/admin/image-optimizer"
               className="bg-neutral-800 text-gray-300 px-4 py-2 rounded-lg font-bold hover:bg-neutral-700 hover:text-white transition-colors flex items-center text-sm"
             >
               <ImageIcon className="w-4 h-4 mr-2" />
               Image Optimizer
+            </Link>
+            <Link
+              href="/admin/articles"
+              className="bg-neutral-800 text-gray-300 px-4 py-2 rounded-lg font-bold hover:bg-neutral-700 hover:text-white transition-colors flex items-center text-sm"
+            >
+              <FileText className="w-4 h-4 mr-2" />
+              Artiklid
             </Link>
             <Link 
               href="/admin/new" 

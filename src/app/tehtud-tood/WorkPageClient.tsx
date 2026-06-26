@@ -6,6 +6,7 @@ import { ArrowUpRight, Calendar, Youtube, Clapperboard, GraduationCap, Mic } fro
 import { Database } from "@/types/database.types";
 import { useTranslations } from 'next-intl';
 import { useLocale } from 'next-intl';
+import { track } from '@/lib/analytics';
 
 type Project = Database['public']['Tables']['projects']['Row'];
 type FilterType = 'all' | 'youtube_ad' | 'shorts' | 'training';
@@ -92,7 +93,12 @@ export default function WorkPageClient({ projects }: WorkPageClientProps) {
               const displayDescription = locale === 'en' && project.description_en ? project.description_en : project.description;
               
               return (
-                <Link key={project.id} href={`/tehtud-tood/${project.slug}`} className="group block h-full">
+                <Link
+                  key={project.id}
+                  href={`/tehtud-tood/${project.slug}`}
+                  className="group block h-full"
+                  onClick={() => track('case_study_click', { slug: project.slug, client_name: project.client_name || null, project_type: project.project_type })}
+                >
                   <article className="flex flex-col h-full">
                     <div className="aspect-[4/3] bg-neutral-900 rounded-2xl overflow-hidden mb-6 relative border border-white/5 group-hover:border-primary/50 transition-all duration-500">
                       {project.thumbnail_url ? (
