@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import { Database } from '@/types/database.types';
-import { X, Plus, Image as ImageIcon, Loader2, Video, Type, GalleryHorizontal, ArrowUp, ArrowDown, Trash2, LayoutTemplate, Youtube, GraduationCap, Clapperboard, Zap } from 'lucide-react';
+import { X, Plus, Image as ImageIcon, Loader2, Video, Type, GalleryHorizontal, ArrowUp, ArrowDown, Trash2, LayoutTemplate, Youtube, GraduationCap, Clapperboard, Zap, Sparkles } from 'lucide-react';
 import { optimizeImage } from '@/lib/optimizeImage';
 
 type Project = Database['public']['Tables']['projects']['Row'];
@@ -44,7 +44,13 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [translating, setTranslating] = useState(false);
-  
+
+  // AI generation panel state
+  const [aiPanelOpen, setAiPanelOpen] = useState(false);
+  const [aiPrompt, setAiPrompt] = useState('');
+  const [generating, setGenerating] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
+
   // Language toggle state
   const [currentLanguage, setCurrentLanguage] = useState<'et' | 'en'>('et');
 
@@ -373,6 +379,89 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     setCurrentLinks(currentLinks.map(l => l.id === id ? { ...l, ...updates } : l));
   };
 
+  // --- AI GENERATION ---
+
+  const handleGenerateWithAI = async () => {
+    if (!aiPrompt.trim()) {
+      setAiError('Kirjelda kõigepealt, mida ja kuidas reklaamiti.');
+      return;
+    }
+    setGenerating(true);
+    setAiError(null);
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) {
+        throw new Error('Sessioon aegunud. Logi uuesti sisse.');
+      }
+
+      const response = await fetch('/api/generate-project', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({
+          prompt: aiPrompt,
+          projectType: formData.project_type || 'youtube_ad',
+        }),
+      });
+
+      if (!response.ok) {
+        const errBody = await response.json().catch(() => null);
+        throw new Error(errBody?.message || 'Genereerimine ebaõnnestus. Proovi uuesti.');
+      }
+
+      const { draft } = await response.json();
+
+      const genId = () => Math.random().toString(36).substring(2, 9);
+
+      // Fill main fields (Estonian version)
+      setFormData(prev => ({
+        ...prev,
+        title: draft.title || prev.title,
+        slug: prev.slug || draft.slug || '',
+        description: draft.description || prev.description,
+      }));
+
+      // Fill content blocks
+      if (Array.isArray(draft.content)) {
+        const blocks: ContentBlock[] = draft.content.map((b: Partial<ContentBlock>) => ({
+          id: genId(),
+          type: (b.type as BlockType) || 'text',
+          layout: (b.layout as LayoutType) || 'left',
+          title: b.title || '',
+          content: b.content || '',
+          mediaUrl: b.mediaUrl || '',
+          thumbnailUrl: '',
+          mediaItems: [],
+        }));
+        setContentBlocks(blocks);
+      }
+
+      // Fill links
+      if (Array.isArray(draft.links) && draft.links.length > 0) {
+        const links: CustomLink[] = draft.links.map((l: Partial<CustomLink>) => ({
+          id: genId(),
+          type: (l.type as LinkType) || 'other',
+          label: l.label || '',
+          url: l.url || '',
+        }));
+        setCustomLinks(links);
+      }
+
+      // Generated content is Estonian — make sure we show it
+      setCurrentLanguage('et');
+      setAiPanelOpen(false);
+      setAiPrompt('');
+    } catch (err) {
+      console.error('AI generation error:', err);
+      setAiError(err instanceof Error ? err.message : 'Genereerimine ebaõnnestus. Proovi uuesti.');
+    } finally {
+      setGenerating(false);
+    }
+  };
+
   // ---------------------------------
 
   const handleTranslateToEnglish = async () => {
@@ -634,6 +723,90 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
             <p className="text-xs text-gray-500 italic">Koolitused kuvatakse automaatselt koolituste sektsioonis.</p>
           )}
         </div>
+      </div>
+
+      {/* AI Generation Panel */}
+      <div className="bg-gradient-to-br from-fuchsia-950/40 to-purple-950/40 p-6 rounded-xl border border-fuchsia-800/40 space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-xl font-bold flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-fuchsia-400" />
+            AI abiline
+          </h3>
+          {!aiPanelOpen && (
+            <button
+              type="button"
+              onClick={() => setAiPanelOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white font-bold rounded-lg hover:from-fuchsia-700 hover:to-purple-700 transition-all text-sm"
+            >
+              <Sparkles className="w-4 h-4" />
+              Genereeri AI-ga
+            </button>
+          )}
+        </div>
+
+        {!aiPanelOpen && (
+          <p className="text-sm text-gray-400">
+            Kirjelda vabas vormis, mida ja kuidas reklaamiti, ning AI kirjutab pealkirja, SEO osa ja sisuplokid valmis — samas stiilis nagu varasemad tehtud tööd.
+          </p>
+        )}
+
+        {aiPanelOpen && (
+          <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+            <p className="text-sm text-gray-400">
+              Kirjelda uut tehtud tööd: mis bränd, mida ja kuidas reklaamiti, video link, reklaamsegmentide ajavahemikud jne.
+              Võid öelda ka täpselt, mitu plokki soovid ja mis igas plokis kirjas peaks olema.
+              AI kirjutab sisu samas stiilis nagu meie varasemad <strong className="text-white">{
+                formData.project_type === 'youtube_ad' ? 'YouTube reklaamid'
+                : formData.project_type === 'shorts' ? 'lühivideo koostööd'
+                : 'koolitused'
+              }</strong> (vali enne õige tüüp ülevalt!).
+            </p>
+            <textarea
+              value={aiPrompt}
+              onChange={(e) => setAiPrompt(e.target.value)}
+              rows={8}
+              disabled={generating}
+              className="w-full bg-black border border-fuchsia-800/40 rounded-lg p-3 text-sm focus:border-fuchsia-500 focus:outline-none disabled:opacity-50"
+              placeholder={`Näiteks:\n\nReklaamisime Bolt Foodi meie videos "24h väljakutse restoranides". Video link: https://youtu.be/...\n\n2 reklaamsegmenti:\n1. segment 01:20-01:45 — tutvustasime Bolt Foodi ja mainisime sooduskoodi KOZIP\n2. segment 15:30-17:00 — tellisime Bolt Foodiga toidu ja näitasime kui kiire see on\n\nEesmärk oli näidata, et Bolt Food on kiireim viis toitu tellida.`}
+            />
+            {aiError && (
+              <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-lg text-sm">
+                {aiError}
+              </div>
+            )}
+            <div className="flex items-center gap-3 flex-wrap">
+              <button
+                type="button"
+                onClick={handleGenerateWithAI}
+                disabled={generating || !aiPrompt.trim()}
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white font-bold rounded-lg hover:from-fuchsia-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {generating ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    AI kirjutab... (~15 sek)
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4" />
+                    Genereeri
+                  </>
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={() => { setAiPanelOpen(false); setAiError(null); }}
+                disabled={generating}
+                className="px-4 py-3 bg-neutral-800 text-gray-300 rounded-lg hover:bg-neutral-700 transition-colors text-sm disabled:opacity-50"
+              >
+                Sulge
+              </button>
+              <p className="text-xs text-gray-500">
+                AI täidab pealkirja, slugi, SEO kirjelduse, sisuplokid ja lingid. Pildid, thumbnailid ja statistika lisad ise.
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Main Info */}
