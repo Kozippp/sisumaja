@@ -88,6 +88,20 @@ const getYoutubeEmbedUrl = (url: string) => {
 // Detect YouTube Shorts URL for vertical display (like homepage)
 const isYoutubeShortsUrl = (url: string) => url && url.includes('/shorts/');
 
+// Extract TikTok video ID (e.g. tiktok.com/@user/video/1234567890)
+const getTikTokVideoId = (url: string) => {
+  if (!url || !url.includes('tiktok.com')) return null;
+  const match = url.match(/tiktok\.com\/@[^/]+\/video\/(\d+)/);
+  return match ? match[1] : null;
+};
+
+// Extract Instagram shortcode (reel/reels/p URLs)
+const getInstagramCode = (url: string) => {
+  if (!url || !url.includes('instagram.com')) return null;
+  const match = url.match(/instagram\.com\/(?:reel|reels|p)\/([A-Za-z0-9_-]+)/);
+  return match ? match[1] : null;
+};
+
 // Renderers for different block types
 const TextBlock = ({ block }: { block: ContentBlock }) => (
   <div className="max-w-3xl mx-auto w-full px-4 mb-16 text-center">
@@ -111,23 +125,54 @@ const MediaBlock = ({ block }: { block: ContentBlock }) => {
   // Content rendering helper
   const renderMedia = () => {
     if (block.type === 'video' && block.mediaUrl) {
+      const tiktokId = getTikTokVideoId(block.mediaUrl);
+      const instagramCode = getInstagramCode(block.mediaUrl);
+
+      // TikTok video — vertical phone-style frame
+      if (tiktokId) {
+        return (
+          <div className="relative bg-black overflow-hidden shadow-2xl border border-white/10 aspect-[9/16] rounded-[2.5rem] max-w-[340px] mx-auto">
+            <iframe
+              src={`https://www.tiktok.com/embed/v2/${tiktokId}`}
+              className="w-full h-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        );
+      }
+
+      // Instagram Reel / post — vertical phone-style frame
+      if (instagramCode) {
+        return (
+          <div className="relative bg-black overflow-hidden shadow-2xl border border-white/10 aspect-[9/16] rounded-[2.5rem] max-w-[340px] mx-auto">
+            <iframe
+              src={`https://www.instagram.com/reel/${instagramCode}/embed/`}
+              className="w-full h-full"
+              allow="encrypted-media; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        );
+      }
+
       const embedUrl = getYoutubeEmbedUrl(block.mediaUrl);
       const isShorts = isYoutubeShortsUrl(block.mediaUrl);
       return (
         <div className={`relative bg-black overflow-hidden shadow-2xl border border-white/10 ${isShorts ? 'aspect-[9/16] rounded-[2.5rem] max-w-[340px] mx-auto' : 'aspect-video rounded-xl'}`}>
             {embedUrl ? (
-                <iframe 
-                    src={embedUrl} 
-                    className="w-full h-full" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowFullScreen 
+                <iframe
+                    src={embedUrl}
+                    className="w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
                 />
             ) : (
                 <div className="w-full h-full flex items-center justify-center text-gray-500">Video ei leitud</div>
             )}
         </div>
       );
-    } 
+    }
     
     if (block.type === 'image' && block.mediaUrl) {
         return (

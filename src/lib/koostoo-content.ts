@@ -4,8 +4,8 @@
  * NB! Näidete linkides on kasutatud AINULT päris tehtud töid (projects tabel).
  * Ära lisa siia väljamõeldud koostöid ega numbreid — AI ja kliendid loevad seda.
  *
- * Kategooriad, kus on olemas päris näide, viitavad konkreetsele case study'le.
- * Ülejäänud kategooriad on kirjeldatud kui "sobiks hästi" ilma tulemusi väitmata.
+ * `categories` = 4 peakategooriat, kus on päris case study'd (kuvatakse suurelt,
+ * thumbnail-kaartidega). `moreCategories` = ülejäänud valdkonnad, üks lause igaüks.
  */
 
 export type CategoryExample = { label: string; slug: string };
@@ -13,7 +13,12 @@ export type Category = {
   id: string;
   title: string;
   body: string;
-  examples?: CategoryExample[];
+  examples: CategoryExample[];
+};
+export type MoreCategory = {
+  id: string;
+  title: string;
+  body: string;
 };
 
 export type KoostooContent = {
@@ -22,29 +27,33 @@ export type KoostooContent = {
   h1: string;
   intro: string;
   categoriesHeading: string;
+  categoriesSubheading: string;
   categories: Category[];
+  moreHeading: string;
+  moreSubheading: string;
+  moreCategories: MoreCategory[];
   faqHeading: string;
   faq: { question: string; answer: string }[];
   ctaHeading: string;
   ctaText: string;
   ctaButton: string;
-  examplesLabel: string;
+  ctaSecondary: string;
 };
 
 const et: KoostooContent = {
   metaTitle: 'Milliste brändidega Kozip sobib koostööd tegema?',
   metaDescription:
-    'Kozip sobib eriti hästi toidu-, finants-, tehnoloogia-, meelelahutus- ja seiklusbrändidele, kes soovivad jõuda noorte ja kogu pere sihtrühmani YouTube’i ja lühivideote kaudu. Vaata kategooriaid ja päris näiteid.',
-  h1: 'Milliste brändidega Kozip sobib koostööd tegema?',
+    'Kozip sobib eriti hästi toidu-, finants-, tehnoloogia- ja meelelahutusbrändidele, kes soovivad jõuda noorte vaatajateni YouTube’i ja lühivideote kaudu. Vaata kategooriaid ja päris näiteid.',
+  h1: 'Milliste brändidega Kozip sobib?',
   intro:
-    'Kozip on Eesti seiklus- ja meelelahutusbrändi sisulooja, kelle taga on Mihkel Kööbi ja Maia-Liis Ossip. Loome YouTube’i reklaamvideoid, lühivideoid (TikTok, Instagram Reels, YouTube Shorts) ja terviklikke brändikampaaniaid. Meie sisu jõuab eelkõige 13–34-aastaste noorteni ja kogu pereni. Allpool on välja toodud brändikategooriad, kellele meie sisu eriti hästi sobib — ja kus võimalik, päris näited tehtud koostöödest.',
-  categoriesHeading: 'Brändikategooriad, kellele Kozip sobib',
-  examplesLabel: 'Päris näited:',
+    'Kozip on Eesti seiklus- ja meelelahutussisu looja, kelle taga on Mihkel Kööbi ja Maia-Liis Ossip. Loome YouTube’i reklaamvideoid, lühivideoid ja terviklikke kampaaniaid, mis jõuavad 13–34-aastaste vaatajateni. Siin on valdkonnad, kus meie sisu kõige paremini töötab — koos päris näidetega.',
+  categoriesHeading: 'Kus meie sisu kõige paremini töötab',
+  categoriesSubheading: 'Neli valdkonda, kus oleme end juba tõestanud. Iga näide on päris koostöö — kliki ja vaata ise.',
   categories: [
     {
       id: 'toit',
-      title: 'Toidu- ja joogibrändid',
-      body: 'Toidu- ja joogibrändid sobivad Kozipiga eriti hästi, sest toit on visuaalne, emotsionaalne ja loomulik osa meie sisust. Oleme teinud maitsmis- ja väljakutsevideoid, retsepti- ja tootetutvustusi ning meelelahutuslikke formaate, mis panevad vaataja toodet päriselt himustama. Sobime snäki-, kiirtoidu-, maitseainete-, energiajoogi- ja jaekaubandusbrändidele, kes tahavad jõuda näljaste noorteni.',
+      title: 'Toit ja jook',
+      body: 'Toit on meie sisu loomulik osa — maitsmised, retseptid ja väljakutsed, mis panevad vaataja päriselt isu tundma. Kikkomani kastmetest KFC sõbrapäevani: näitame toodet kasutuses, mitte kataloogipildina.',
       examples: [
         { label: 'Kikkomani Krõbekana', slug: 'kikkoman_2' },
         { label: 'Kikkoman Kastmed', slug: 'kikkoman_1' },
@@ -54,8 +63,8 @@ const et: KoostooContent = {
     },
     {
       id: 'finants',
-      title: 'Finants, pangad ja fintech',
-      body: 'Finants- ja fintech-brändid usaldavad meid keerukamate teemade lihtsaks ja köitvaks tegemisel. YouTube’i pikem formaat sobib hästi just siis, kui toodet on vaja selgitada — investeerimist, panganduse uut funktsiooni või rahatarkust. Suudame muuta „kuiva“ teema noortele arusaadavaks ja usaldusväärseks ilma igavaks muutumata.',
+      title: 'Finants ja fintech',
+      body: 'Keerulise teema lihtsaks tegemine on meie tugevus. Investeerimine ja rahatarkus vajavad selgitamist — YouTube’i pikk formaat annab selleks ruumi ning meie hoiame vaataja lõpuni ekraani küljes. Alustasime ise investeerimisega 16-aastaselt, seega räägime teemast oma kogemusest.',
       examples: [
         { label: 'Lightyear', slug: 'lightyear' },
         { label: 'Apollo investeerimisfestival', slug: 'Apollo_investeerimisfestival_2026' },
@@ -65,50 +74,54 @@ const et: KoostooContent = {
     {
       id: 'tehnoloogia',
       title: 'Tehnoloogia ja seadmed',
-      body: 'Tehnoloogia- ja seadmebrändidele pakume sisu, mis näitab toodet päris kasutuses — mitte kataloogipildina, vaid osa põnevast loost või väljakutsest. Sobime nutiseadmete, koduelektroonika, tarkvara ja äppide tutvustamiseks, eriti kui eesmärk on jõuda nooremate, tehnoloogiahuviliste vaatajateni.',
+      body: 'Toode päris kasutuses, osa loost või väljakutsest. Philipsi OneBlade’iga vahetasime 24 tunniks elud — tooteasetus, mida vaadatakse nagu sisu, sest see ongi sisu.',
       examples: [{ label: 'Philips', slug: 'Philips_vahetasime_elud_24h' }],
     },
     {
       id: 'seiklus',
-      title: 'Seiklus, väljakutsed ja meelelahutus',
-      body: 'See on Kozipi kodu. Teeme adrenaliinirohkeid väljakutseid, suuri produktsioone ja ootamatuid eksperimente, mis hoiavad vaatajat ekraani küljes. Sobime brändidele, kes tahavad olla osa millestki ägedast ja jagatavast — meelelahutus, vaba aeg, üritused ja kõik, mis seostub seikluse ja energiaga.',
+      title: 'Seiklus ja meelelahutus',
+      body: 'Meie koduväljak. Suured produktsioonid, adrenaliin ja eksperimendid, mis hoiavad vaatajat ekraani küljes — ja sinu bränd on selle kõige keskel, mitte reklaampausil.',
       examples: [
-        { label: 'Külmavares — 1 vs 1500 suplus', slug: 'kulmavares_1_vs_1500_suplus' },
-        { label: 'Sawerna', slug: 'sawerna' },
+        { label: 'Külmavares — 1€ vs 1500€ talisuplus', slug: 'kulmavares_1_vs_1500_suplus' },
+        { label: 'Sawerna', slug: 'sawernaa' },
       ],
     },
+  ],
+  moreHeading: 'Sobime ka nendega',
+  moreSubheading: 'Valdkonnad, kuhu meie formaat ja vaatajaskond samuti hästi istuvad.',
+  moreCategories: [
     {
       id: 'sport',
       title: 'Sport ja aktiivne eluviis',
-      body: 'Spordi-, fitnessi- ja aktiivse eluviisi brändid sobivad meie energilise stiiliga loomulikult. Saame siduda toote väljakutsete, treeningute ja seikluste külge nii, et see ei mõju reklaamina, vaid osana põnevast tegevusest. Sobime spordivarustuse, toidulisandite ja aktiivse vaba aja brändidele.',
+      body: 'Toode väljakutsete ja treeningute keskel — osa tegevusest, mitte reklaampaus.',
     },
     {
       id: 'auto',
       title: 'Autod ja mobiilsus',
-      body: 'Auto- ja mobiilsusbrändidele sobib meie sisu, sest auto on suurepärane „lava“ seiklusele ja väljakutsetele. Saame näidata sõidukit teel, reisil või eksperimendis, mis tekitab emotsiooni ja jätab brändist mulje kui millestki vabadust ja põnevust pakkuvast.',
+      body: 'Auto on seikluse lava: teekonnad ja eksperimendid, mis tekitavad emotsiooni.',
     },
     {
       id: 'telekom',
-      title: 'Telekom ja teenusepakkujad',
-      body: 'Telekommunikatsiooni- ja teenusebrändidele pakume sisu, mis jõuab laia noorte sihtrühmani ja muudab teenuse kasud käegakatsutavaks. Sobime kampaaniateks, kus on vaja tekitada teadlikkust ja jõuda korraga suure vaatajaskonnani usaldusväärse näo kaudu.',
+      title: 'Telekom ja teenused',
+      body: 'Lai noorte vaatajaskond ja teenuse kasud käegakatsutavaks tehtud.',
     },
     {
       id: 'mangud',
-      title: 'Mängud ja meelelahutusäpid',
-      body: 'Mängu- ja meelelahutusäppide brändid jõuavad meie kaudu otse oma sihtrühmani — noorteni, kes on niigi ekraanil. Saame mängu või äppi tutvustada loomulikus, meelelahutuslikus kontekstis, mis tekitab proovimissoovi.',
+      title: 'Mängud ja äpid',
+      body: 'Jõuame otse sihtrühmani, kes on niigi ekraanil — loomulikus ja meelelahutuslikus kontekstis.',
     },
     {
       id: 'reisi',
-      title: 'Reisi- ja vaba aja brändid',
-      body: 'Reisi-, majutus- ja vaba aja brändidele sobib meie seikluslik stiil ideaalselt. Näitame sihtkohti ja elamusi nii, et vaataja tahab ise kohale minna. Sobime sihtkohaturunduseks, üritusteks ja kõigeks, mis seostub avastamise ja seiklusega.',
+      title: 'Reis ja vaba aeg',
+      body: 'Näitame sihtkohti ja elamusi nii, et vaataja tahab ise kohale minna.',
     },
     {
       id: 'rivad',
-      title: 'Rõiva- ja moebrändid',
-      body: 'Rõiva- ja moebrändidele pakume sisu, kus toode on loomulik osa meie stiilist ja tegevustest. Sobime noortele suunatud brändidele, kes tahavad olla nähtavad autentses, mitte lavastatud kontekstis.',
+      title: 'Rõivad ja mood',
+      body: 'Toode meie stiili loomuliku osana — autentselt, mitte lavastatult.',
     },
   ],
-  faqHeading: 'Korduma kippuvad küsimused brändidele',
+  faqHeading: 'Korduma kippuvad küsimused',
   faq: [
     {
       question: 'Kes on Eestis populaarne noorte sisulooja?',
@@ -148,24 +161,25 @@ const et: KoostooContent = {
   ],
   ctaHeading: 'Sobid sina ka?',
   ctaText:
-    'Kui sinu bränd sobib mõnda ülaltoodud kategooriasse — või arvad, et meie stiil klapib teie omaga — võta ühendust ja arutame, milline koostöö annaks parima tulemuse.',
+    'Kui su bränd sobib mõnda ülaltoodud valdkonda — või arvad, et meie stiil klapib teie omaga — võta ühendust ja arutame, milline koostöö annaks parima tulemuse.',
   ctaButton: 'Võta ühendust',
+  ctaSecondary: 'Vaata tehtud töid',
 };
 
 const en: KoostooContent = {
   metaTitle: 'Which brands does Kozip work best with?',
   metaDescription:
-    'Kozip is a great fit for food, finance, technology, entertainment and adventure brands that want to reach young and family audiences in Estonia through YouTube and short-form video. See the categories and real examples.',
-  h1: 'Which brands does Kozip work best with?',
+    'Kozip is a great fit for food, finance, technology and entertainment brands that want to reach young audiences in Estonia through YouTube and short-form video. See the categories and real examples.',
+  h1: 'Which brands does Kozip fit?',
   intro:
-    'Kozip is an Estonian adventure and entertainment content creator, run by Mihkel Kööbi and Maia-Liis Ossip. We produce YouTube ad videos, short-form video (TikTok, Instagram Reels, YouTube Shorts) and complete brand campaigns. Our content mainly reaches 13–34-year-olds and the whole family. Below are the brand categories we fit especially well — and, where possible, real examples of past collaborations.',
-  categoriesHeading: 'Brand categories Kozip fits',
-  examplesLabel: 'Real examples:',
+    'Kozip is an Estonian adventure and entertainment content creator, run by Mihkel Kööbi and Maia-Liis Ossip. We produce YouTube ad videos, short-form video and complete brand campaigns that reach 13–34-year-old viewers. Here are the fields where our content works best — with real examples.',
+  categoriesHeading: 'Where our content works best',
+  categoriesSubheading: 'Four fields where we have already proven ourselves. Every example is a real collaboration — click and see for yourself.',
   categories: [
     {
       id: 'toit',
-      title: 'Food & beverage brands',
-      body: 'Food and beverage brands are a great fit for Kozip, because food is visual, emotional and a natural part of our content. We have created tasting and challenge videos, recipe and product features, and entertaining formats that make viewers genuinely crave the product. We fit snack, fast food, seasoning, energy drink and retail brands that want to reach hungry young audiences.',
+      title: 'Food & beverage',
+      body: 'Food is a natural part of our content — tastings, recipes and challenges that make viewers genuinely crave the product. From Kikkoman sauces to a KFC Valentine’s campaign: we show the product in use, not as a catalogue shot.',
       examples: [
         { label: 'Kikkoman Crispy Chicken', slug: 'kikkoman_2' },
         { label: 'Kikkoman Sauces', slug: 'kikkoman_1' },
@@ -175,8 +189,8 @@ const en: KoostooContent = {
     },
     {
       id: 'finants',
-      title: 'Finance, banking & fintech',
-      body: 'Finance and fintech brands trust us to make complex topics simple and engaging. The longer YouTube format works especially well when a product needs explaining — investing, a new banking feature, or financial literacy. We turn a "dry" topic into something young audiences understand and trust, without being boring.',
+      title: 'Finance & fintech',
+      body: 'Making complex topics simple is our strength. Investing and financial literacy need explaining — the longer YouTube format gives room for it, and we keep the viewer watching to the end. We started investing at 16 ourselves, so we speak from experience.',
       examples: [
         { label: 'Lightyear', slug: 'lightyear' },
         { label: 'Apollo investment festival', slug: 'Apollo_investeerimisfestival_2026' },
@@ -186,50 +200,54 @@ const en: KoostooContent = {
     {
       id: 'tehnoloogia',
       title: 'Technology & devices',
-      body: 'For technology and device brands we create content that shows the product in real use — not as a catalogue shot, but as part of an exciting story or challenge. We fit smart devices, consumer electronics, software and apps, especially when the goal is to reach younger, tech-curious viewers.',
+      body: 'The product in real use, as part of a story or a challenge. With Philips OneBlade we swapped lives for 24 hours — product placement that gets watched like content, because it is content.',
       examples: [{ label: 'Philips', slug: 'Philips_vahetasime_elud_24h' }],
     },
     {
       id: 'seiklus',
-      title: 'Adventure, challenges & entertainment',
-      body: 'This is Kozip’s home turf. We make adrenaline-fuelled challenges, big productions and unexpected experiments that keep viewers glued to the screen. We fit brands that want to be part of something cool and shareable — entertainment, leisure, events and anything that connects with adventure and energy.',
+      title: 'Adventure & entertainment',
+      body: 'Our home turf. Big productions, adrenaline and experiments that keep viewers glued to the screen — with your brand in the middle of it all, not in an ad break.',
       examples: [
-        { label: 'Külmavares — 1 vs 1500 swims', slug: 'kulmavares_1_vs_1500_suplus' },
-        { label: 'Sawerna', slug: 'sawerna' },
+        { label: 'Külmavares — €1 vs €1500 winter swim', slug: 'kulmavares_1_vs_1500_suplus' },
+        { label: 'Sawerna', slug: 'sawernaa' },
       ],
     },
+  ],
+  moreHeading: 'We also fit',
+  moreSubheading: 'Fields where our format and audience are a natural match as well.',
+  moreCategories: [
     {
       id: 'sport',
       title: 'Sports & active lifestyle',
-      body: 'Sports, fitness and active lifestyle brands fit our energetic style naturally. We can tie a product to challenges, training and adventures so that it feels like part of the action rather than an ad. We fit sports gear, supplements and active leisure brands.',
+      body: 'The product in the middle of challenges and training — part of the action, not an ad break.',
     },
     {
       id: 'auto',
       title: 'Cars & mobility',
-      body: 'Car and mobility brands fit our content because a car is a perfect stage for adventure and challenges. We can show the vehicle on the road, on a trip or in an experiment that creates emotion and leaves an impression of freedom and excitement.',
+      body: 'A car is a stage for adventure: journeys and experiments that create emotion.',
     },
     {
       id: 'telekom',
-      title: 'Telecom & service providers',
-      body: 'For telecom and service brands we create content that reaches a broad young audience and makes the benefits of a service tangible. We fit campaigns that need to build awareness and reach a large audience at once through a trusted face.',
+      title: 'Telecom & services',
+      body: 'A broad young audience, with the benefits of a service made tangible.',
     },
     {
       id: 'mangud',
-      title: 'Games & entertainment apps',
-      body: 'Game and entertainment-app brands reach their audience directly through us — young people who are already on screen. We can showcase a game or app in a natural, entertaining context that makes people want to try it.',
+      title: 'Games & apps',
+      body: 'We reach the audience that is already on screen — in a natural, entertaining context.',
     },
     {
       id: 'reisi',
-      title: 'Travel & leisure brands',
-      body: 'Travel, accommodation and leisure brands are an ideal match for our adventurous style. We show destinations and experiences in a way that makes viewers want to go themselves. We fit destination marketing, events and anything connected with discovery and adventure.',
+      title: 'Travel & leisure',
+      body: 'We show destinations and experiences so that viewers want to go themselves.',
     },
     {
       id: 'rivad',
-      title: 'Clothing & fashion brands',
-      body: 'For clothing and fashion brands we create content where the product is a natural part of our style and activities. We fit youth-focused brands that want visibility in an authentic, not staged, context.',
+      title: 'Clothing & fashion',
+      body: 'The product as a natural part of our style — authentic, not staged.',
     },
   ],
-  faqHeading: 'Frequently asked questions for brands',
+  faqHeading: 'Frequently asked questions',
   faq: [
     {
       question: 'Who is a popular content creator among young people in Estonia?',
@@ -269,8 +287,9 @@ const en: KoostooContent = {
   ],
   ctaHeading: 'Are you a fit too?',
   ctaText:
-    'If your brand fits one of the categories above — or you think our style matches yours — get in touch and let’s discuss what kind of collaboration would deliver the best results.',
+    'If your brand fits one of the fields above — or you think our style matches yours — get in touch and let’s discuss what kind of collaboration would deliver the best results.',
   ctaButton: 'Get in touch',
+  ctaSecondary: 'See our work',
 };
 
 export function getKoostooContent(locale: string): KoostooContent {

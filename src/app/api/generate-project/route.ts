@@ -60,7 +60,7 @@ const OUTPUT_SCHEMA = {
           },
           mediaUrl: {
             type: 'string',
-            description: 'Video URL (YouTube link, võib sisaldada ?t= ajatemplit). Tühi string kui kasutaja linki ei andnud',
+            description: 'Video URL (YouTube, TikTok või Instagram Reeli link; YouTube link võib sisaldada ?t= ajatemplit). Tühi string kui kasutaja linki ei andnud',
           },
         },
         required: ['type', 'layout', 'title', 'content', 'mediaUrl'],
@@ -179,7 +179,7 @@ KASUTAJA KIRJELDUS UUE TEHTUD TÖÖ KOHTA:
 ${prompt.trim()}`;
 
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
+      model: 'gpt-5.6-terra',
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
         { role: 'user', content: userMessage },
@@ -192,7 +192,6 @@ ${prompt.trim()}`;
           schema: OUTPUT_SCHEMA as unknown as Record<string, unknown>,
         },
       },
-      temperature: 0.4,
     });
 
     const raw = completion.choices[0]?.message?.content;

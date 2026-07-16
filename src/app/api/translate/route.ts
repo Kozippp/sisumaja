@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     // Translate title
     if (title) {
       const titleCompletion = await openai.chat.completions.create({
-        model: 'gpt-4o',
+        model: 'gpt-5.6-terra',
         messages: [
           {
             role: 'system',
@@ -41,7 +41,6 @@ export async function POST(req: NextRequest) {
             content: title
           }
         ],
-        temperature: 0.3,
       });
       translations.title_en = titleCompletion.choices[0]?.message?.content?.trim() || title;
     }
@@ -49,7 +48,7 @@ export async function POST(req: NextRequest) {
     // Translate description
     if (description) {
       const descriptionCompletion = await openai.chat.completions.create({
-        model: 'gpt-4o',
+        model: 'gpt-5.6-terra',
         messages: [
           {
             role: 'system',
@@ -60,7 +59,6 @@ export async function POST(req: NextRequest) {
             content: description
           }
         ],
-        temperature: 0.3,
       });
       translations.description_en = descriptionCompletion.choices[0]?.message?.content?.trim() || description;
     }
@@ -75,7 +73,7 @@ export async function POST(req: NextRequest) {
         // Translate block title if exists
         if (block.title) {
           const titleCompletion = await openai.chat.completions.create({
-            model: 'gpt-4o',
+            model: 'gpt-5.6-terra',
             messages: [
               {
                 role: 'system',
@@ -86,7 +84,6 @@ export async function POST(req: NextRequest) {
                 content: block.title
               }
             ],
-            temperature: 0.3,
           });
           translatedBlock.title = titleCompletion.choices[0]?.message?.content?.trim() || block.title;
         }
@@ -94,7 +91,7 @@ export async function POST(req: NextRequest) {
         // Translate block content if exists
         if (block.content) {
           const contentCompletion = await openai.chat.completions.create({
-            model: 'gpt-4o',
+            model: 'gpt-5.6-terra',
             messages: [
               {
                 role: 'system',
@@ -105,7 +102,6 @@ export async function POST(req: NextRequest) {
                 content: block.content
               }
             ],
-            temperature: 0.3,
           });
           translatedBlock.content = contentCompletion.choices[0]?.message?.content?.trim() || block.content;
         }
@@ -124,7 +120,7 @@ export async function POST(req: NextRequest) {
 
         if (link.label) {
           const labelCompletion = await openai.chat.completions.create({
-            model: 'gpt-4o',
+            model: 'gpt-5.6-terra',
             messages: [
               {
                 role: 'system',
@@ -135,7 +131,6 @@ export async function POST(req: NextRequest) {
                 content: link.label
               }
             ],
-            temperature: 0.3,
           });
           translatedLink.label = labelCompletion.choices[0]?.message?.content?.trim() || link.label;
         }
@@ -147,7 +142,7 @@ export async function POST(req: NextRequest) {
     // Translate client quote
     if (client_quote) {
       const quoteCompletion = await openai.chat.completions.create({
-        model: 'gpt-4o',
+        model: 'gpt-5.6-terra',
         messages: [
           {
             role: 'system',
@@ -158,7 +153,6 @@ export async function POST(req: NextRequest) {
             content: client_quote
           }
         ],
-        temperature: 0.3,
       });
       translations.client_quote_en = quoteCompletion.choices[0]?.message?.content?.trim() || client_quote;
     }
@@ -166,7 +160,7 @@ export async function POST(req: NextRequest) {
     // Translate client review title
     if (client_review_title) {
       const reviewTitleCompletion = await openai.chat.completions.create({
-        model: 'gpt-4o',
+        model: 'gpt-5.6-terra',
         messages: [
           {
             role: 'system',
@@ -177,7 +171,6 @@ export async function POST(req: NextRequest) {
             content: client_review_title
           }
         ],
-        temperature: 0.3,
       });
       translations.client_review_title_en = reviewTitleCompletion.choices[0]?.message?.content?.trim() || client_review_title;
     }

@@ -1038,14 +1038,15 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                         {block.type === 'video' && (
                             <div className="space-y-4">
                                 <div>
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Video URL (YouTube/Vimeo)</label>
-                                    <input 
+                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Video URL (YouTube / TikTok / Instagram)</label>
+                                    <input
                                         type="text"
                                         value={block.mediaUrl || ''}
                                         onChange={(e) => updateBlock(block.id, { mediaUrl: e.target.value })}
                                         className="w-full bg-black border border-neutral-700 rounded p-2 text-sm"
-                                        placeholder="https://www.youtube.com/watch?v=..."
+                                        placeholder="youtube.com/watch?v=... | tiktok.com/@kasutaja/video/... | instagram.com/reel/..."
                                     />
+                                    <p className="text-xs text-gray-500 mt-1">Toetatud: YouTube (ka Shorts), TikTok video link, Instagram Reel/postitus</p>
                                 </div>
                                 <div>
                                     <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Custom Thumbnail (Valikuline)</label>
