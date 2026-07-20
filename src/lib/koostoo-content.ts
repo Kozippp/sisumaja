@@ -3,9 +3,11 @@
  *
  * NB! Näidete linkides on kasutatud AINULT päris tehtud töid (projects tabel).
  * Ära lisa siia väljamõeldud koostöid ega numbreid — AI ja kliendid loevad seda.
+ * Vaatamiste arvud tulevad projects.stat_views väljalt, mitte siit.
  *
- * `categories` = 4 peakategooriat, kus on päris case study'd (kuvatakse suurelt,
- * thumbnail-kaartidega). `moreCategories` = ülejäänud valdkonnad, üks lause igaüks.
+ * `categories` = 6 peakategooriat, kus on päris case study'd (kuvatakse suurelt,
+ * thumbnail-kaartidega). `moreCategories` = valdkonnad, kus case study puudub,
+ * aga kus on konkreetne põhjendus, miks meie formaat sinna istub.
  */
 
 export type CategoryExample = { label: string; slug: string };
@@ -20,18 +22,29 @@ export type MoreCategory = {
   title: string;
   body: string;
 };
+export type HeroStat = { value: string; label: string };
 
 export type KoostooContent = {
   metaTitle: string;
   metaDescription: string;
   h1: string;
   intro: string;
+  heroStats: HeroStat[];
   categoriesHeading: string;
   categoriesSubheading: string;
   categories: Category[];
+  audienceHeading: string;
+  audienceIntro: string;
+  audienceTvNote: string;
+  audienceDisclaimer: string;
+  audienceGenderLabels: { female: string; male: string; other: string };
+  viewsLabel: string;
   moreHeading: string;
   moreSubheading: string;
   moreCategories: MoreCategory[];
+  moreFallbackPrefix: string;
+  moreFallbackLink: string;
+  moreFallbackSuffix: string;
   faqHeading: string;
   faq: { question: string; answer: string }[];
   ctaHeading: string;
@@ -43,28 +56,33 @@ export type KoostooContent = {
 const et: KoostooContent = {
   metaTitle: 'Milliste brändidega Kozip sobib koostööd tegema?',
   metaDescription:
-    'Kozip sobib eriti hästi toidu-, finants-, tehnoloogia- ja meelelahutusbrändidele, kes soovivad jõuda noorte vaatajateni YouTube’i ja lühivideote kaudu. Vaata kategooriaid ja päris näiteid.',
-  h1: 'Milliste brändidega Kozip sobib?',
+    'Kozip on üks Eesti populaarsemaid nooruslikke kogupere kanaleid. Vaata, kus oleme end brändikoostöödes tõestanud: toit, finants, tehnoloogia, sisustus, rõivad ja üritused. Päris näited ja päris numbrid.',
+  h1: 'Kellele sobime?',
   intro:
-    'Kozip on Eesti seiklus- ja meelelahutussisu looja, kelle taga on Mihkel Kööbi ja Maia-Liis Ossip. Loome YouTube’i reklaamvideoid, lühivideoid ja terviklikke kampaaniaid, mis jõuavad 13–34-aastaste vaatajateni. Siin on valdkonnad, kus meie sisu kõige paremini töötab — koos päris näidetega.',
-  categoriesHeading: 'Kus meie sisu kõige paremini töötab',
-  categoriesSubheading: 'Neli valdkonda, kus oleme end juba tõestanud. Iga näide on päris koostöö — kliki ja vaata ise.',
+    'Kozip on üks Eesti populaarsemaid kogupere sotsiaalmeedia kanaleid, mida veavad Mihkel Kööbi ja Maia-Liis Ossip. Meiega sobib koostöö brändidele, kes tahavad jõuda korraga väga laia vaatajaskonnani ja olla osa loost, mille sees nende bränd elab, mitte reklaamipaus, mida vahele kerida.',
+  heroStats: [
+    { value: '60 000+', label: 'vaatamist keskmisel YouTube’i videol' },
+    { value: 'kuni 220 000', label: 'vaatamist lühivideole viiel platvormil kokku' },
+  ],
+  categoriesHeading: 'Mida meie kanalil sobib reklaamida',
+  categoriesSubheading:
+    'Kuus valdkonda päris koostöödega. Iga näide on klikitav ja iga number on päris.',
   categories: [
     {
       id: 'toit',
       title: 'Toit ja jook',
-      body: 'Toit on meie sisu loomulik osa — maitsmised, retseptid ja väljakutsed, mis panevad vaataja päriselt isu tundma. Kikkomani kastmetest KFC sõbrapäevani: näitame toodet kasutuses, mitte kataloogipildina.',
+      body: 'Toit on meie sisu loomulik osa. Retseptid, maitsmised ja väljakutsed, kus toode on kaadris sellepärast, et me sellega päriselt midagi teeme. Kikkomani retseptivideod on kogunud kokku üle poole miljoni vaatamise ning KFC sõbrapäevakampaania jõudis üle 200 000 vaatajani.',
       examples: [
-        { label: 'Kikkomani Krõbekana', slug: 'kikkoman_2' },
-        { label: 'Kikkoman Kastmed', slug: 'kikkoman_1' },
+        { label: 'Kikkomani rebitud liha burger', slug: 'rebitud_liha_burger' },
         { label: 'Luksuslik kohting KFC-s', slug: 'KFC_kohting' },
         { label: 'Härmavili x Selver', slug: 'h2rmavili_x_selver' },
+        { label: 'Fazer Muhkel & Muhklike', slug: 'fazer_muhklikesed' },
       ],
     },
     {
       id: 'finants',
       title: 'Finants ja fintech',
-      body: 'Keerulise teema lihtsaks tegemine on meie tugevus. Investeerimine ja rahatarkus vajavad selgitamist — YouTube’i pikk formaat annab selleks ruumi ning meie hoiame vaataja lõpuni ekraani küljes. Alustasime ise investeerimisega 16-aastaselt, seega räägime teemast oma kogemusest.',
+      body: 'Alustasime ise investeerimisega 16-aastaselt ja räägime rahast oma kogemuse põhjalt. Pikk YouTube’i formaat annab ruumi ka keerulisemate teemade selgitamiseks.',
       examples: [
         { label: 'Lightyear', slug: 'lightyear' },
         { label: 'Apollo investeerimisfestival', slug: 'Apollo_investeerimisfestival_2026' },
@@ -74,94 +92,124 @@ const et: KoostooContent = {
     {
       id: 'tehnoloogia',
       title: 'Tehnoloogia ja seadmed',
-      body: 'Toode päris kasutuses, osa loost või väljakutsest. Philipsi OneBlade’iga vahetasime 24 tunniks elud — tooteasetus, mida vaadatakse nagu sisu, sest see ongi sisu.',
-      examples: [{ label: 'Philips', slug: 'Philips_vahetasime_elud_24h' }],
-    },
-    {
-      id: 'seiklus',
-      title: 'Seiklus ja meelelahutus',
-      body: 'Meie koduväljak. Suured produktsioonid, adrenaliin ja eksperimendid, mis hoiavad vaatajat ekraani küljes — ja sinu bränd on selle kõige keskel, mitte reklaampausil.',
+      body: 'Tehnika on meie videote loomulik osa: suured produktsioonid, seadmed ja väljakutsed käivad meie sisust läbi. Seade töötab meie videotes kõige paremini siis, kui see on osa loost. Philips OneBlade’iga vahetasime 24 tunniks elud ja tegime lühisketši kiirest hommikust. Tooteasetus, mida vaadatakse nagu sisu, sest see ongi sisu.',
       examples: [
-        { label: 'Külmavares — 1€ vs 1500€ talisuplus', slug: 'kulmavares_1_vs_1500_suplus' },
-        { label: 'Sawerna', slug: 'sawernaa' },
+        { label: 'Philips: vahetasime elud 24h', slug: 'Philips_vahetasime_elud_24h' },
+        { label: 'Philips OneBlade’i sketš', slug: 'philips_oneblade' },
       ],
     },
-  ],
-  moreHeading: 'Sobime ka nendega',
-  moreSubheading: 'Valdkonnad, kuhu meie formaat ja vaatajaskond samuti hästi istuvad.',
-  moreCategories: [
     {
-      id: 'sport',
-      title: 'Sport ja aktiivne eluviis',
-      body: 'Toode väljakutsete ja treeningute keskel — osa tegevusest, mitte reklaampaus.',
+      id: 'kodu',
+      title: 'Kodu ja sisustus',
+      body: 'Sawerna mööbel sai peaosa videos, kus viimane magama jäänud sisulooja võitis 1000 eurot. Kodukaubad ja sisustus istuvad meie formaati loomulikult, sest suur osa meie sisust sünnibki kodus, köögis ja igapäevaelus.',
+      examples: [{ label: 'Sawerna', slug: 'sawernaa' }],
     },
     {
+      id: 'rivad',
+      title: 'Rõivad',
+      body: 'Külmavarese joped läbisid tõsise testi: 1 euro vs 1500 euro talisuplus. Riided ja varustus saavad meie videotes end tõestada päris olukordades, külmas vees, metsas ja väljakutsete keskel.',
+      examples: [{ label: 'Külmavares: 1€ vs 1500€ talisuplus', slug: 'kulmavares_1_vs_1500_suplus' }],
+    },
+    {
+      id: 'yritused',
+      title: 'Üritused ja kaubandus',
+      body: 'Rocca al Mare Halloweeni peo kutsevideod kogusid ligi 185 000 vaatamist. Ürituste puhul on meil lisatrump: saame ise kohal olla, mis toob meie fännid üritusele kohale ja annab brändile kohapeal veel ühe sisuvõimaluse.',
+      examples: [{ label: 'Rocca al Mare Halloween', slug: 'rocca_al_mare_halloween' }],
+    },
+  ],
+  audienceHeading: 'Keda sa meie kaudu kätte saad',
+  audienceIntro:
+    'Vali platvorm ja vaata, milline on selle kanali vaatajate vanuse- ja soojaotus.',
+  audienceTvNote:
+    '55% YouTube’i vaatamistest tuleb telerist. Suure tõenäosusega vaatab terve pere koos.',
+  audienceDisclaimer:
+    'Vanusegraafikud ei ole kunagi 100% täpsed (lapsed vaatavad tihti vanemate kontodelt), kuid annavad hea võrdluspildi teiste kanalitega.',
+  audienceGenderLabels: { female: 'Naised', male: 'Mehed', other: 'Muu' },
+  viewsLabel: 'vaatamist',
+  moreHeading: 'Sobime ka nendega',
+  moreSubheading:
+    'Meie sisu jõuab kogupere vaatajaskonnani, seega siin on veel mõned valdkonnad, mida meie kanalil sobib reklaamida.',
+  moreCategories: [
+    {
       id: 'auto',
-      title: 'Autod ja mobiilsus',
-      body: 'Auto on seikluse lava: teekonnad ja eksperimendid, mis tekitavad emotsiooni.',
+      title: 'Autod ja transport',
+      body: 'Meie seiklused algavad tihti teekonnaga. Näiteks Eesti erilisemaid Airbnb-sid testides roadtrippisime autoga läbi Eesti, nii et auto oli suure osa videost kaadris. Sellisesse loosse sobib loomulikult nii autobränd, rent, tankla kui ka muu transpordiga seotud teenus.',
+    },
+    {
+      id: 'kindlustus',
+      title: 'Kindlustus ja turvalisus',
+      body: 'Meie sisu ongi riskid ja ootamatud olukorrad: talisuplus, mets, kõrgused, hirmude ületamine. Kindlustusbränd saab olla kohal täpselt seal, kus vaataja riskile mõtleb. Peresõbralik ja skandaalivaba maine hoiab sõnumi usaldusväärsena.',
     },
     {
       id: 'telekom',
       title: 'Telekom ja teenused',
-      body: 'Lai noorte vaatajaskond ja teenuse kasud käegakatsutavaks tehtud.',
+      body: 'Sarjas "Viimane sisulooja, kes metsast lahkub" selgus, kui palju loeb hea levi, kui elad nädal aega metsas. Telefon on meie videotes pidevalt kasutuses, seega side ja nutiteenused sobivad meie sisusse loomulikult.',
     },
     {
-      id: 'mangud',
-      title: 'Mängud ja äpid',
-      body: 'Jõuame otse sihtrühmani, kes on niigi ekraanil — loomulikus ja meelelahutuslikus kontekstis.',
+      id: 'sport',
+      title: 'Sport ja tervis',
+      body: 'Talisuplus, trennid ja füüsilised väljakutsed käivad meie videotest pidevalt läbi. Oleme teinud koostöid ka spordi- ja toidulisandibrändidega, näiteks MyFitness ja ICONFIT.',
+    },
+    {
+      id: 'ilu',
+      title: 'Ilu ja enesehooldus',
+      body: 'Instagramis on 67% meie vaatajatest naised ja ilu- ning enesehooldustooted sobivad meie igapäevaellu loomulikult. Oleme teinud koostöid ka ilubrändidega, näiteks hambavalgenduse vallas.',
     },
     {
       id: 'reisi',
       title: 'Reis ja vaba aeg',
-      body: 'Näitame sihtkohti ja elamusi nii, et vaataja tahab ise kohale minna.',
-    },
-    {
-      id: 'rivad',
-      title: 'Rõivad ja mood',
-      body: 'Toode meie stiili loomuliku osana — autentselt, mitte lavastatult.',
+      body: 'Grand Rose’i spaapäev, Eesti erilisemate Airbnb-de test ja reisivideod Kreekast. Näitame kohti ja elamusi nii, et vaataja paneb need oma nimekirja.',
     },
   ],
+  moreFallbackPrefix: 'Ei leidnud oma valdkonda?',
+  moreFallbackLink: 'Kirjuta meile',
+  moreFallbackSuffix: ' ja vaatame, kas sinu bränd sobib meie sisusse.',
   faqHeading: 'Korduma kippuvad küsimused',
   faq: [
     {
-      question: 'Kes on Eestis populaarne noorte sisulooja?',
+      question: 'Kuidas Kozipiga koostöö käib?',
       answer:
-        'Kozip on üks Eesti tuntumaid seiklus- ja meelelahutussisu loojaid, kelle sisu jõuab eelkõige 13–34-aastaste noorteni YouTube’is, TikTokis ja Instagramis. Brändi taga on Mihkel Kööbi ja Maia-Liis Ossip.',
+        'Sina räägid, mida soovid turundada. Kui see sobib meie brändiga kokku, uurime täpsemalt sinu vajadusi ja pakume välja skripti. Kui sina skripti kinnitad, siis alustame sisu ja reklaami produtseerimisega. Enne postitamist saadame valmis video sulle ülevaatuseks ning vajadusel saame sisse viia muudatusi. Kui kõik sobib, läheb video meie kanalitele üles.',
     },
     {
-      question: 'Milline sisulooja sobib toidubrändile?',
+      question: 'Kui kiiresti video valmib?',
       answer:
-        'Kozip sobib toidu- ja joogibrändidele eriti hästi. Oleme teinud koostöövideoid näiteks Kikkomani, KFC ja Härmavili x Selveriga — maitsmis-, väljakutse- ja tootetutvustusformaate, mis tekitavad vaatajas päris isu.',
+        'Lühivideo valmib päringust avaldamiseni 2 kuni 4 nädalaga, YouTube’i integratsioon 3 kuni 6 nädalaga. Kiirhooaegadel võib see võtta kauem, seega tasub kampaania aegsasti ette planeerida, et jääks aega valmistuda. Võtame iga kuu vastu vaid paar kampaaniat.',
     },
     {
-      question: 'Milline Eesti YouTuber teeb challenge- ehk väljakutsevideoid?',
+      question: 'Kui palju koostöö Kozipiga maksab?',
       answer:
-        'Kozip on tuntud just seiklus- ja väljakutsevideote poolest — suured produktsioonid, eksperimendid ja ootamatud väljakutsed. See formaat sobib brändidele, kes tahavad olla osa põnevast ja jagatavast sisust.',
+        'Võtame vastu koostöid, mille koguhind algab 1000 eurost. Pikaajalise koostöö puhul saame pakkuda stabiilsemat hinda. Täpne hind sõltub formaadist ja mahust, seega küsi meilt pakkumist.',
     },
     {
-      question: 'Kes jõuab 13–24-aastaste noorteni Eestis?',
+      question: 'Mis formaadid ühe kampaania sisse mahuvad?',
       answer:
-        'Kozipi sisu põhivaatajaskond on noored ja noored täiskasvanud. Pakume brändidele võimalust jõuda selle raskesti tabatava sihtrühmani usaldusväärse ja meelelahutusliku sisu kaudu.',
+        'Saame teha eraldi YouTube’i integratsiooni, lühivideo või esinemise. Kampaania raames pakume ka pakette, millega saad turundada tõhusamalt ja parema tükihinnaga. Lühivideod jõuavad alati korraga viiele platvormile: TikTok, Instagram Reels, YouTube Shorts, Facebook ja Snapchat.',
     },
     {
-      question: 'Milline influencer sobib uue toote lansseerimiseks?',
+      question: 'Kas saame sisule sõna sekka öelda?',
       answer:
-        'Kozip sobib tootelansseeringuteks, sest suudame ühe kampaania raames teha nii pikema YouTube’i video (toote selgitamiseks) kui ka lühivideoid (ulatuse ja teadlikkuse kasvatamiseks) ning jõuda korraga suure noorte vaatajaskonnani.',
+        'Jah. Skript kooskõlastatakse enne võtteid ja valmis video enne avaldamist, vajadusel teeme muudatusi.',
     },
     {
-      question: 'Kes teeb kvaliteetseid YouTube’i brändikoostöid Eestis?',
+      question: 'Millistele brändidele Kozip ei sobi?',
       answer:
-        'Kozip teeb terviklikke YouTube’i brändikoostöid alates ideest ja stsenaariumist kuni produktsiooni ja avaldamiseni. Vaata päris näiteid meie tehtud tööde lehelt.',
+        'Me ei tee koostööd alkoholi, hasartmängude, poliitika ega millegagi, mis meie hinnangul ühiskonnale väärtust ei paku. Meie sisu on peresõbralik ja skandaalivaba, pakkudes brändidele turvalist ning usaldusväärset platvormi reklaamiks.',
     },
     {
-      question: 'Kas Kozip pakub reklaami ka isiklikele kanalitele?',
+      question: 'Kellele Kozipi sisu jõuab?',
       answer:
-        'Jah. Lisaks Kozipi brändikanalitele pakume reklaami ka Mihkli ja Maia-Liisi isiklikele kanalitele, sõltuvalt kampaania eesmärgist ja sihtrühmast.',
+        'Kozip on nooruslik kogupere kanal. YouTube’is vaatab meid sageli terve pere koos teleriekraanilt, lühivideod jõuavad noorte ja noorte täiskasvanuteni TikTokis ja Instagramis. Kokku jõuame lastest lastevanemateni.',
+    },
+    {
+      question: 'Kas reklaami saab osta ka Mihkli ja Maia-Liisi isiklikele kanalitele?',
+      answer:
+        'Jah. Kozip on lai kogupere kanal, kuid Mihkli ja Maia-Liisi isiklikud kanalid pakuvad personaalsemat ja lähedasemat kontakti. Nii jõuab brändi sõnum vaatajani inimeselt, keda ta igapäevaselt jälgib ja usaldab. Videod koguvad olenevalt videost 20 000 kuni 50 000 vaatamist ning sobivad eriti hästi ilu-, spordi- ja elustiilibrändidele.',
     },
   ],
-  ctaHeading: 'Sobid sina ka?',
+  ctaHeading: 'Kas su bränd sobib meie loosse?',
   ctaText:
-    'Kui su bränd sobib mõnda ülaltoodud valdkonda — või arvad, et meie stiil klapib teie omaga — võta ühendust ja arutame, milline koostöö annaks parima tulemuse.',
+    'Kirjuta meile, mida soovid turundada ning kui see meie brändiga kokku sobib, pakume välja täpse plaani ja idee, kuidas võiks seda meie kanalitel turundada.',
   ctaButton: 'Võta ühendust',
   ctaSecondary: 'Vaata tehtud töid',
 };
@@ -169,28 +217,33 @@ const et: KoostooContent = {
 const en: KoostooContent = {
   metaTitle: 'Which brands does Kozip work best with?',
   metaDescription:
-    'Kozip is a great fit for food, finance, technology and entertainment brands that want to reach young audiences in Estonia through YouTube and short-form video. See the categories and real examples.',
-  h1: 'Which brands does Kozip fit?',
+    'Kozip is one of Estonia’s most popular youthful family entertainment channels. See where we have proven ourselves in brand collaborations: food, finance, technology, home, apparel and events. Real examples, real numbers.',
+  h1: 'Who do we work with?',
   intro:
-    'Kozip is an Estonian adventure and entertainment content creator, run by Mihkel Kööbi and Maia-Liis Ossip. We produce YouTube ad videos, short-form video and complete brand campaigns that reach 13–34-year-old viewers. Here are the fields where our content works best — with real examples.',
-  categoriesHeading: 'Where our content works best',
-  categoriesSubheading: 'Four fields where we have already proven ourselves. Every example is a real collaboration — click and see for yourself.',
+    'Kozip is one of Estonia’s most popular family entertainment channels on social media, run by Mihkel Kööbi and Maia-Liis Ossip. Working with us fits brands that want to reach a very broad audience at once and be part of a story their brand lives inside, not an ad break to skip.',
+  heroStats: [
+    { value: '60,000+', label: 'views on an average YouTube video' },
+    { value: 'up to 220,000', label: 'views per short-form video across five platforms' },
+  ],
+  categoriesHeading: 'What our channel is a good fit to advertise',
+  categoriesSubheading:
+    'Six fields with real collaborations. Every example is clickable and every number is real.',
   categories: [
     {
       id: 'toit',
       title: 'Food & beverage',
-      body: 'Food is a natural part of our content — tastings, recipes and challenges that make viewers genuinely crave the product. From Kikkoman sauces to a KFC Valentine’s campaign: we show the product in use, not as a catalogue shot.',
+      body: 'Food is a natural part of our content. Recipes, tastings and challenges where the product is on screen because we are actually doing something with it. Our Kikkoman recipe videos have gathered over half a million views combined, and the KFC Valentine’s campaign reached more than 200,000 viewers.',
       examples: [
-        { label: 'Kikkoman Crispy Chicken', slug: 'kikkoman_2' },
-        { label: 'Kikkoman Sauces', slug: 'kikkoman_1' },
+        { label: 'Kikkoman pulled meat burger', slug: 'rebitud_liha_burger' },
         { label: 'A luxury date at KFC', slug: 'KFC_kohting' },
         { label: 'Härmavili x Selver', slug: 'h2rmavili_x_selver' },
+        { label: 'Fazer Muhkel & Muhklike', slug: 'fazer_muhklikesed' },
       ],
     },
     {
       id: 'finants',
       title: 'Finance & fintech',
-      body: 'Making complex topics simple is our strength. Investing and financial literacy need explaining — the longer YouTube format gives room for it, and we keep the viewer watching to the end. We started investing at 16 ourselves, so we speak from experience.',
+      body: 'We started investing at 16 ourselves and talk about money from our own experience. The long YouTube format gives room to explain even more complex topics.',
       examples: [
         { label: 'Lightyear', slug: 'lightyear' },
         { label: 'Apollo investment festival', slug: 'Apollo_investeerimisfestival_2026' },
@@ -200,94 +253,124 @@ const en: KoostooContent = {
     {
       id: 'tehnoloogia',
       title: 'Technology & devices',
-      body: 'The product in real use, as part of a story or a challenge. With Philips OneBlade we swapped lives for 24 hours — product placement that gets watched like content, because it is content.',
-      examples: [{ label: 'Philips', slug: 'Philips_vahetasime_elud_24h' }],
-    },
-    {
-      id: 'seiklus',
-      title: 'Adventure & entertainment',
-      body: 'Our home turf. Big productions, adrenaline and experiments that keep viewers glued to the screen — with your brand in the middle of it all, not in an ad break.',
+      body: 'Tech is a natural part of our videos: big productions, devices and challenges run through our content. A device works best in our videos when it is part of the story. With Philips OneBlade, we swapped lives for 24 hours and made a short sketch about a fast morning. Product placement that gets watched like content, because it is content.',
       examples: [
-        { label: 'Külmavares — €1 vs €1500 winter swim', slug: 'kulmavares_1_vs_1500_suplus' },
-        { label: 'Sawerna', slug: 'sawernaa' },
+        { label: 'Philips: we swapped lives for 24h', slug: 'Philips_vahetasime_elud_24h' },
+        { label: 'Philips OneBlade sketch', slug: 'philips_oneblade' },
       ],
     },
-  ],
-  moreHeading: 'We also fit',
-  moreSubheading: 'Fields where our format and audience are a natural match as well.',
-  moreCategories: [
     {
-      id: 'sport',
-      title: 'Sports & active lifestyle',
-      body: 'The product in the middle of challenges and training — part of the action, not an ad break.',
+      id: 'kodu',
+      title: 'Home & interior',
+      body: 'Sawerna furniture played the lead role in a video where the last creator to fall asleep won 1000 euros. Home products fit our format naturally, because a large part of our content is born at home, in the kitchen and in everyday life.',
+      examples: [{ label: 'Sawerna', slug: 'sawernaa' }],
     },
     {
+      id: 'rivad',
+      title: 'Clothing',
+      body: 'Külmavares jackets went through a serious test: a 1 euro vs 1500 euro winter swim. Clothing and gear get to prove themselves in our videos in real situations, in ice-cold water, in the forest and in the middle of challenges.',
+      examples: [{ label: 'Külmavares: €1 vs €1500 winter swim', slug: 'kulmavares_1_vs_1500_suplus' }],
+    },
+    {
+      id: 'yritused',
+      title: 'Events & retail',
+      body: 'Our invitation videos for the Rocca al Mare Halloween party gathered close to 185,000 views. With events we have an extra card to play: we can attend in person, which brings our fans to the event and gives the brand one more content opportunity on site.',
+      examples: [{ label: 'Rocca al Mare Halloween', slug: 'rocca_al_mare_halloween' }],
+    },
+  ],
+  audienceHeading: 'Who you reach through us',
+  audienceIntro:
+    'Pick a platform to see the age and gender breakdown of its viewers.',
+  audienceTvNote:
+    '55% of our YouTube views come from TV screens. Most likely the whole family is watching together.',
+  audienceDisclaimer:
+    'Age charts are never 100% precise (kids often watch from their parents’ accounts), but they give a good comparison against other channels.',
+  audienceGenderLabels: { female: 'Women', male: 'Men', other: 'Other' },
+  viewsLabel: 'views',
+  moreHeading: 'We also fit',
+  moreSubheading:
+    'Our content reaches a whole-family audience, so here are a few more fields that fit advertising on our channel.',
+  moreCategories: [
+    {
       id: 'auto',
-      title: 'Cars & mobility',
-      body: 'A car is a stage for adventure: journeys and experiments that create emotion.',
+      title: 'Cars & transport',
+      body: 'Our adventures often start with a journey. For example, while testing Estonia’s most unusual Airbnbs we road-tripped across the country, so the car was on screen for a large part of the video. A car brand, rental, fuel chain or any other transport service fits such a story naturally.',
+    },
+    {
+      id: 'kindlustus',
+      title: 'Insurance & safety',
+      body: 'Our content is literally about risks and unexpected situations: winter swimming, the forest, heights, facing fears. An insurance brand can be present exactly where the viewer is thinking about risk. Our family-friendly, scandal-free reputation keeps the message trustworthy.',
     },
     {
       id: 'telekom',
       title: 'Telecom & services',
-      body: 'A broad young audience, with the benefits of a service made tangible.',
+      body: 'In our series "The last creator to leave the forest" it became clear how much good network coverage matters when you live in the woods for a week. Phones are constantly in use in our videos, so connectivity and digital services fit our content naturally.',
     },
     {
-      id: 'mangud',
-      title: 'Games & apps',
-      body: 'We reach the audience that is already on screen — in a natural, entertaining context.',
+      id: 'sport',
+      title: 'Sports & health',
+      body: 'Winter swimming, workouts and physical challenges come up in our videos all the time. We have also worked with sports and supplement brands such as MyFitness and ICONFIT.',
+    },
+    {
+      id: 'ilu',
+      title: 'Beauty & self-care',
+      body: 'On Instagram 67% of our viewers are women, and beauty and self-care products fit naturally into our everyday content. We have also worked with beauty brands, for example in teeth whitening.',
     },
     {
       id: 'reisi',
       title: 'Travel & leisure',
-      body: 'We show destinations and experiences so that viewers want to go themselves.',
-    },
-    {
-      id: 'rivad',
-      title: 'Clothing & fashion',
-      body: 'The product as a natural part of our style — authentic, not staged.',
+      body: 'A spa day at Grand Rose, a test of Estonia’s most unusual Airbnbs and travel videos from Greece. We show places and experiences so that viewers put them on their own list.',
     },
   ],
+  moreFallbackPrefix: 'Didn’t find your field?',
+  moreFallbackLink: 'Write to us',
+  moreFallbackSuffix: ' and let’s see whether your brand fits our content.',
   faqHeading: 'Frequently asked questions',
   faq: [
     {
-      question: 'Who is a popular content creator among young people in Estonia?',
+      question: 'How does a collaboration with Kozip work?',
       answer:
-        'Kozip is one of Estonia’s best-known adventure and entertainment content creators, reaching mainly 13–34-year-olds on YouTube, TikTok and Instagram. The brand is run by Mihkel Kööbi and Maia-Liis Ossip.',
+        'You tell us what you want to market. If it fits our brand, we explore your needs in more detail and propose a script. Once you approve the script, we start producing the content and advertising. Before publishing, we send you the finished video for review and can make changes where needed. Once everything fits, the video goes live on our channels.',
     },
     {
-      question: 'Which content creator fits a food brand?',
+      question: 'How fast is a video ready?',
       answer:
-        'Kozip is a great fit for food and beverage brands. We have created collaboration videos with Kikkoman, KFC and Härmavili x Selver, for example — tasting, challenge and product-feature formats that make viewers genuinely crave the product.',
+        'A short-form video takes 2 to 4 weeks from inquiry to publishing, and a YouTube integration 3 to 6 weeks. It can take longer during busy seasons, so it pays to plan your campaign well in advance and leave time to prepare. We only take on a couple of campaigns each month.',
     },
     {
-      question: 'Which Estonian YouTuber makes challenge videos?',
+      question: 'How much does a collaboration with Kozip cost?',
       answer:
-        'Kozip is known precisely for adventure and challenge videos — big productions, experiments and unexpected challenges. This format fits brands that want to be part of exciting, shareable content.',
+        'We take on collaborations starting from 1000 euros in total. For long-term partnerships we can offer more stable pricing. The exact price depends on format and scope, so ask us for a quote.',
     },
     {
-      question: 'Who reaches 13–24-year-olds in Estonia?',
+      question: 'What formats fit into one campaign?',
       answer:
-        'Kozip’s core audience is young people and young adults. We offer brands a way to reach this hard-to-capture audience through trustworthy, entertaining content.',
+        'We can do a standalone YouTube integration, a short-form video or an appearance. Within a campaign we also offer packages that let you market more effectively at a better unit price. Short-form videos always go out to five platforms at once: TikTok, Instagram Reels, YouTube Shorts, Facebook and Snapchat.',
     },
     {
-      question: 'Which influencer fits a new product launch?',
+      question: 'Do we get a say in the content?',
       answer:
-        'Kozip fits product launches because within one campaign we can make both a longer YouTube video (to explain the product) and short-form videos (to grow reach and awareness), reaching a large young audience at once.',
+        'Yes. The script is approved before filming and the finished video before publishing, with changes made where needed.',
     },
     {
-      question: 'Who makes high-quality YouTube brand collaborations in Estonia?',
+      question: 'Which brands does Kozip not fit?',
       answer:
-        'Kozip produces complete YouTube brand collaborations from idea and script to production and publishing. See real examples on our portfolio page.',
+        'We do not work with alcohol, gambling, politics or anything that in our view does not bring value to society. Our content is family-friendly and scandal-free, giving brands a safe and trustworthy platform for advertising.',
     },
     {
-      question: 'Does Kozip also offer advertising on personal channels?',
+      question: 'Who does Kozip’s content reach?',
       answer:
-        'Yes. In addition to Kozip’s brand channels, we offer advertising on Mihkel’s and Maia-Liis’s personal channels, depending on the campaign goal and target audience.',
+        'Kozip is a youthful family entertainment channel. On YouTube whole families often watch us together on a TV screen, while our short-form videos reach young people and young adults on TikTok and Instagram. In total we reach everyone from kids to their parents.',
+    },
+    {
+      question: 'Can I also advertise on Mihkel’s and Maia-Liis’s personal channels?',
+      answer:
+        'Yes. Kozip is a broad family entertainment channel, while Mihkel’s and Maia-Liis’s personal channels offer a more personal, close-knit connection. This lets the brand message reach the viewer through someone they follow and trust every day. Videos receive 20,000 to 50,000 views depending on the video and are especially well suited to beauty, sports and lifestyle brands.',
     },
   ],
-  ctaHeading: 'Are you a fit too?',
+  ctaHeading: 'Does your brand fit our story?',
   ctaText:
-    'If your brand fits one of the fields above — or you think our style matches yours — get in touch and let’s discuss what kind of collaboration would deliver the best results.',
+    'Tell us what you want to market and, if it fits our brand, we will propose a concrete plan and idea for how to market it on our channels.',
   ctaButton: 'Get in touch',
   ctaSecondary: 'See our work',
 };

@@ -8,21 +8,22 @@ import {
   TrendingUp,
   Cpu,
   Flame,
-  Dumbbell,
-  Car,
-  Radio,
-  Gamepad2,
-  Plane,
+  Sofa,
   Shirt,
-  Youtube,
-  Clapperboard,
-  Instagram,
-  Mic,
+  PartyPopper,
+  Car,
+  ShieldCheck,
+  Radio,
+  Dumbbell,
+  Sparkles,
+  Plane,
   Plus,
+  Eye,
 } from "lucide-react";
 import { getKoostooContent } from "@/lib/koostoo-content";
 import { buildAlternates, localePath } from "@/lib/site";
 import { supabase } from "@/lib/supabase";
+import AudienceCharts from "@/components/AudienceCharts";
 import JsonLd from "@/components/JsonLd";
 import { faqSchema, breadcrumbSchema } from "@/lib/schema";
 
@@ -32,14 +33,24 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
   toit: UtensilsCrossed,
   finants: TrendingUp,
   tehnoloogia: Cpu,
-  seiklus: Flame,
-  sport: Dumbbell,
-  auto: Car,
-  telekom: Radio,
-  mangud: Gamepad2,
-  reisi: Plane,
+  kodu: Sofa,
   rivad: Shirt,
+  yritused: PartyPopper,
+  auto: Car,
+  kindlustus: ShieldCheck,
+  telekom: Radio,
+  sport: Dumbbell,
+  ilu: Sparkles,
+  reisi: Plane,
 };
+
+/** "220 000" | "200100" | "74578" -> localized "220 000" / "220,000" */
+function formatViews(raw: string | null | undefined, locale: string): string | null {
+  if (!raw) return null;
+  const n = parseInt(raw.replace(/\D/g, ""), 10);
+  if (!Number.isFinite(n) || n <= 0) return null;
+  return new Intl.NumberFormat(locale === "en" ? "en-US" : "et-EE").format(n);
+}
 
 export async function generateMetadata({
   params,
@@ -70,23 +81,19 @@ export default async function KoostooPage({
   setRequestLocale(locale);
   const c = getKoostooContent(locale);
 
-  // Fetch real thumbnails for the example case studies
+  // Fetch real thumbnails + view counts for the example case studies
   const exampleSlugs = c.categories.flatMap((cat) => cat.examples.map((e) => e.slug));
   const { data: exampleProjects } = await supabase
     .from("projects")
-    .select("slug, thumbnail_url")
+    .select("slug, thumbnail_url, stat_views")
     .in("slug", exampleSlugs)
     .eq("is_visible", true);
-  const thumbBySlug = new Map(
-    (exampleProjects || []).map((p) => [p.slug, p.thumbnail_url as string | null])
+  const projectBySlug = new Map(
+    (exampleProjects || []).map((p) => [
+      p.slug,
+      { thumb: p.thumbnail_url as string | null, views: p.stat_views as string | null },
+    ])
   );
-
-  const platforms = [
-    { icon: Youtube, label: "YouTube" },
-    { icon: Clapperboard, label: "TikTok" },
-    { icon: Instagram, label: "Instagram Reels" },
-    { icon: Mic, label: locale === "en" ? "Trainings & events" : "Koolitused ja üritused" },
-  ];
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -101,24 +108,28 @@ export default async function KoostooPage({
       />
 
       {/* Hero */}
-      <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 border-b border-neutral-900 bg-neutral-950 overflow-hidden">
+      <section className="relative pt-32 pb-16 px-4 sm:px-6 lg:px-8 border-b border-neutral-900 bg-neutral-950 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(192,38,211,0.12),transparent_60%)]" />
         <div className="relative max-w-4xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tighter mb-6">
             {c.h1}
           </h1>
-          <p className="text-gray-400 text-lg leading-relaxed max-w-3xl mx-auto mb-8">
+          <p className="text-gray-400 text-lg leading-relaxed max-w-3xl mx-auto mb-10">
             {c.intro}
           </p>
-          <div className="flex flex-wrap justify-center gap-2">
-            {platforms.map(({ icon: Icon, label }) => (
-              <span
-                key={label}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-gray-300"
+
+          {/* Key stats */}
+          <div className="grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
+            {c.heroStats.map((stat) => (
+              <div
+                key={stat.label}
+                className="bg-white/5 border border-white/10 rounded-2xl px-5 py-6"
               >
-                <Icon className="w-4 h-4 text-primary" />
-                {label}
-              </span>
+                <p className="text-2xl md:text-3xl font-black text-primary mb-1">
+                  {stat.value}
+                </p>
+                <p className="text-sm text-gray-400 leading-snug">{stat.label}</p>
+              </div>
             ))}
           </div>
         </div>
@@ -171,7 +182,8 @@ export default async function KoostooPage({
                   }`}
                 >
                   {cat.examples.map((ex) => {
-                    const thumb = thumbBySlug.get(ex.slug);
+                    const project = projectBySlug.get(ex.slug);
+                    const views = formatViews(project?.views, locale);
                     return (
                       <Link
                         key={ex.slug}
@@ -179,9 +191,9 @@ export default async function KoostooPage({
                         className="group block"
                       >
                         <div className="aspect-video bg-neutral-900 rounded-xl overflow-hidden relative border border-white/5 group-hover:border-primary/50 transition-all duration-500">
-                          {thumb ? (
+                          {project?.thumb ? (
                             <img
-                              src={thumb}
+                              src={project.thumb}
                               alt={ex.label}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                             />
@@ -190,7 +202,13 @@ export default async function KoostooPage({
                               <Icon className="w-8 h-8 text-neutral-700" />
                             </div>
                           )}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                          {views && (
+                            <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full text-xs font-bold text-white">
+                              <Eye className="w-3.5 h-3.5 text-primary" />
+                              {views} {c.viewsLabel}
+                            </span>
+                          )}
                           <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-md p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-1 group-hover:translate-y-0">
                             <ArrowUpRight className="w-4 h-4 text-white" />
                           </div>
@@ -208,8 +226,23 @@ export default async function KoostooPage({
         })}
       </section>
 
+      {/* Audience: age & gender per platform */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-center mb-3">
+          {c.audienceHeading}
+        </h2>
+        <p className="text-gray-500 text-center max-w-2xl mx-auto mb-10">
+          {c.audienceIntro}
+        </p>
+        <AudienceCharts
+          tvNote={c.audienceTvNote}
+          disclaimer={c.audienceDisclaimer}
+          genderLabels={c.audienceGenderLabels}
+        />
+      </section>
+
       {/* More categories — compact */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-center mb-3">
           {c.moreHeading}
         </h2>
@@ -235,6 +268,16 @@ export default async function KoostooPage({
             );
           })}
         </div>
+        <p className="text-center text-gray-400 mt-10">
+          {c.moreFallbackPrefix}{" "}
+          <Link
+            href="/kontakt"
+            className="text-primary font-bold hover:underline underline-offset-4"
+          >
+            {c.moreFallbackLink}
+          </Link>
+          {c.moreFallbackSuffix}
+        </p>
       </section>
 
       {/* FAQ — accordion */}
