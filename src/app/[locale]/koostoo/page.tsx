@@ -18,12 +18,12 @@ import {
   Sparkles,
   Plane,
   Plus,
-  Eye,
 } from "lucide-react";
 import { getKoostooContent } from "@/lib/koostoo-content";
 import { buildAlternates, localePath } from "@/lib/site";
 import { supabase } from "@/lib/supabase";
 import AudienceCharts from "@/components/AudienceCharts";
+import LiveCaseStudyCards from "@/components/LiveCaseStudyCards";
 import JsonLd from "@/components/JsonLd";
 import { faqSchema, breadcrumbSchema } from "@/lib/schema";
 
@@ -43,14 +43,6 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
   ilu: Sparkles,
   reisi: Plane,
 };
-
-/** "220 000" | "200100" | "74578" -> localized "220 000" / "220,000" */
-function formatViews(raw: string | null | undefined, locale: string): string | null {
-  if (!raw) return null;
-  const n = parseInt(raw.replace(/\D/g, ""), 10);
-  if (!Number.isFinite(n) || n <= 0) return null;
-  return new Intl.NumberFormat(locale === "en" ? "en-US" : "et-EE").format(n);
-}
 
 export async function generateMetadata({
   params,
@@ -81,17 +73,21 @@ export default async function KoostooPage({
   setRequestLocale(locale);
   const c = getKoostooContent(locale);
 
-  // Fetch real thumbnails + view counts for the example case studies
+  // Fetch the same thumbnail and statistics fields used by each linked case study.
   const exampleSlugs = c.categories.flatMap((cat) => cat.examples.map((e) => e.slug));
   const { data: exampleProjects } = await supabase
     .from("projects")
-    .select("slug, thumbnail_url, stat_views")
+    .select("id, slug, thumbnail_url, stat_views")
     .in("slug", exampleSlugs)
     .eq("is_visible", true);
   const projectBySlug = new Map(
     (exampleProjects || []).map((p) => [
       p.slug,
-      { thumb: p.thumbnail_url as string | null, views: p.stat_views as string | null },
+      {
+        id: p.id as string,
+        thumb: p.thumbnail_url as string | null,
+        views: p.stat_views as string | null,
+      },
     ])
   );
 
@@ -174,52 +170,25 @@ export default async function KoostooPage({
                 </div>
 
                 {/* Case study cards */}
-                <div
+                <LiveCaseStudyCards
                   className={`${reversed ? "lg:order-1" : ""} ${
                     cat.examples.length === 1
                       ? "max-w-md w-full mx-auto lg:mx-0"
                       : "grid grid-cols-2 gap-4"
                   }`}
-                >
-                  {cat.examples.map((ex) => {
-                    const project = projectBySlug.get(ex.slug);
-                    const views = formatViews(project?.views, locale);
-                    return (
-                      <Link
-                        key={ex.slug}
-                        href={`/tehtud-tood/${ex.slug}`}
-                        className="group block"
-                      >
-                        <div className="aspect-video bg-neutral-900 rounded-xl overflow-hidden relative border border-white/5 group-hover:border-primary/50 transition-all duration-500">
-                          {project?.thumb ? (
-                            <img
-                              src={project.thumb}
-                              alt={ex.label}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-neutral-900 to-neutral-950">
-                              <Icon className="w-8 h-8 text-neutral-700" />
-                            </div>
-                          )}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                          {views && (
-                            <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full text-xs font-bold text-white">
-                              <Eye className="w-3.5 h-3.5 text-primary" />
-                              {views} {c.viewsLabel}
-                            </span>
-                          )}
-                          <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-md p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-1 group-hover:translate-y-0">
-                            <ArrowUpRight className="w-4 h-4 text-white" />
-                          </div>
-                          <p className="absolute bottom-3 left-3 right-3 text-sm font-bold text-white leading-snug drop-shadow">
-                            {ex.label}
-                          </p>
-                        </div>
-                      </Link>
-                    );
+                  cards={cat.examples.map((example) => {
+                    const project = projectBySlug.get(example.slug);
+                    return {
+                      id: project?.id || null,
+                      slug: example.slug,
+                      label: example.label,
+                      thumbnailUrl: project?.thumb || null,
+                      views: project?.views || null,
+                    };
                   })}
-                </div>
+                  locale={locale}
+                  viewsLabel={c.viewsLabel}
+                />
               </div>
             </article>
           );

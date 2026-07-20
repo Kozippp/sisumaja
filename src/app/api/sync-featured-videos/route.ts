@@ -1,9 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
-import { fetchYouTubeVideoData } from '@/lib/youtube';
+import { NextResponse } from 'next/server';
+import { getSupabaseServer } from '@/lib/supabase-server';
+import { fetchYouTubeVideosData } from '@/lib/youtube';
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
+    const supabase = getSupabaseServer();
+
     // Get all visible featured videos
     const { data: videos, error: fetchError } = await supabase
       .from('featured_videos')
@@ -22,43 +24,29 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true, data: [] });
     }
 
-    // Fetch fresh data from YouTube for all videos
-    const updates = await Promise.all(
-      videos.map(async (video) => {
-        try {
-          const videoData = await fetchYouTubeVideoData(video.youtube_video_id);
-          if (videoData) {
-            return {
-              id: video.id,
-              view_count: videoData.viewCount,
-              title: videoData.title,
-              thumbnail_url: videoData.thumbnailUrl
-            };
-          }
-          return null;
-        } catch (err) {
-          console.error(`Error fetching data for ${video.youtube_video_id}:`, err);
-          return null;
-        }
-      })
-    );
+    // The API accepts up to 50 IDs at once, so all carousel view counts refresh in one request.
+    const youtubeVideos = await fetchYouTubeVideosData(videos.map((video) => video.youtube_video_id));
+    const youtubeVideoById = new Map(youtubeVideos.map((video) => [video.videoId, video]));
+    const lastSyncedAt = new Date().toISOString();
+    const updates = videos.flatMap((video) => {
+      const youtubeVideo = youtubeVideoById.get(video.youtube_video_id);
+      return youtubeVideo
+        ? [{
+            id: video.id,
+            view_count: youtubeVideo.viewCount,
+            title: youtubeVideo.title,
+            thumbnail_url: youtubeVideo.thumbnailUrl,
+          }]
+        : [];
+    });
 
-    // Filter out failed updates and update database
-    const validUpdates = updates.filter(u => u !== null);
-    
-    for (const update of validUpdates) {
-      if (update) {
-        await supabase
-          .from('featured_videos')
-          .update({
-            view_count: update.view_count,
-            title: update.title,
-            thumbnail_url: update.thumbnail_url,
-            last_synced_at: new Date().toISOString()
-          })
-          .eq('id', update.id);
-      }
-    }
+    await Promise.all(updates.map(async (update) => {
+      const { error } = await supabase
+        .from('featured_videos')
+        .update({ ...update, last_synced_at: lastSyncedAt })
+        .eq('id', update.id);
+      if (error) console.error(`Error syncing featured video ${update.id}:`, error);
+    }));
 
     // Return updated videos
     const { data: updatedVideos } = await supabase

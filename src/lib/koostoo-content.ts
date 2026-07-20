@@ -92,7 +92,7 @@ const et: KoostooContent = {
     {
       id: 'tehnoloogia',
       title: 'Tehnoloogia ja seadmed',
-      body: 'Tehnika on meie videote loomulik osa: suured produktsioonid, seadmed ja väljakutsed käivad meie sisust läbi. Seade töötab meie videotes kõige paremini siis, kui see on osa loost. Philips OneBlade’iga vahetasime 24 tunniks elud ja tegime lühisketši kiirest hommikust. Tooteasetus, mida vaadatakse nagu sisu, sest see ongi sisu.',
+      body: 'Kozipi videod sobivad hästi eri tüüpi tehnika reklaamimiseks, sest saame seda oma igapäevastes lugudes päriselt kasutada ja näidata. Näiteks muruniidukid, köögitarvikud, tolmuimejad ja habemeajamismasinad — ning kõik muu, mis saab meie loos loomulikult kasutusse tulla.',
       examples: [
         { label: 'Philips: vahetasime elud 24h', slug: 'Philips_vahetasime_elud_24h' },
         { label: 'Philips OneBlade’i sketš', slug: 'philips_oneblade' },
@@ -253,7 +253,7 @@ const en: KoostooContent = {
     {
       id: 'tehnoloogia',
       title: 'Technology & devices',
-      body: 'Tech is a natural part of our videos: big productions, devices and challenges run through our content. A device works best in our videos when it is part of the story. With Philips OneBlade, we swapped lives for 24 hours and made a short sketch about a fast morning. Product placement that gets watched like content, because it is content.',
+      body: 'Kozip videos are a strong fit for all kinds of tech because we can genuinely use and show it in our everyday stories. From lawnmowers and kitchen appliances to vacuum cleaners and electric shavers — anything that can naturally become part of the story.',
       examples: [
         { label: 'Philips: we swapped lives for 24h', slug: 'Philips_vahetasime_elud_24h' },
         { label: 'Philips OneBlade sketch', slug: 'philips_oneblade' },
