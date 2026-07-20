@@ -47,10 +47,10 @@ export default function DashboardPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm('Oled kindel, et soovid seda tööd kustutada? See peidetakse ka avalikust "Tehtud tööd" vaatest.')) {
+    if (confirm('Oled kindel, et soovid selle töö JÄÄDAVALT kustutada? Kui tahad seda ainult peita, kasuta silma-ikooni.')) {
       const { error } = await supabase
         .from('projects')
-        .update({ is_visible: false })
+        .delete()
         .eq('id', id);
 
       if (error) {
