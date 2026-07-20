@@ -19,6 +19,8 @@ export default function AdminFeaturedVideos() {
   const [syncingId, setSyncingId] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editUrl, setEditUrl] = useState("");
+  const [draggingId, setDraggingId] = useState<string | null>(null);
+  const [savingOrder, setSavingOrder] = useState(false);
 
   async function fetchVideos() {
     const { data, error } = await supabase
@@ -134,28 +136,46 @@ export default function AdminFeaturedVideos() {
     }
   }
 
-  async function handleReorder(id: string, direction: "up" | "down") {
-    const currentIndex = videos.findIndex((v) => v.id === id);
-    if (currentIndex === -1) return;
-    if (direction === "up" && currentIndex === 0) return;
-    if (direction === "down" && currentIndex === videos.length - 1) return;
+  async function saveOrder(orderedVideos: FeaturedVideo[]) {
+    setSavingOrder(true);
+    const results = await Promise.all(
+      orderedVideos.map((video, index) =>
+        supabase
+          .from("featured_videos")
+          .update({ display_order: index })
+          .eq("id", video.id)
+      )
+    );
 
-    const swapIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
-    const currentVideo = videos[currentIndex];
-    const swapVideo = videos[swapIndex];
+    const failedUpdate = results.find((result) => result.error);
+    if (failedUpdate?.error) {
+      setError("Järjekorra salvestamine ebaõnnestus. Palun proovi uuesti.");
+      await fetchVideos();
+    } else {
+      setVideos(orderedVideos.map((video, index) => ({ ...video, display_order: index })));
+    }
+    setSavingOrder(false);
+  }
 
-    // Swap display orders
-    await supabase
-      .from("featured_videos")
-      .update({ display_order: swapVideo.display_order })
-      .eq("id", currentVideo.id);
+  function handleDrop(event: React.DragEvent<HTMLDivElement>, targetId: string) {
+    event.preventDefault();
+    const sourceId = draggingId;
+    setDraggingId(null);
+    if (!sourceId || sourceId === targetId || savingOrder) return;
 
-    await supabase
-      .from("featured_videos")
-      .update({ display_order: currentVideo.display_order })
-      .eq("id", swapVideo.id);
+    const draggedIndex = videos.findIndex((video) => video.id === sourceId);
+    const targetIndex = videos.findIndex((video) => video.id === targetId);
+    if (draggedIndex < 0 || targetIndex < 0) return;
 
-    fetchVideos();
+    const targetBounds = event.currentTarget.getBoundingClientRect();
+    const placeAfter = event.clientY > targetBounds.top + targetBounds.height / 2;
+    const reorderedVideos = [...videos];
+    const [draggedVideo] = reorderedVideos.splice(draggedIndex, 1);
+    const updatedTargetIndex = reorderedVideos.findIndex((video) => video.id === targetId);
+    reorderedVideos.splice(updatedTargetIndex + (placeAfter ? 1 : 0), 0, draggedVideo);
+
+    setVideos(reorderedVideos);
+    void saveOrder(reorderedVideos);
   }
 
   function startEditUrl(video: FeaturedVideo) {
@@ -281,11 +301,21 @@ export default function AdminFeaturedVideos() {
           </div>
         ) : (
           <div className="space-y-4">
+            <p className="text-sm text-gray-500 -mb-1">
+              Lohista videokaarti käepidemest, et muuta karusselli järjekorda.
+              {savingOrder && <span className="ml-2 text-fuchsia-400">Salvestan…</span>}
+            </p>
             {videos.map((video, index) => (
               <div
                 key={video.id}
-                className={`bg-neutral-900 rounded-xl p-6 border ${
-                  video.is_visible ? "border-white/10" : "border-gray-700"
+                onDragOver={(event) => event.preventDefault()}
+                onDrop={(event) => handleDrop(event, video.id)}
+                className={`bg-neutral-900 rounded-xl p-6 border transition-colors ${
+                  draggingId && draggingId !== video.id
+                    ? "border-fuchsia-500/50"
+                    : video.is_visible
+                      ? "border-white/10"
+                      : "border-gray-700"
                 }`}
               >
                 <div className="flex gap-6">
@@ -307,26 +337,33 @@ export default function AdminFeaturedVideos() {
                   {/* Content */}
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-2">
-                      <h3 className="text-lg font-bold line-clamp-2">
-                        {video.title}
-                      </h3>
-                      <div className="flex gap-2">
+                      <div className="flex items-start gap-3 pr-4">
                         <button
-                          onClick={() => handleReorder(video.id, "up")}
-                          disabled={index === 0}
-                          className="p-2 hover:bg-white/5 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                          title="Move up"
+                          type="button"
+                          draggable={!savingOrder}
+                          onDragStart={(event) => {
+                            event.dataTransfer.effectAllowed = "move";
+                            event.dataTransfer.setData("text/plain", video.id);
+                            setDraggingId(video.id);
+                          }}
+                          onDragEnd={() => setDraggingId(null)}
+                          disabled={savingOrder}
+                          className="mt-0.5 p-2 text-gray-500 hover:text-white hover:bg-white/5 rounded-lg cursor-grab active:cursor-grabbing disabled:cursor-not-allowed disabled:opacity-40 transition-colors"
+                          title="Lohista järjekorra muutmiseks"
+                          aria-label="Lohista järjekorra muutmiseks"
                         >
-                          <GripVertical className="w-4 h-4 rotate-180" />
+                          <GripVertical className="w-5 h-5" />
                         </button>
-                        <button
-                          onClick={() => handleReorder(video.id, "down")}
-                          disabled={index === videos.length - 1}
-                          className="p-2 hover:bg-white/5 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                          title="Move down"
-                        >
-                          <GripVertical className="w-4 h-4" />
-                        </button>
+                        <div>
+                          <div className="inline-flex items-center rounded-full bg-fuchsia-500/10 border border-fuchsia-500/20 px-2.5 py-1 text-xs font-bold text-fuchsia-300 mb-2">
+                            {video.is_visible
+                              ? `Kuvatakse #${videos.slice(0, index + 1).filter((item) => item.is_visible).length}`
+                              : "Peidetud"}
+                          </div>
+                          <h3 className="text-lg font-bold line-clamp-2">
+                            {video.title}
+                          </h3>
+                        </div>
                       </div>
                     </div>
 
