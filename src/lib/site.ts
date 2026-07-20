@@ -77,7 +77,7 @@ export function absoluteUrl(path = '/'): string {
 
 /**
  * Lokaliseeritud tee 'as-needed' strateegiaga:
- * eesti = ilma prefiksita (/koostoo), inglise = /en prefiksiga (/en/koostoo).
+ * eesti = ilma prefiksita (/kellele_sobime), inglise = /en prefiksiga (/en/kellele_sobime).
  */
 export function localePath(path: string, locale: string): string {
   const p = path.startsWith('/') ? path : `/${path}`;

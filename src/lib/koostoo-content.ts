@@ -1,5 +1,5 @@
 /**
- * Sisu lehele /koostoo ("Kellele Kozip sobib"). Kakskeelne (et/en).
+ * Sisu lehele /kellele_sobime ("Kellele Kozip sobib"). Kakskeelne (et/en).
  *
  * NB! Näidete linkides on kasutatud AINULT päris tehtud töid (projects tabel).
  * Ära lisa siia väljamõeldud koostöid ega numbreid — AI ja kliendid loevad seda.

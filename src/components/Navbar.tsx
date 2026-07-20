@@ -55,7 +55,7 @@ export default function Navbar() {
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-8">
               <NavLink href="/">{t('home')}</NavLink>
-              <NavLink href="/koostoo">{t('collaboration')}</NavLink>
+              <NavLink href="/kellele_sobime">{t('collaboration')}</NavLink>
               <NavLink href="/tehtud-tood">{t('portfolio')}</NavLink>
               <NavLink href="/artiklid">{t('articles')}</NavLink>
               <NavLink href="/kontakt">{t('contact')}</NavLink>
@@ -95,7 +95,7 @@ export default function Navbar() {
             <MobileNavLink href="/" onClick={() => setIsOpen(false)}>
               {t('home')}
             </MobileNavLink>
-            <MobileNavLink href="/koostoo" onClick={() => setIsOpen(false)}>
+            <MobileNavLink href="/kellele_sobime" onClick={() => setIsOpen(false)}>
               {t('collaboration')}
             </MobileNavLink>
             <MobileNavLink href="/tehtud-tood" onClick={() => setIsOpen(false)}>

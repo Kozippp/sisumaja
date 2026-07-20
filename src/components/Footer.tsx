@@ -48,7 +48,7 @@ export default function Footer() {
             <h4 className="text-white font-bold uppercase tracking-wider mb-6">{t('navigation')}</h4>
             <ul className="space-y-4">
               <FooterLink href="/">{tNav('home')}</FooterLink>
-              <FooterLink href="/koostoo">{tNav('collaboration')}</FooterLink>
+              <FooterLink href="/kellele_sobime">{tNav('collaboration')}</FooterLink>
               <FooterLink href="/tehtud-tood">{tNav('portfolio')}</FooterLink>
               <FooterLink href="/artiklid">{tNav('articles')}</FooterLink>
               <FooterLink href="/kontakt">{tNav('contact')}</FooterLink>

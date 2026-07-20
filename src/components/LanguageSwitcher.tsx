@@ -26,7 +26,7 @@ export function LanguageSwitcher({ currentLocale: initialLocale, variant = 'navb
     setOptimisticLocale(locale);
     track('language_switch', { from: optimisticLocale, to: locale });
 
-    // Vaheta keelt URL-i kaudu (säilitab praeguse lehe), nt /koostoo <-> /en/koostoo
+    // Vaheta keelt URL-i kaudu (säilitab praeguse lehe), nt /kellele_sobime <-> /en/kellele_sobime
     startTransition(() => {
       router.replace(pathname, { locale });
     });

@@ -30,7 +30,7 @@ function entry(
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     entry('/', { changeFrequency: 'weekly', priority: 1 }),
-    entry('/koostoo', { changeFrequency: 'monthly', priority: 0.9 }),
+    entry('/kellele_sobime', { changeFrequency: 'monthly', priority: 0.9 }),
     entry('/tehtud-tood', { changeFrequency: 'weekly', priority: 0.8 }),
     entry('/artiklid', { changeFrequency: 'weekly', priority: 0.7 }),
     entry('/kontakt', { changeFrequency: 'yearly', priority: 0.6 }),

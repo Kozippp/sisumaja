@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Vaatajaskonna vanuse- ja soojaotus platvormide kaupa (/koostoo leht).
+ * Vaatajaskonna vanuse- ja soojaotus platvormide kaupa (/kellele_sobime leht).
  * Andmed: YouTube Studio / TikTok Analytics / Instagram Insights, juuli 2026.
  * Uuenda numbreid siin, kui analüütika oluliselt muutub.
  */
