@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Zap, Loader2, Check, X, ImageIcon, Undo2 } from 'lucide-react';
-import { collectAllImages, loadOptimizationMappings, saveOptimizationMappings, parseSupabaseStorageUrl, type ImageEntry } from '@/lib/imageOptimizer';
+import { collectAllImages, loadOptimizationMappings, saveOptimizationMappings, parseSupabaseStorageUrl, type ImageEntry, type ImageSource } from '@/lib/imageOptimizer';
 import { optimizeImage } from '@/lib/optimizeImage';
 
 export default function AdminImageOptimizer() {
@@ -17,7 +17,26 @@ export default function AdminImageOptimizer() {
     optimizedUrl: string;
     optimizedFile: File;
   } | null>(null);
+  const [isOptimizingAll, setIsOptimizingAll] = useState(false);
+  const [bulkProgress, setBulkProgress] = useState({ completed: 0, total: 0 });
   const router = useRouter();
+
+  async function updateImageSourceUrl(source: ImageSource, url: string) {
+    switch (source.table) {
+      case 'retention_images':
+        return supabase.from('retention_images').update({ image_url: url }).eq('id', source.rowId);
+      case 'testimonials':
+        return supabase.from('testimonials').update({ image_url: url }).eq('id', source.rowId);
+      case 'client_logos':
+        return supabase.from('client_logos').update({ logo_url: url }).eq('id', source.rowId);
+      case 'shorts_videos':
+        return supabase.from('shorts_videos').update({ thumbnail_url: url }).eq('id', source.rowId);
+      case 'youtube_ad_videos':
+        return supabase.from('youtube_ad_videos').update({ thumbnail_url: url }).eq('id', source.rowId);
+      default:
+        return { error: new Error(`Unsupported image source: ${source.table}`) };
+    }
+  }
 
   useEffect(() => {
     const run = async () => {
@@ -40,22 +59,26 @@ export default function AdminImageOptimizer() {
     run();
   }, [router]);
 
+  async function createOptimizedFile(entry: ImageEntry): Promise<File | null> {
+    const { data: blob, error } = await supabase.storage
+      .from(entry.bucket)
+      .download(entry.path);
+
+    if (error || !blob) {
+      throw new Error(error?.message ?? 'Failed to download image');
+    }
+
+    const ext = entry.path.split('.').pop() || 'jpg';
+    const file = new File([blob], `image.${ext}`, { type: blob.type });
+    const optimized = await optimizeImage(file);
+    return optimized === file ? null : optimized;
+  }
+
   async function handleOptimizeClick(entry: ImageEntry) {
     setOptimizingId(entry.url);
     try {
-      const { data: blob, error } = await supabase.storage
-        .from(entry.bucket)
-        .download(entry.path);
-
-      if (error || !blob) {
-        throw new Error(error?.message ?? 'Failed to download image');
-      }
-
-      const ext = entry.path.split('.').pop() || 'jpg';
-      const file = new File([blob], `image.${ext}`, { type: blob.type });
-      const optimized = await optimizeImage(file);
-
-      if (optimized === file) {
+      const optimized = await createOptimizedFile(entry);
+      if (!optimized) {
         alert('Image could not be optimized (e.g. already WebP or unsupported format)');
         return;
       }
@@ -77,69 +100,69 @@ export default function AdminImageOptimizer() {
     }
   }
 
+  async function replaceWithOptimized(entry: ImageEntry, optimizedFile: File) {
+    const newPath = `optimized/${Date.now()}-${Math.random().toString(36).slice(2)}.webp`;
+
+    const { error: uploadError } = await supabase.storage
+      .from(entry.bucket)
+      .upload(newPath, optimizedFile, { upsert: true });
+
+    if (uploadError) throw uploadError;
+
+    const { data } = supabase.storage.from(entry.bucket).getPublicUrl(newPath);
+    const newUrl = data.publicUrl;
+
+    const updatedRows = new Set<string>();
+    for (const src of entry.sources) {
+      const rowKey = `${src.table}:${src.rowId}`;
+      if (updatedRows.has(rowKey)) continue;
+
+      if (src.table === 'projects') {
+        const { data: project } = await supabase
+          .from('projects')
+          .select('thumbnail_url, client_avatar_url, media_gallery, content')
+          .eq('id', src.rowId)
+          .single();
+
+        if (!project) continue;
+
+        const updates: Record<string, unknown> = {};
+        if (project.thumbnail_url === entry.url) updates.thumbnail_url = newUrl;
+        if (project.client_avatar_url === entry.url) updates.client_avatar_url = newUrl;
+        if (Array.isArray(project.media_gallery) && project.media_gallery.includes(entry.url)) {
+          updates.media_gallery = (project.media_gallery as string[]).map((u) => u === entry.url ? newUrl : u);
+        }
+        if (Array.isArray(project.content) && JSON.stringify(project.content).includes(entry.url)) {
+          updates.content = replaceUrlInContent(project.content, entry.url, newUrl);
+        }
+
+        if (Object.keys(updates).length > 0) {
+          await supabase.from('projects').update(updates).eq('id', src.rowId);
+          updatedRows.add(rowKey);
+        }
+      } else {
+        const { error } = await updateImageSourceUrl(src, newUrl);
+
+        if (!error) updatedRows.add(rowKey);
+      }
+    }
+
+    const mappings = await loadOptimizationMappings(supabase);
+    mappings[newUrl] = entry.url;
+    await saveOptimizationMappings(supabase, mappings);
+
+    setImages(prev => prev.map(img =>
+      img.url === entry.url
+        ? { ...img, url: newUrl, path: newPath, isOptimized: true, originalUrl: entry.url }
+        : img
+    ));
+  }
+
   async function handleUseOptimized() {
     if (!previewEntry) return;
     setOptimizingId(previewEntry.entry.url);
     try {
-      const { entry, optimizedFile } = previewEntry;
-      const newPath = `optimized/${Date.now()}-${Math.random().toString(36).slice(2)}.webp`;
-
-      const { error: uploadError } = await supabase.storage
-        .from(entry.bucket)
-        .upload(newPath, optimizedFile, { upsert: true });
-
-      if (uploadError) throw uploadError;
-
-      const { data } = supabase.storage.from(entry.bucket).getPublicUrl(newPath);
-      const newUrl = data.publicUrl;
-
-      const updatedRows = new Set<string>();
-      for (const src of entry.sources) {
-        const rowKey = `${src.table}:${src.rowId}`;
-        if (updatedRows.has(rowKey)) continue;
-
-        if (src.table === 'projects') {
-          const { data: project } = await supabase
-            .from('projects')
-            .select('thumbnail_url, client_avatar_url, media_gallery, content')
-            .eq('id', src.rowId)
-            .single();
-
-          if (!project) continue;
-
-          const updates: Record<string, unknown> = {};
-          if (project.thumbnail_url === entry.url) updates.thumbnail_url = newUrl;
-          if (project.client_avatar_url === entry.url) updates.client_avatar_url = newUrl;
-          if (Array.isArray(project.media_gallery) && project.media_gallery.includes(entry.url)) {
-            updates.media_gallery = (project.media_gallery as string[]).map((u) => u === entry.url ? newUrl : u);
-          }
-          if (Array.isArray(project.content) && JSON.stringify(project.content).includes(entry.url)) {
-            updates.content = replaceUrlInContent(project.content, entry.url, newUrl);
-          }
-
-          if (Object.keys(updates).length > 0) {
-            await supabase.from('projects').update(updates).eq('id', src.rowId);
-            updatedRows.add(rowKey);
-          }
-        } else {
-          const { error } = await (supabase as any)
-            .from(src.table)
-            .update({ [src.column]: newUrl })
-            .eq('id', src.rowId);
-
-          if (!error) updatedRows.add(rowKey);
-        }
-      }
-
-      const mappings = await loadOptimizationMappings(supabase);
-      mappings[newUrl] = entry.url;
-      await saveOptimizationMappings(supabase, mappings);
-
-      setImages(prev => prev.map(img =>
-        img.url === entry.url
-          ? { ...img, url: newUrl, path: newPath, isOptimized: true, originalUrl: entry.url }
-          : img
-      ));
+      await replaceWithOptimized(previewEntry.entry, previewEntry.optimizedFile);
       setPreviewEntry(null);
     } catch (err) {
       console.error(err);
@@ -147,6 +170,40 @@ export default function AdminImageOptimizer() {
     } finally {
       setOptimizingId(null);
     }
+  }
+
+  async function handleOptimizeAll() {
+    const entriesToOptimize = images.filter((entry) => !entry.isOptimized);
+    if (entriesToOptimize.length === 0 || isOptimizingAll) return;
+    if (!confirm(`Optimize and replace all ${entriesToOptimize.length} unoptimized images with WebP files?`)) return;
+
+    setIsOptimizingAll(true);
+    setBulkProgress({ completed: 0, total: entriesToOptimize.length });
+    let optimizedCount = 0;
+    let skippedCount = 0;
+    let failedCount = 0;
+
+    for (const [index, entry] of entriesToOptimize.entries()) {
+      setOptimizingId(entry.url);
+      try {
+        const optimizedFile = await createOptimizedFile(entry);
+        if (!optimizedFile) {
+          skippedCount += 1;
+        } else {
+          await replaceWithOptimized(entry, optimizedFile);
+          optimizedCount += 1;
+        }
+      } catch (err) {
+        console.error(`Failed to optimize ${entry.url}:`, err);
+        failedCount += 1;
+      } finally {
+        setBulkProgress({ completed: index + 1, total: entriesToOptimize.length });
+      }
+    }
+
+    setOptimizingId(null);
+    setIsOptimizingAll(false);
+    alert(`Optimization complete: ${optimizedCount} optimized, ${skippedCount} skipped, ${failedCount} failed.`);
   }
 
   async function handleRevertToOriginal(entry: ImageEntry) {
@@ -187,10 +244,7 @@ export default function AdminImageOptimizer() {
             updatedRows.add(rowKey);
           }
         } else {
-          const { error } = await (supabase as any)
-            .from(src.table)
-            .update({ [src.column]: newUrl })
-            .eq('id', src.rowId);
+          const { error } = await updateImageSourceUrl(src, newUrl);
 
           if (!error) updatedRows.add(rowKey);
         }
@@ -243,6 +297,8 @@ export default function AdminImageOptimizer() {
     );
   }
 
+  const unoptimizedCount = images.filter((entry) => !entry.isOptimized).length;
+
   return (
     <div className="min-h-screen bg-black pt-32 pb-12 px-4">
       <div className="max-w-7xl mx-auto">
@@ -253,11 +309,23 @@ export default function AdminImageOptimizer() {
           >
             <ArrowLeft className="w-5 h-5" />
           </Link>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <ImageIcon className="w-6 h-6 text-amber-500" />
-            Image Optimizer
-          </h1>
-          <div />
+          <div className="flex items-center gap-4">
+            <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+              <ImageIcon className="w-6 h-6 text-amber-500" />
+              Image Optimizer
+            </h1>
+            <button
+              type="button"
+              onClick={handleOptimizeAll}
+              disabled={isOptimizingAll || unoptimizedCount === 0 || !!previewEntry}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-500 text-black font-bold hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              {isOptimizingAll ? <Loader2 className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />}
+              {isOptimizingAll
+                ? `Optimizing ${bulkProgress.completed}/${bulkProgress.total}`
+                : `Optimize all (${unoptimizedCount})`}
+            </button>
+          </div>
         </div>
 
         <p className="text-gray-400 mb-6">
@@ -295,7 +363,7 @@ export default function AdminImageOptimizer() {
                     <button
                       type="button"
                       onClick={() => handleOptimizeClick(entry)}
-                      disabled={entry.isOptimized || optimizingId === entry.url}
+                      disabled={isOptimizingAll || entry.isOptimized || optimizingId === entry.url}
                       className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium transition-colors"
                     >
                       {optimizingId === entry.url ? (
@@ -309,7 +377,7 @@ export default function AdminImageOptimizer() {
                       <button
                         type="button"
                         onClick={() => handleRevertToOriginal(entry)}
-                        disabled={optimizingId === entry.url}
+                        disabled={isOptimizingAll || optimizingId === entry.url}
                         className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-neutral-700 text-gray-300 hover:bg-neutral-600 disabled:opacity-50 text-sm font-medium transition-colors"
                         title="Revert to original"
                       >
