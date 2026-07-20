@@ -1,9 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { getSupabaseServer } from '@/lib/supabase-server';
 import { extractYouTubeVideoId, fetchYouTubeVideoData } from '@/lib/youtube';
+
+async function verifyAdmin(request: NextRequest): Promise<boolean> {
+  const authHeader = request.headers.get('authorization');
+  if (!authHeader?.startsWith('Bearer ')) return false;
+
+  const accessToken = authHeader.slice(7);
+  const supabase = getSupabaseServer();
+  const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+  return !error && !!user;
+}
 
 export async function POST(request: NextRequest) {
   try {
+    if (!await verifyAdmin(request)) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const supabase = getSupabaseServer();
     const { youtubeUrl } = await request.json();
 
     if (!youtubeUrl) {
@@ -77,6 +92,11 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
+    if (!await verifyAdmin(request)) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const supabase = getSupabaseServer();
     const { id } = await request.json();
 
     if (!id) {

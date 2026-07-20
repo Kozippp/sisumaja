@@ -20,12 +20,7 @@ export default function AdminFeaturedVideos() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editUrl, setEditUrl] = useState("");
 
-  useEffect(() => {
-    fetchVideos();
-  }, []);
-
   async function fetchVideos() {
-    setLoading(true);
     const { data, error } = await supabase
       .from("featured_videos")
       .select("*")
@@ -39,6 +34,36 @@ export default function AdminFeaturedVideos() {
     setLoading(false);
   }
 
+  async function getAdminHeaders() {
+    const { data: { session } } = await supabase.auth.getSession();
+    return {
+      "Content-Type": "application/json",
+      ...(session ? { Authorization: `Bearer ${session.access_token}` } : {}),
+    };
+  }
+
+  useEffect(() => {
+    let isMounted = true;
+
+    void supabase
+      .from("featured_videos")
+      .select("*")
+      .order("display_order", { ascending: true })
+      .then(({ data, error }) => {
+        if (!isMounted) return;
+        if (error) {
+          console.error("Error fetching videos:", error);
+        } else {
+          setVideos(data || []);
+        }
+        setLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   async function handleAddVideo(e: React.FormEvent) {
     e.preventDefault();
     setError("");
@@ -47,7 +72,7 @@ export default function AdminFeaturedVideos() {
     try {
       const response = await fetch("/api/featured-videos", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: await getAdminHeaders(),
         body: JSON.stringify({ youtubeUrl: newVideoUrl }),
       });
 
@@ -61,7 +86,7 @@ export default function AdminFeaturedVideos() {
 
       setNewVideoUrl("");
       fetchVideos();
-    } catch (err) {
+    } catch {
       setError("Failed to add video");
     }
     setAddingVideo(false);
@@ -72,7 +97,7 @@ export default function AdminFeaturedVideos() {
     try {
       const response = await fetch("/api/featured-videos", {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: await getAdminHeaders(),
         body: JSON.stringify({ id }),
       });
 
