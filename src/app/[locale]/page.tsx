@@ -229,8 +229,10 @@ export default async function Home({
             {/* Two Column Layout: Instagram Profile (Left) + Text (Right) on desktop. Mobile: Text first, Profile below, both centered in viewport */}
             <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center justify-items-center mb-6 pt-[18vh] lg:pt-0">
             
-            {/* Oval Glow Effect Behind Both Elements */}
-            <div className="absolute inset-0 -inset-x-20 bg-fuchsia-500/20 rounded-full blur-[100px] opacity-50 animate-pulse"></div>
+            {/* Oval Glow Effect Behind Both Elements.
+                NB: animeeritud suure raadiusega blur re-komponeeris iga kaadri
+                ja külmutas mobiili GPU – seetõttu staatiline (animate-pulse eemaldatud). */}
+            <div className="hero-oval-glow absolute inset-0 -inset-x-20 bg-fuchsia-500/20 rounded-full blur-[100px] opacity-50"></div>
             
             {/* Main Text - order-1 on mobile (top), order-2 on desktop (right) */}
             <div

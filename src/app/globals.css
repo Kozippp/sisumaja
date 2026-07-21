@@ -87,6 +87,25 @@
   }
 }
 
+/* --- Mobiili GPU-jõudlus ---
+   Suure raadiusega blur() ja backdrop-filter on telefoni GPU-l väga kulukad
+   (Safaris kõige hullem). ANIMEERITUD blur re-komponeerib iga kaadri ja
+   küllastab GPU – see põhjustas mobiilis pika "hall ekraan" külmumise.
+   Mobiilis: külmutame glow-animatsioonid ja vähendame blur-raadiust.
+   Arvutis jääb efekt täies mahus alles. */
+@media (max-width: 900px) {
+  /* Külmuta animeeritud glow'd – animeeritud blur re-komponeerib iga kaadri. */
+  .hero-glow-one,
+  .hero-glow-two {
+    animation: none;
+  }
+  /* Kärbi kõik suure raadiusega blur'id (blur-[100px]..blur-[150px]) mobiilil.
+     Väiksem raadius = kordades odavam GPU-komposiit, visuaalselt peaaegu sama. */
+  [class*="blur-[1"] {
+    filter: blur(40px);
+  }
+}
+
 /* Scroll-reveal (sisse-hõljumine kerimisel) – puhas CSS, JS-i pole vaja.
    Sisu on HTML-is kohe nähtav. Brauserites, mis toetavad scroll-driven
    animatsioone (kaasaegne Safari/Chrome), hõljub sisu vaatesse; vanemad
