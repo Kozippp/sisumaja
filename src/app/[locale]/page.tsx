@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import { Link } from "@/i18n/navigation";
-import { ArrowRight, Play, Star, Zap, TrendingUp, Clapperboard, Users, MessageCircle, CheckCircle, Youtube, Video, Mic, BadgeCheck, Smartphone, Repeat, Eye, BarChart3, ThumbsUp, Target } from "lucide-react";
+import { ArrowRight, Play, Zap, TrendingUp, Users, Youtube, Video, Mic, BadgeCheck, Smartphone, BarChart3, ThumbsUp } from "lucide-react";
 import Image from "next/image";
 import { Database } from "@/types/database.types";
 import * as motion from "framer-motion/client";
@@ -9,12 +9,11 @@ import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { YouTubeComparisonTable } from "@/components/YouTubeComparisonTable";
 import { VideoPlayer } from "@/components/VideoPlayer";
 import { StandardVideoPlayer } from "@/components/StandardVideoPlayer";
-import { SocialMediaComparisonTable } from "@/components/SocialMediaComparisonTable";
 import { TrainingSection } from "@/components/TrainingSection";
-import { RetentionImagesModal } from "@/components/RetentionImagesModal";
 import { RetentionLink } from "@/components/RetentionLink";
 import { ContactForm } from "@/components/ContactForm";
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Testimonial } from '@/types/testimonials';
 
 export const revalidate = 60;
 
@@ -133,6 +132,16 @@ async function getRetentionImages(): Promise<RetentionImage[]> {
   return data || [];
 }
 
+async function getTestimonials(): Promise<Testimonial[]> {
+  const { data } = await supabase
+    .from("testimonials")
+    .select("*")
+    .eq("status", "published")
+    .order("order", { ascending: true })
+    .order("created_at", { ascending: false });
+  return data || [];
+}
+
 export default async function Home({
   params,
 }: {
@@ -142,22 +151,36 @@ export default async function Home({
   setRequestLocale(locale);
   const t = await getTranslations();
   
-  const recentProjects = await getRecentProjects();
-  const youtubeProjects = await getYoutubeProjects();
-  const shortsProjects = await getShortsProjects();
-  const trainingProjects = await getTrainingProjects();
-  const clientLogos = await getClientLogos();
-  const socialStats = await getSocialStats();
-  const featuredVideos = await getFeaturedVideos();
-  const shortsVideos = await getShortsVideos();
-  const youtubeAdVideos = await getYoutubeAdVideos();
-  const retentionImages = await getRetentionImages();
+  const [
+    recentProjects,
+    youtubeProjects,
+    shortsProjects,
+    trainingProjects,
+    clientLogos,
+    socialStats,
+    featuredVideos,
+    shortsVideos,
+    youtubeAdVideos,
+    retentionImages,
+    testimonials,
+  ] = await Promise.all([
+    getRecentProjects(),
+    getYoutubeProjects(),
+    getShortsProjects(),
+    getTrainingProjects(),
+    getClientLogos(),
+    getSocialStats(),
+    getFeaturedVideos(),
+    getShortsVideos(),
+    getYoutubeAdVideos(),
+    getRetentionImages(),
+    getTestimonials(),
+  ]);
 
   // Localize projects
   const localizedRecentProjects = recentProjects.map(p => getLocalizedProject(p, locale));
   const localizedYoutubeProjects = youtubeProjects.map(p => getLocalizedProject(p, locale));
   const localizedShortsProjects = shortsProjects.map(p => getLocalizedProject(p, locale));
-  const localizedTrainingProjects = trainingProjects.map(p => getLocalizedProject(p, locale));
 
   const SERVICES = [
     {
@@ -192,15 +215,11 @@ export default async function Home({
         {/* Abstract Background */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-fuchsia-900/20 via-black to-black opacity-50" />
-          <motion.div 
-            animate={{ scale: [1, 1.2, 1], rotate: [0, 45, 0], opacity: [0.3, 0.5, 0.3] }}
-            transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-1/4 left-1/4 w-96 h-96 bg-fuchsia-600/20 rounded-full blur-[100px]"
+          <div
+            className="hero-glow-one absolute top-1/4 left-1/4 w-96 h-96 bg-fuchsia-600/20 rounded-full blur-[100px]"
           />
-          <motion.div 
-            animate={{ scale: [1, 1.3, 1], x: [0, 50, 0], opacity: [0.2, 0.4, 0.2] }}
-            transition={{ duration: 25, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-            className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[120px]"
+          <div
+            className="hero-glow-two absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[120px]"
           />
         </div>
 
@@ -215,23 +234,17 @@ export default async function Home({
             <div className="absolute inset-0 -inset-x-20 bg-fuchsia-500/20 rounded-full blur-[100px] opacity-50 animate-pulse"></div>
             
             {/* Main Text - order-1 on mobile (top), order-2 on desktop (right) */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative text-center lg:text-left z-10 order-1 lg:order-2 w-full"
+            <div
+              className="hero-enter-right relative text-center lg:text-left z-10 order-1 lg:order-2 w-full"
             >
               <h1 className="text-2xl md:text-3xl lg:text-4xl font-black leading-tight mb-6">
                 {t('hero.title')}<br />{locale === 'et' ? 'Eesti ' : ''}<span className="text-fuchsia-500">{t('hero.titleBold')}</span><br />{t('hero.titleEnd')}
               </h1>
-            </motion.div>
+            </div>
 
             {/* Instagram Profile Card - order-2 on mobile (below text), order-1 on desktop (left). Smaller on mobile */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              className="relative flex justify-center lg:justify-end z-10 order-2 lg:order-1 w-full"
+            <div
+              className="hero-enter-left relative flex justify-center lg:justify-end z-10 order-2 lg:order-1 w-full"
             >
               <div className="relative group cursor-default scale-90 lg:scale-100 origin-center">
                 {/* Instagram-style Card - smaller padding and content on mobile */}
@@ -244,6 +257,7 @@ export default async function Home({
                           src="/kozip-profile.png"
                           alt="Kozip"
                           fill
+                          sizes="(min-width: 1024px) 160px, 96px"
                           className="object-cover"
                           priority
                         />
@@ -272,7 +286,7 @@ export default async function Home({
                   </div>
                 </a>
               </div>
-            </motion.div>
+            </div>
 
           </div>
 
@@ -306,13 +320,11 @@ export default async function Home({
                 const serviceColors = colors[service.id as keyof typeof colors];
                 
                 return (
-                  <motion.a
+                  <a
                     key={service.id}
                     href={service.href}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 + 0.5 }}
-                    className="group relative p-4 md:p-8 rounded-2xl hover:bg-white/5 hover:border hover:border-white/10 transition-all duration-300 backdrop-blur-sm overflow-hidden flex flex-row md:flex-col items-center md:items-center text-left md:text-center gap-4 md:gap-0"
+                    style={{ animationDelay: `${index * 0.1 + 0.5}s` }}
+                    className="hero-enter-up group relative p-4 md:p-8 rounded-2xl hover:bg-white/5 hover:border hover:border-white/10 transition-all duration-300 backdrop-blur-sm overflow-hidden flex flex-row md:flex-col items-center md:items-center text-left md:text-center gap-4 md:gap-0"
                   >
                     <div className={`absolute inset-0 bg-gradient-to-br ${serviceColors.hoverGradient} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
                     
@@ -331,7 +343,7 @@ export default async function Home({
                     <div className={`absolute right-4 top-1/2 -translate-y-1/2 md:top-auto md:translate-y-0 md:bottom-4 md:right-4 flex-shrink-0 w-5 h-5 md:opacity-0 md:group-hover:opacity-100 transition-opacity md:transform md:translate-y-2 md:group-hover:translate-y-0 duration-300 ${serviceColors.arrow}`}>
                       <ArrowRight className="w-5 h-5" />
                     </div>
-                  </motion.a>
+                  </a>
                 );
               })}
             </div>
@@ -339,11 +351,9 @@ export default async function Home({
 
           {/* Client Logos - Desktop Only (inside hero, at the bottom) */}
           <div className="hidden lg:block mt-auto pt-12">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              className="relative"
+            <div
+              className="hero-enter-up relative"
+              style={{ animationDelay: '0.8s' }}
             >
               <div className="flex flex-col items-center gap-6 w-full">
                 <h3 className="text-lg font-bold text-white text-center">{t('clients.title')}</h3>
@@ -372,6 +382,7 @@ export default async function Home({
                                 src={client.logo_url} 
                                 alt={client.name}
                                 fill
+                                sizes="112px"
                                 className="object-contain"
                                 style={{
                                   objectPosition: `${client.logo_position_x || 50}% ${client.logo_position_y || 50}%`
@@ -385,7 +396,7 @@ export default async function Home({
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
 
         </div>
@@ -421,6 +432,7 @@ export default async function Home({
                           src={client.logo_url} 
                           alt={client.name}
                           fill
+                          sizes="(min-width: 768px) 128px, 96px"
                           className="object-contain"
                           style={{
                             objectPosition: `${client.logo_position_x || 50}% ${client.logo_position_y || 50}%`
@@ -454,7 +466,8 @@ export default async function Home({
                    <Image 
                      src="/kes-on-kozip-new.png" 
                      alt="Kozip tiim" 
-                     fill 
+                     fill
+                     sizes="(min-width: 1280px) 584px, (min-width: 1024px) 46vw, calc(100vw - 3rem)"
                      className="object-cover" 
                    />
                 </div>
@@ -504,7 +517,7 @@ export default async function Home({
       </section>
 
       {/* 5. SOCIAL PROOF */}
-      <TestimonialsSection />
+      <TestimonialsSection initialTestimonials={testimonials} />
 
       {/* 6. SERVICES DETAIL */}
       <div className="bg-neutral-950">
@@ -687,7 +700,13 @@ export default async function Home({
                     <Link key={project.id} href={`/tehtud-tood/${project.slug}`} className="group block">
                       <div className="aspect-video bg-neutral-900 rounded-2xl overflow-hidden mb-4 border border-white/5 group-hover:border-fuchsia-500/50 transition-all duration-300 relative">
                         {project.thumbnail_url ? (
-                          <img src={project.thumbnail_url} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                          <Image
+                            src={project.thumbnail_url}
+                            alt={project.title}
+                            fill
+                            sizes="(min-width: 1280px) 384px, (min-width: 768px) 30vw, calc(100vw - 3rem)"
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center text-gray-700">{t('youtubeService.noImage')}</div>
                         )}
@@ -867,7 +886,13 @@ export default async function Home({
                 {localizedShortsProjects.map((project) => (
                   <Link key={project.id} href={`/tehtud-tood/${project.slug}`} className="group block relative aspect-[9/16] bg-neutral-900 rounded-2xl overflow-hidden border border-white/5 hover:border-fuchsia-500/50 transition-all duration-300">
                     {project.thumbnail_url ? (
-                      <img src={project.thumbnail_url} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <Image
+                        src={project.thumbnail_url}
+                        alt={project.title}
+                        fill
+                        sizes="(min-width: 1280px) 282px, (min-width: 768px) 23vw, calc(50vw - 1.5rem)"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-700 bg-neutral-800">
                          <Video className="w-12 h-12 opacity-20" />
@@ -933,9 +958,15 @@ export default async function Home({
             {localizedRecentProjects.length > 0 ? (
               localizedRecentProjects.map((project) => (
                 <Link key={project.id} href={`/tehtud-tood/${project.slug}`} className="group block">
-                  <div className="aspect-video bg-neutral-900 rounded-2xl overflow-hidden mb-4 border border-white/5 group-hover:border-fuchsia-500/50 transition-all duration-300">
+                  <div className="relative aspect-video bg-neutral-900 rounded-2xl overflow-hidden mb-4 border border-white/5 group-hover:border-fuchsia-500/50 transition-all duration-300">
                     {project.thumbnail_url ? (
-                      <img src={project.thumbnail_url} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <Image
+                        src={project.thumbnail_url}
+                        alt={project.title}
+                        fill
+                        sizes="(min-width: 1280px) 384px, (min-width: 768px) 30vw, calc(100vw - 3rem)"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-700">{t('common.imageMissing')}</div>
                     )}

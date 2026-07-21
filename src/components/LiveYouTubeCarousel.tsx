@@ -26,6 +26,7 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
 
   useEffect(() => {
     let isMounted = true;
+    const track = trackRef.current;
 
     const syncVideos = async () => {
       if (document.hidden) return;
@@ -47,10 +48,28 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
       }
     };
 
-    syncVideos();
+    // Initial data is already rendered by the server. Refresh view counts only
+    // when the visitor actually reaches this below-the-fold carousel.
+    let observer: IntersectionObserver | null = null;
+    if (track && 'IntersectionObserver' in window) {
+      observer = new IntersectionObserver(
+          (entries) => {
+            if (entries.some((entry) => entry.isIntersecting)) {
+              observer?.disconnect();
+              void syncVideos();
+            }
+          },
+          { rootMargin: '200px' }
+        );
+    }
+
+    if (observer && track) {
+      observer.observe(track);
+    }
     
     return () => {
       isMounted = false;
+      observer?.disconnect();
     };
   }, []);
 
@@ -143,6 +162,7 @@ export default function LiveYouTubeCarousel({ initialVideos }: LiveYouTubeCarous
                   src={video.thumbnail_url}
                   alt={video.title}
                   fill
+                  sizes="320px"
                   className="object-cover group-hover:scale-105 transition-all duration-500"
                 />
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">

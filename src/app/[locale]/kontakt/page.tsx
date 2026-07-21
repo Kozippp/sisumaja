@@ -3,9 +3,9 @@
 import { Mail, MapPin, Instagram, Youtube, ArrowRight, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import Image from 'next/image';
 import { useState, FormEvent, useEffect } from 'react';
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { useTranslations } from 'next-intl';
 import { track } from '@/lib/analytics';
+import { getRecaptchaToken, warmRecaptcha } from '@/lib/recaptcha';
 
 export default function ContactPage() {
   const t = useTranslations('contactPage');
@@ -13,7 +13,6 @@ export default function ContactPage() {
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
-  const { executeRecaptcha } = useGoogleReCaptcha();
 
   useEffect(() => {
     setMounted(true);
@@ -31,13 +30,13 @@ export default function ContactPage() {
     const form = e.currentTarget;
     const formData = new FormData(form);
 
-    if (executeRecaptcha) {
-      try {
-        const token = await executeRecaptcha('contact');
+    try {
+      const token = await getRecaptchaToken('contact');
+      if (token) {
         formData.set('recaptcha_token', token);
-      } catch {
-        // reCAPTCHA failed, continue without
       }
+    } catch {
+      // reCAPTCHA failed, continue with the server-side spam protections.
     }
 
     try {
@@ -55,13 +54,14 @@ export default function ContactPage() {
       setStatus('success');
       track('contact_form_submit', { page: 'kontakt' });
       form.reset();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Submission error:', error);
       setStatus('error');
-      
-      if (error.message === 'missing_fields') {
+
+      const errorCode = error instanceof Error ? error.message : '';
+      if (errorCode === 'missing_fields') {
         setErrorMessage(t('errorMissingFields'));
-      } else if (error.message === 'email_failed') {
+      } else if (errorCode === 'email_failed') {
         setErrorMessage(t('errorEmailFailed'));
       } else {
         setErrorMessage(t('errorGeneric'));
@@ -144,7 +144,13 @@ export default function ContactPage() {
                 </div>
               )}
 
-              <form className="space-y-6" onSubmit={handleSubmit} noValidate>
+              <form
+                className="space-y-6"
+                onSubmit={handleSubmit}
+                onFocusCapture={warmRecaptcha}
+                onPointerEnter={warmRecaptcha}
+                noValidate
+              >
                 {/* Honeypot */}
                 <div className="absolute -left-[9999px] w-1 h-1 overflow-hidden" aria-hidden="true">
                   <label htmlFor="website">Website</label>
@@ -243,14 +249,14 @@ function SocialButton({ icon, href }: { icon: React.ReactNode, href: string }) {
   );
 }
 
-function TikTokIcon(props: React.SVGProps<SVGSVGElement>) {
+function TikTokIcon({ className }: { className?: string }) {
   return (
     <Image
       src="/tiktok_logo.png"
       alt="TikTok"
       width={24}
       height={24}
-      className="w-6 h-6 object-contain"
+      className={`${className || 'w-6 h-6'} object-contain`}
     />
   );
 }

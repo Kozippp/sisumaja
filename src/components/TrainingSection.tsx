@@ -5,6 +5,7 @@ import { Mic, Users, ArrowRight, School, Calendar } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Database } from "@/types/database.types";
 import { useTranslations, useLocale } from 'next-intl';
+import Image from "next/image";
 
 type Project = Database['public']['Tables']['projects']['Row'];
 
@@ -148,10 +149,12 @@ export function TrainingSection({ trainingProjects = [] }: TrainingSectionProps)
                            className="snap-center shrink-0 w-[85vw] md:w-[400px] aspect-[16/10] bg-neutral-900 rounded-3xl overflow-hidden border border-white/10 relative group/card hover:border-white/30 transition-all duration-300 block"
                         >
                            {project.thumbnail_url ? (
-                              <img
+                              <Image
                                  src={project.thumbnail_url}
                                  alt={displayTitle}
-                                 className="absolute inset-0 w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-700"
+                                 fill
+                                 sizes="(min-width: 768px) 400px, 85vw"
+                                 className="object-cover group-hover/card:scale-105 transition-transform duration-700"
                               />
                            ) : (
                               <div className="absolute inset-0 bg-neutral-800 flex items-center justify-center text-gray-600 group-hover/card:scale-105 transition-transform duration-700">

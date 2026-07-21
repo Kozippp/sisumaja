@@ -13,9 +13,10 @@ export default function CookieConsent() {
     // Check if user has already made a choice
     const consent = localStorage.getItem('cookie-consent');
     if (!consent) {
-      // Show banner after a short delay
-      const timer = setTimeout(() => setIsVisible(true), 1000);
-      return () => clearTimeout(timer);
+      // Show immediately after hydration. A delayed banner becomes the page's
+      // LCP element and makes the page look slower without helping the visitor.
+      const timer = window.setTimeout(() => setIsVisible(true), 0);
+      return () => window.clearTimeout(timer);
     }
   }, []);
 
@@ -82,4 +83,3 @@ export default function CookieConsent() {
     </AnimatePresence>
   );
 }
-

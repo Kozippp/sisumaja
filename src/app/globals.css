@@ -33,6 +33,60 @@
   to { transform: translateX(-33.33%); }
 }
 
+/* Keep the hero movement on the compositor. Framer Motion's perpetual
+   requestAnimationFrame loop caused long main-thread tasks on slow phones. */
+@keyframes hero-glow-one {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.3; }
+  50% { transform: scale(1.2) rotate(45deg); opacity: 0.5; }
+}
+
+@keyframes hero-glow-two {
+  0%, 100% { transform: translateX(0) scale(1); opacity: 0.2; }
+  50% { transform: translateX(50px) scale(1.3); opacity: 0.4; }
+}
+
+@keyframes hero-enter-right {
+  from { opacity: 1; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes hero-enter-left {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.hero-glow-one {
+  animation: hero-glow-one 20s ease-in-out infinite both;
+  will-change: transform, opacity;
+}
+
+.hero-glow-two {
+  animation: hero-glow-two 25s ease-in-out 2s infinite both;
+  will-change: transform, opacity;
+}
+
+.hero-enter-right {
+  animation: hero-enter-right 0.8s ease-out 0.2s both;
+}
+
+.hero-enter-left {
+  animation: hero-enter-left 0.8s ease-out both;
+}
+
+.hero-enter-up {
+  animation: fadeInUp 0.5s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-glow-one,
+  .hero-glow-two,
+  .hero-enter-right,
+  .hero-enter-left,
+  .hero-enter-up {
+    animation: none;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 3.9%;

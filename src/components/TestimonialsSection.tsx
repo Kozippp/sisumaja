@@ -1,36 +1,17 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { supabase } from "@/lib/supabase";
 import { Testimonial } from "@/types/testimonials";
 import Image from "next/image";
-import { Star, Quote, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Star, Quote, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations } from 'next-intl';
 
-export function TestimonialsSection() {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
-  const [loading, setLoading] = useState(true);
+export function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Testimonial[] }) {
+  const testimonials = initialTestimonials;
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const t = useTranslations('testimonials');
-
-  useEffect(() => {
-    async function fetchTestimonials() {
-      const { data } = await supabase
-        .from("testimonials")
-        .select("*")
-        .eq("status", "published")
-        .order("order", { ascending: true })
-      .order("created_at", { ascending: false });
-      
-      if (data) {
-        setTestimonials(data);
-      }
-      setLoading(false);
-    }
-    fetchTestimonials();
-  }, []);
 
   useEffect(() => {
     if (selectedId) {
@@ -43,7 +24,6 @@ export function TestimonialsSection() {
     };
   }, [selectedId]);
 
-  if (loading) return <div className="py-20 text-center text-white/20">{t('loading')}</div>;
   if (testimonials.length === 0) return null;
 
   const selectedTestimonial = testimonials.find(t => t.id === selectedId);
@@ -147,6 +127,8 @@ export function TestimonialsSection() {
                   ) : (
                     <div className="relative flex items-center justify-center p-2 md:p-6">
                        {selectedTestimonial.image_url && (
+                         // The modal needs the original aspect ratio and is only mounted after a click.
+                         // eslint-disable-next-line @next/next/no-img-element
                          <img
                            src={selectedTestimonial.image_url}
                            alt="Tagasiside"
@@ -179,6 +161,7 @@ export function TestimonialsSection() {
                         src={t.image_url} 
                         alt="" 
                         fill 
+                        sizes="96px"
                         className="object-cover" 
                       />
                     ) : (
@@ -218,6 +201,7 @@ function TextTestimonialCard({ testimonial, expanded = false }: { testimonial: T
                 src={testimonial.image_url} 
                 alt={testimonial.author_name || ''}
                 fill
+                sizes="56px"
                 className="object-cover"
               />
             ) : (
@@ -249,7 +233,7 @@ function TextTestimonialCard({ testimonial, expanded = false }: { testimonial: T
           "text-gray-300 leading-relaxed italic",
           expanded ? "text-xl md:text-2xl" : "text-lg"
         )}>
-          "{testimonial.content}"
+          &quot;{testimonial.content}&quot;
         </p>
       </div>
     </div>
@@ -266,6 +250,7 @@ function ImageTestimonialCard({ testimonial }: { testimonial: Testimonial }) {
              alt="Tagasiside kuvatõmmis"
              width={600}
              height={800}
+             sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
              className="w-full h-auto object-contain"
            />
          )}

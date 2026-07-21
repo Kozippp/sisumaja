@@ -2,8 +2,8 @@
 
 import { ArrowRight, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { useState, FormEvent, useEffect } from 'react';
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { useTranslations } from 'next-intl';
+import { getRecaptchaToken, warmRecaptcha } from '@/lib/recaptcha';
 
 /**
  * Same contact form as on /kontakt page – copy, not a new component.
@@ -15,7 +15,6 @@ export function ContactForm() {
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
-  const { executeRecaptcha } = useGoogleReCaptcha();
 
   useEffect(() => {
     setMounted(true);
@@ -33,13 +32,13 @@ export function ContactForm() {
     const form = e.currentTarget;
     const formData = new FormData(form);
 
-    if (executeRecaptcha) {
-      try {
-        const token = await executeRecaptcha('contact');
+    try {
+      const token = await getRecaptchaToken('contact');
+      if (token) {
         formData.set('recaptcha_token', token);
-      } catch {
-        // reCAPTCHA failed, continue without
       }
+    } catch {
+      // reCAPTCHA failed, continue with the server-side spam protections.
     }
 
     try {
@@ -56,13 +55,14 @@ export function ContactForm() {
 
       setStatus('success');
       form.reset();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Submission error:', error);
       setStatus('error');
 
-      if (error.message === 'missing_fields') {
+      const errorCode = error instanceof Error ? error.message : '';
+      if (errorCode === 'missing_fields') {
         setErrorMessage(t('errorMissingFields'));
-      } else if (error.message === 'email_failed') {
+      } else if (errorCode === 'email_failed') {
         setErrorMessage(t('errorEmailFailed'));
       } else {
         setErrorMessage(t('errorGeneric'));
@@ -96,7 +96,13 @@ export function ContactForm() {
         </div>
       )}
 
-      <form className="space-y-6" onSubmit={handleSubmit} noValidate>
+      <form
+        className="space-y-6"
+        onSubmit={handleSubmit}
+        onFocusCapture={warmRecaptcha}
+        onPointerEnter={warmRecaptcha}
+        noValidate
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <label htmlFor="home-name" className="text-sm font-medium text-gray-400 uppercase tracking-wider">{t('yourName')}</label>

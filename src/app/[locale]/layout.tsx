@@ -7,7 +7,6 @@ import { getMessages, setRequestLocale } from 'next-intl/server';
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CookieConsent from "@/components/CookieConsent";
-import { RecaptchaProvider } from "@/components/RecaptchaProvider";
 import JsonLd from "@/components/JsonLd";
 import Analytics from "@/components/Analytics";
 import { organizationSchema, webSiteSchema } from "@/lib/schema";
@@ -123,15 +122,13 @@ export default async function LocaleLayout({
       </head>
       <body className={`${spaceGrotesk.variable} ${inter.variable} font-sans antialiased bg-background text-foreground`}>
         <NextIntlClientProvider messages={messages}>
-          <RecaptchaProvider>
-            <Analytics />
-            <Navbar />
-            <main className="min-h-screen">
-              {children}
-            </main>
-            <Footer />
-            <CookieConsent />
-          </RecaptchaProvider>
+          <Analytics />
+          <Navbar />
+          <main className="min-h-screen">
+            {children}
+          </main>
+          <Footer />
+          <CookieConsent />
         </NextIntlClientProvider>
       </body>
     </html>

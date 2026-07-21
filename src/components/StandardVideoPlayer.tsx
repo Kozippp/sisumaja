@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { Play, Pause, Volume2, VolumeX } from 'lucide-react';
+import { LiteYouTubeEmbed } from './LiteYouTubeEmbed';
 
 interface StandardVideoPlayerProps {
   videoUrl: string;
@@ -91,17 +92,18 @@ export const StandardVideoPlayer = ({ videoUrl, thumbnailUrl, title }: StandardV
     togglePlay();
   };
 
-  // If it's YouTube, render iframe
+  // Keep YouTube's heavy player out of the initial page load. The poster looks
+  // like the normal player and the real iframe is mounted on the first click.
   if (isYouTube && youtubeVideoId) {
     return (
       <div className="relative rounded-2xl overflow-hidden bg-neutral-900 border border-white/10 shadow-2xl w-full">
         <div className="relative aspect-video bg-black">
-          <iframe
-            src={`https://www.youtube.com/embed/${youtubeVideoId}?controls=1&modestbranding=1&rel=0${youtubeStartTime ? `&start=${youtubeStartTime}` : ''}`}
-            title={title || 'YouTube video'}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            className="w-full h-full"
+          <LiteYouTubeEmbed
+            videoId={youtubeVideoId}
+            title={title}
+            thumbnailUrl={thumbnailUrl}
+            startTime={youtubeStartTime}
+            imageSizes="(min-width: 1280px) 584px, (min-width: 1024px) 46vw, 100vw"
           />
         </div>
       </div>
@@ -122,6 +124,7 @@ export const StandardVideoPlayer = ({ videoUrl, thumbnailUrl, title }: StandardV
           poster={thumbnailUrl || undefined}
           className="w-full h-full object-cover cursor-pointer"
           onClick={handleVideoClick}
+          preload="none"
           playsInline
           muted={isMuted}
           onPlay={() => setIsPlaying(true)}

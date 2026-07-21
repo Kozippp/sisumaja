@@ -15,11 +15,11 @@ export default function Analytics() {
   // Init nõusolekul + kuula nõusoleku muutust
   useEffect(() => {
     if (!ANALYTICS_AVAILABLE) return;
-    initAnalytics();
 
     const onConsentChange = () => {
-      initAnalytics();
-      trackPageview(window.location.href);
+      void initAnalytics().then(() => {
+        trackPageview(window.location.href);
+      });
     };
     window.addEventListener('cookie-consent-changed', onConsentChange);
     return () => window.removeEventListener('cookie-consent-changed', onConsentChange);
@@ -28,8 +28,15 @@ export default function Analytics() {
   // Lehevaatamine route-muutusel
   useEffect(() => {
     if (!ANALYTICS_AVAILABLE) return;
-    initAnalytics();
-    trackPageview(window.location.href);
+    let cancelled = false;
+    void initAnalytics().then(() => {
+      if (!cancelled) {
+        trackPageview(window.location.href);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [pathname]);
 
   return null;
