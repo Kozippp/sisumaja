@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Mic, Users, ArrowRight, School, Calendar } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Database } from "@/types/database.types";
@@ -54,59 +53,33 @@ export function TrainingSection({ trainingProjects = [] }: TrainingSectionProps)
        <div className="max-w-7xl mx-auto px-6 relative z-10">
           {/* Header */}
           <div className="text-center max-w-4xl mx-auto mb-20">
-             <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 text-green-500 text-xs font-bold uppercase tracking-wider mb-6"
-             >
+             <div className="reveal inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 text-green-500 text-xs font-bold uppercase tracking-wider mb-6">
                 <Users className="w-4 h-4" /> {t('badge')}
-             </motion.div>
-             
-             <motion.h2 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-                className="text-4xl md:text-5xl lg:text-6xl font-black mb-8 text-white tracking-tight"
-             >
+             </div>
+
+             <h2 className="reveal text-4xl md:text-5xl lg:text-6xl font-black mb-8 text-white tracking-tight">
                 {t('title')}<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">{t('titleHighlight')}</span>
-             </motion.h2>
-             
-             <motion.p 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-                className="text-xl text-gray-400 leading-relaxed"
-             >
+             </h2>
+
+             <p className="reveal text-xl text-gray-400 leading-relaxed">
                 {t('subtitle')}
-             </motion.p>
+             </p>
           </div>
 
           {/* 3 Cards Title */}
-          <motion.h3 
-             initial={{ opacity: 0, y: 20 }}
-             whileInView={{ opacity: 1, y: 0 }}
-             viewport={{ once: true }}
-             className="text-2xl md:text-3xl font-bold text-center mb-10"
-          >
+          <h3 className="reveal text-2xl md:text-3xl font-bold text-center mb-10">
              {t('howCanWeHelp')}
-          </motion.h3>
+          </h3>
 
           {/* 3 Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
              {SERVICES.map((service, idx) => (
-                <motion.div 
-                   key={idx} 
-                   initial={{ opacity: 0, y: 30 }}
-                   whileInView={{ opacity: 1, y: 0 }}
-                   viewport={{ once: true }}
-                   transition={{ delay: 0.3 + idx * 0.1 }}
-                   className="group relative bg-white/5 border border-white/10 p-8 rounded-3xl overflow-hidden hover:bg-white/10 transition-colors duration-500"
+                <div
+                   key={idx}
+                   className="reveal group relative bg-white/5 border border-white/10 p-8 rounded-3xl overflow-hidden hover:bg-white/10 transition-colors duration-500"
                 >
                    <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-                   
+
                    <div className="relative z-10">
                       <div className={`w-14 h-14 rounded-2xl ${service.color}/20 flex items-center justify-center ${service.textColor} mb-6 group-hover:scale-110 transition-transform duration-500`}>
                          {service.icon}
@@ -114,18 +87,13 @@ export function TrainingSection({ trainingProjects = [] }: TrainingSectionProps)
                       <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-white transition-colors">{service.title}</h3>
                       <p className="text-gray-400 group-hover:text-gray-200 transition-colors leading-relaxed">{service.description}</p>
                    </div>
-                </motion.div>
+                </div>
              ))}
           </div>
 
           {/* Case Studies Carousel */}
           {hasProjects && (
-            <motion.div 
-               initial={{ opacity: 0 }}
-               whileInView={{ opacity: 1 }}
-               viewport={{ once: true }}
-               className="mb-20"
-            >
+            <div className="reveal mb-20">
                <div className="flex justify-between items-end mb-8">
                  <h3 className="text-2xl font-bold text-white">{t('portfolioTitle')}</h3>
                  <Link href="/tehtud-tood?filter=training" className="text-sm font-bold uppercase text-gray-400 hover:text-white flex items-center gap-2 transition-colors">
@@ -184,20 +152,15 @@ export function TrainingSection({ trainingProjects = [] }: TrainingSectionProps)
                      <div className="w-6 shrink-0" />
                   </div>
                </div>
-            </motion.div>
+            </div>
           )}
 
           {/* CTA */}
-          <motion.div 
-             initial={{ opacity: 0, y: 20 }}
-             whileInView={{ opacity: 1, y: 0 }}
-             viewport={{ once: true }}
-             className="text-center"
-          >
+          <div className="reveal text-center">
              <a href="#contact" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-fuchsia-500 hover:text-white transition-all duration-300">
                 {t('ctaButton')} <ArrowRight className="w-4 h-4" />
              </a>
-          </motion.div>
+          </div>
        </div>
     </section>
   );

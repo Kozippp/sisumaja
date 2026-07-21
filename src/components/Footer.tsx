@@ -75,9 +75,9 @@ export default function Footer() {
             variant="footer"
           />
           <div className="flex space-x-6 flex-wrap justify-end gap-y-2">
-            <Link href="/privaatsuspoliitika" className="hover:text-white transition-colors">{t('privacy')}</Link>
-            <Link href="/kasutustingimused" className="hover:text-white transition-colors">{t('terms')}</Link>
-            <Link href="/kupsiste-poliitika" className="hover:text-white transition-colors">{t('cookies')}</Link>
+            <Link href="/privaatsuspoliitika" prefetch={false} className="hover:text-white transition-colors">{t('privacy')}</Link>
+            <Link href="/kasutustingimused" prefetch={false} className="hover:text-white transition-colors">{t('terms')}</Link>
+            <Link href="/kupsiste-poliitika" prefetch={false} className="hover:text-white transition-colors">{t('cookies')}</Link>
           </div>
         </div>
       </div>
@@ -114,7 +114,7 @@ function TikTokIcon(props: React.SVGProps<SVGSVGElement>) {
 function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <li>
-      <Link href={href} className="text-gray-400 hover:text-white transition-colors hover:translate-x-1 inline-block duration-200">
+      <Link href={href} prefetch={false} className="text-gray-400 hover:text-white transition-colors hover:translate-x-1 inline-block duration-200">
         {children}
       </Link>
     </li>

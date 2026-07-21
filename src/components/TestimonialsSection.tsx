@@ -37,49 +37,32 @@ export function TestimonialsSection({ initialTestimonials }: { initialTestimonia
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-20"
-        >
+        <div className="reveal text-center mb-20">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
             {t('title')} <span className="text-fuchsia-500">{t('titleHighlight')}</span>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto text-lg">
             {t('subtitle')}
           </p>
-        </motion.div>
+        </div>
 
         {/* Masonry Grid Layout */}
         <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
-          {testimonials.map((testimonial, index) => (
-            <motion.div
+          {testimonials.map((testimonial) => (
+            <div
               key={testimonial.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ 
-                opacity: 1, 
-                y: 0,
-                transition: { duration: 0.5, delay: index * 0.1 }
-              }}
-              viewport={{ once: true }}
               onClick={() => setSelectedId(testimonial.id)}
               className={cn(
-                "break-inside-avoid cursor-pointer",
+                "reveal break-inside-avoid cursor-pointer transition-transform duration-200 hover:scale-[1.02] hover:-translate-y-1",
                 !testimonial.show_on_mobile && "hidden md:inline-block"
               )}
-              whileHover={{ 
-                scale: 1.02, 
-                y: -5,
-                transition: { duration: 0.2, delay: 0 }
-              }}
             >
               {testimonial.type === 'text' ? (
                 <TextTestimonialCard testimonial={testimonial} />
               ) : (
                 <ImageTestimonialCard testimonial={testimonial} />
               )}
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
